@@ -1,0 +1,10 @@
++TITLE: Zero Knowledge Proofs
+#+AUTHOR: Filip Bielejec
+#+LANGUAGE: en
+#+latex_class_options: [12pt]
+#+INCLUDE: pre_course.org
+
+* Table of Contents
+| file       | Description |
+|------------+-------------|
+| [[file:pre_course.org][Pre-Course]] | Course Prep |

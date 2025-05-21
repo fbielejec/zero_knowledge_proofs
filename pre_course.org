@@ -1,0 +1,11 @@
+* IN-PROGRESS Pre-Course
+- https://leather-bulb-be5.notion.site/ZKP-Pre-Course-Self-Learn-Material-V2-31b9618231cd424fa72bdc5f11221bea
+** IN-PROGRESS Linear algebra
+- [ ] vectors: https://www.youtube.com/watch?v=fNk_zzaMoSs
+
+---
+
+*NOTE: summary*
+
+
+---
