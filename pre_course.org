@@ -1,7 +1,7 @@
 * IN-PROGRESS Pre-Course
 - https://leather-bulb-be5.notion.site/ZKP-Pre-Course-Self-Learn-Material-V2-31b9618231cd424fa72bdc5f11221bea
-** IN-PROGRESS Linear algebra
-*** DONE vectors: https://www.youtube.com/watch?v=fNk_zzaMoSs
+* IN-PROGRESS Linear algebra
+** DONE vectors: https://www.youtube.com/watch?v=fNk_zzaMoSs
 
 ---
 
@@ -32,7 +32,7 @@
 : [ 3 -5]+[2 1]=[ 5 -4]
 : 2*[ 5 -4]=[10 -8]
 
-*** DONE Linear combinations, span, and basis vectors https://www.youtube.com/watch?v=k7RM-ot2NWY
+** DONE Linear combinations, span, and basis vectors https://www.youtube.com/watch?v=k7RM-ot2NWY
 
 ---
 
@@ -86,7 +86,7 @@ where:
 
   np.random.seed(2137)
 
-  # Define vectors
+  # Define basis vectors
   i_hat = np.array([1,0])
   j_hat = np.array([0,1])
 
@@ -116,14 +116,14 @@ def span(i, j):
     return combinations
 
 # these two vectors are linearly dependent (they are a linear combination of one another)
-i = np.array([1,0]) 
+i = np.array([1,0])
 j = 2 * i
 # notice how only one coordinate varies (only 1 dimension)
 print(f"span of i={i} and j={j}: {span(i,j)}")
 
 # these two vectors are linearly independent
-i = np.array([1,0]) 
-j = np.array([0,1]) 
+i = np.array([1,0])
+j = np.array([0,1])
 # notice how both coordinates vary (we gain 1 dimension)
 print(f"span of i={i} and j={j}: {span(i,j)}")
 #+END_SRC
@@ -132,12 +132,169 @@ print(f"span of i={i} and j={j}: {span(i,j)}")
 : span of i=[1 0] and j=[2 0]: {(-8, 0), (4, 0), (-12, 0), (-17, 0), (-27, 0), (7, 0), (13, 0), (10, 0), (6, 0), (1, 0)}
 : span of i=[1 0] and j=[0 1]: {(-9, -9), (4, 1), (2, -3), (1, 1), (3, 10), (-6, -3), (2, 9), (1, -3), (-8, -2), (-10, 8)}
 
-*** IN-PROGRESS Linear transformations and matrices: https://www.youtube.com/watch?v=kYB8IZa5AuE
+** DONE Linear transformations and matrices: https://www.youtube.com/watch?v=kYB8IZa5AuE
 
 ---
 
 *NOTE: chapter summary*
 
-
+- transformations are functions with vectors as inputs that return vectors as outputs
+- they act on the entire vector space
+- linear transformations mean:
+  - all lines must remain lines, without getting curved
+  - origin of the coordinate system must remain in place
+- the above property means that you need to only concern yourself with tracking the transformation of the origin, since every other vector fals in place (you can deuce where it lands based on where $\hat{i}$ and $\hat{j}$ land.
+- 2D linear transformations is completely described by just four numbers, the two coords for where $\hat{i}$ lands and two coords where $\hat{j}$ lands.
 
 ---
+
+#+BEGIN_SRC jupyter-python :session zk :async yes
+  import numpy as np
+  import random
+
+  # basis vectors
+  i_hat = np.array([1,0])
+  j_hat = np.array([0,1])
+
+  v = -1*i_hat + 2*j_hat
+
+  # applying some transformation:
+  transformed_i = np.array([1,-2])
+  transformed_j = np.array([3,0])
+
+  transformed_v = -1* transformed_i + 2*transformed_j
+
+  # matrix for the linear transformation:
+  m = np.array([
+                [transformed_i[0],transformed_j[0]],
+                [transformed_i[1],transformed_j[1]]
+               ])
+  v = np.array([-1,2])
+
+  # matrix times vector gives us the same transformed vector
+  print(f"{transformed_v} == {m} * {v} == {np.matmul(m, v)}")
+#+END_SRC
+
+#+RESULTS:
+: [5 2] == [[ 1  3]
+:  [-2  0]] * [-1  2] == [5 2]
+
+** DONE Matrix multiplication as composition https://www.youtube.com/watch?v=XkY2DOUCWMU
+
+---
+
+*NOTE: chapter summary*
+
+- linear transformations can be combined (composed)
+ - e.g. a rotation and a shear
+- this combination is matrix multiplication
+  - e.g. $A(BC) = (AB)C $
+- matrix mulitplication is NOT commutative $A*B \neq B*A$
+
+---
+
+#+BEGIN_SRC jupyter-python :session zk :async yes
+  import numpy as np
+  import random
+
+  v = np.array([-1, 2])
+
+  # counter-clockwise rotation by 90 deg
+  # i_hat => [0,1]
+  # j_hat => [-1,0]
+  m1 = np.array([
+                [0, -1],
+                [1, 0]
+               ])
+
+  # a shear
+  # i_hat => [1,0]
+  # j_hat => [1,1]
+  m2 = np.array([
+                [1, 1],
+                [0, 1]
+               ])
+
+  # composed tranformation has the same effect as applying two successive ones
+  # reading m2 * m1 is right to left (first rotation than shear)
+  print(f"{np.matmul(np.matmul(m2, m1),v)} == {np.matmul(m2, np.matmul(m1, v)) }")
+#+END_SRC
+
+#+RESULTS:
+: [-3 -1] == [-3 -1]
+
+** DONE 3D linear transformations: https://www.youtube.com/watch?v=rHLEWRxRGiM
+
+---
+
+*NOTE: chapter summary*
+
+- basis vectors are now : $\hat{i}, \hat{j}, \hat{k}$
+- applying a transformation is again done by multiplying the vectors of the space by the transformation matroiix, which consist of the transformed base vectors $\hat{i}, \hat{j}, \hat{k}$
+  - m * v = v[0] * m[,0] +  v[1] * m[,1] +  v[2] * m[,2]
+
+---
+
+#+BEGIN_SRC jupyter-python :session zk :async yes
+  import numpy as np
+  import random
+
+  # basis
+  i = np.array([1,0,-1])x
+  j = np.array([1,1,0])
+  k = np.array([1,0,1])
+
+  m = np.array([
+                [i[0], j[0], k[0]],
+                [i[1], j[1], k[1]],
+                [i[2], j[2], k[2]]
+               ])
+
+  v = np.array([3,2,1])
+
+
+
+  print(f"{m}")
+#+END_SRC
+
+#+RESULTS:
+: [[ 1  1  1]
+:  [ 0  1  0]
+:  [-1  0  1]]
+
+** IN-PROGRESS The determinant: https://www.youtube.com/watch?v=Ip3X9LOh2dk
+
+---
+
+*NOTE: chapter summary*
+
+- Linear transformations stretch or squish the space
+- The determinant measures how much volumes change during a transformation (increase or decrease)
+  - e.g. in a case of a linear transformation $3*\hat{i}$ and $2*\hat{i}$ a square on the space grid that was 1:1 is now 2:3
+  - if the volume was A it is now 6*A
+- det(M) where M is the transformation matrix is the measure of that increase (or decrease in volume)
+- It is also possible that the volume after applying a transformation does not change at all.
+  - In that case $det(M)=1$
+
+---
+
+#+BEGIN_SRC jupyter-python :session zk :async yes
+  import numpy as np
+  import random
+
+  # transformed basis vectors
+  i_hat = 3 * np.array([1,0]) # i scaled by factor of 3
+  j_hat = 2 * np.array([0,1]) # j scaled by factor of 2
+
+  # transformation matrix
+  m = np.array([
+                [i_hat[0],j_hat[0]],
+                [i_hat[1],j_hat[1]]
+               ])
+
+  print(f"det({m}) = {np.linalg.det(m)}")
+#+END_SRC
+
+#+RESULTS:
+: det([[3 0]
+:  [0 2]]) = 6.0
