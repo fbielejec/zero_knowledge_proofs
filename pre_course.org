@@ -271,10 +271,21 @@ print(f"span of i={i} and j={j}: {span(i,j)}")
 - Linear transformations stretch or squish the space
 - The determinant measures how much volumes change during a transformation (increase or decrease)
   - e.g. in a case of a linear transformation $3*\hat{i}$ and $2*\hat{i}$ a square on the space grid that was 1:1 is now 2:3
-  - if the volume was A it is now 6*A
-- det(M) where M is the transformation matrix is the measure of that increase (or decrease in volume)
-- It is also possible that the volume after applying a transformation does not change at all.
+  - if the area was A it is now 6*A
+- det(M) where M is the transformation matrix is the measure of that increase (or decrease in the area)
+- It is also possible that the area after applying a transformation does not change at all.
   - In that case $det(M)=1$
+- It is even possible for a transformation to squish the entire space into a single line, or a point ($det(M)=0$).
+- Negative determinant means that the transformation inverts the space
+ - it's absolute value will still tell you the factor of the area increase (or decrease)
+- In case of 3 dimensions we can talk about the volume increasing or decreasing
+- computing the determinant:
+$det(\begin{bmatrix}
+a & b \\
+c & d
+\end{bmatrix})=ad-bc$
+
+- $det(M_1 \cdot M_2) = det(M_1) \cdot det(M_2)$
 
 ---
 
