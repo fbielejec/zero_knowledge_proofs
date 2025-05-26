@@ -262,7 +262,7 @@ print(f"span of i={i} and j={j}: {span(i,j)}")
 :  [ 0  1  0]
 :  [-1  0  1]]
 
-** IN-PROGRESS The determinant: https://www.youtube.com/watch?v=Ip3X9LOh2dk
+** DONE The determinant: https://www.youtube.com/watch?v=Ip3X9LOh2dk
 
 ---
 
@@ -309,3 +309,19 @@ c & d
 #+RESULTS:
 : det([[3 0]
 :  [0 2]]) = 6.0
+
+** IN-PROGRESS Inverse matrices, column space and null space: https://www.youtube.com/watch?v=uQhTuRlWMxw
+
+---
+
+*NOTE: chapter summary*
+
+
+---
+
+#+BEGIN_SRC jupyter-python :session zk :async yes
+  import numpy as np
+  import random
+
+
+#+END_SRC
