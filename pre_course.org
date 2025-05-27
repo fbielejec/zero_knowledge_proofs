@@ -481,6 +481,7 @@ $\begin{bmatrix}
 
 * IN-PROGRESS Practice Problems
 ** DONE Exercise 1
+
 #+BEGIN_SRC jupyter-python :session zk :async yes
   import numpy as np
 
@@ -502,7 +503,8 @@ $\begin{bmatrix}
 : True
 : False
 
-** DONE Exercise 2
+** DONE Exercise 2: matrix multiplication
+
 #+BEGIN_SRC jupyter-python :session zk :async yes
   import numpy as np
 
@@ -543,7 +545,8 @@ $\begin{bmatrix}
 
 #+RESULTS:
 
-** DONE Exercise 3
+** DONE Exercise 3: dot product
+
 #+BEGIN_SRC jupyter-python :session zk :async yes
   import numpy as np
 
@@ -552,15 +555,83 @@ $\begin{bmatrix}
 
   A = np.array([1,2,3,4])
   B = np.array([[1],[2],[3],[4]])
- 
+
   assert (dot_product(A, B) == 30)
 #+END_SRC
 
 #+RESULTS:
 
-** IN-PROGRESS Exercise 4
+** DONE Exercise 4: linear combinations
+
 #+BEGIN_SRC jupyter-python :session zk :async yes
   import numpy as np
 
+  def linearCombination(A, B, a, b):
+      # Todo, add your code
+      return a*A + b*B
 
+  vector1 = np.array([1,2])
+  vector2 = np.array([5,6])
+  scalar1 = 3
+  scalar2 = 10
+
+  assert (np.array([53, 66]) == linearCombination(vector1, vector2, scalar1, scalar2)).all()
 #+END_SRC
+
+#+RESULTS:
+
+** IN-PROGRESS Exercise 5: modular arithmetic
+
+- The challenge here is to compute the modular inverse of 15 % 1223.
+- That is 15 * x % 1223 == 1.
+
+#+BEGIN_SRC jupyter-python :session zk :async yes
+  import numpy as np
+
+  a=15;m=1223;
+
+  # multiplicative inverse exists (a and m are coprime)
+  print(f"GCD({a},{m})={np.gcd(a,m)}")
+
+  # GCD (48,18) by euclidean algorithm
+  48 % 18
+  18 % 12
+  12 % 6 # gcd(48,18) = 6
+
+  def gcd(a, b):
+      if b == 0:
+          return a
+      return gcd(b, a % b)
+
+  assert(gcd(a,m) == 1)
+
+  a=48;b=18;
+
+  def gcdExtended(a, b):
+      # Base Case
+      if a == 0 :
+          return b,0,1
+
+      gcd,x1,y1 = gcdExtended(b%a, a)
+
+      # Update x and y using results of recursive the call
+      x = y1 - (b//a) * x1
+      y = x1
+
+      return gcd,x,y
+
+  # example15 moonmath
+  assert(gcdExtended(6,5) == (1,1,-1))
+
+  # 15 * x % 1223 == 1 <=>
+  # 15 * x1 + 1223 * y1 == 1
+  gcd,x1,y1 = gcdExtended(a,m)
+
+  print(f"{gcd} == {a} * {x1} + {m} * {y1} == {a*x1 + m*y1}")
+  print(f"{a}^-1 * {a} mod {m} = {(x1 * a) % m} => {a}^-1 mod {m} = {x1}")
+#+END_SRC
+
+#+RESULTS:
+: GCD(15,1223)=1
+: 1 == 48 * -586 + 1223 * 23 == 1
+: 48^-1 * 48 mod 1223 = 1 => 48^-1 mod 1223 = -586
