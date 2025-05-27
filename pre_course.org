@@ -145,6 +145,12 @@ print(f"span of i={i} and j={j}: {span(i,j)}")
   - origin of the coordinate system must remain in place
 - the above property means that you need to only concern yourself with tracking the transformation of the origin, since every other vector fals in place (you can deuce where it lands based on where $\hat{i}$ and $\hat{j}$ land.
 - 2D linear transformations is completely described by just four numbers, the two coords for where $\hat{i}$ lands and two coords where $\hat{j}$ lands.
+- think of it this way: after applying certain transformation that morph the space in a linear way the vector $vec{v}$ lands on $vec{v_{transformed}}$ in this new space
+  - but it can still be described in terms of the (now transformed) basis vectors
+
+- *Formal linearity properties*
+  - $L(\vec{v} + \vec{w})= L(\vec{v}) + L(\vec{w})$
+  - $L(c\vec{v})= cL(\vec{v})$
 
 ---
 
@@ -310,18 +316,251 @@ c & d
 : det([[3 0]
 :  [0 2]]) = 6.0
 
-** IN-PROGRESS Inverse matrices, column space and null space: https://www.youtube.com/watch?v=uQhTuRlWMxw
+** DONE Inverse matrices, column space, rank and null space: https://www.youtube.com/watch?v=uQhTuRlWMxw
 
 ---
 
 *NOTE: chapter summary*
 
+- solving linear systems of equations
+- keywords:
+  - Gaussian elimination
+  - raw echelon form
+
+- Example: a linear system of equations:
+
+$\begin{cases}
+2x + 5y +3z=-3 \\
+4x+0y+8z = 0 \\
+1x + 3y + 0z = 2
+\end{cases}$
+
+- Same system in a matrix form:
+
+$\begin{bmatrix}
+2 & 5 & 3 \\
+4 & 0 & 8 \\
+1 & 3 & 0
+\end{bmatrix} \cdot \begin{bmatrix} x\\ y\\ z \end{bmatrix} = \begin{bmatrix} -3\\ 0\\ 2 \end{bmatrix}$
+
+- A $\cdot \vec{x} = \vec{v}$
+- where:
+  - $A$ corresponds to some linear transformation, therefore the equations means looking for a vector $\vec{x}$ which after applying $A$ lands on $\vec{v}$
+
+- *Determinant*
+- We can check the determinant to conclude whether the system has a solution:
+- Case 1: $det(A) \neq 0$
+  - this means the transformation preserves all the dimensions and there is a unique solution.
+  - In this case solving for $\vec{x}$ is akin to reversing the linear transformation applied by $A$:
+  - $x= A^{-1} \times \vec{v}$
+  - where $A^{-1}$ (inverse of $A$) is basically a different linear transformation (a transformation which reverses transformation $A$).
+  - Applying $A$ and then inversing it: $A\cdot A^{-1}=I$ gets us right back to where we started (a transformation that does nothing, an identity matrix).
+- Case 2: $det(A) = 0$
+  - the transformation squishes the space into a smaller dimension, there is no inverse
+  - there can still be a solution (if the vector $\vec{v}$ "lives" on the line that the space is squished to)
+
+- *Rank: number of dimensions in the transformed space*
+  - when the output of the transformation is a line (it's one dimensional) we say that transformation $A$ has a rank of 1.
+  - if all the vectors land on a plane it has a rank of 2.
+
+- *Column space*
+ - the set of all possible outputs $A\vec{v}$
+ - matrix is full rank if the rank is as high as it can be (i.e. equals the number of columns of that matrix)
+
+- *Null space (matrix kernel)*
+  - what the set of all the solutions looks like
 
 ---
 
 #+BEGIN_SRC jupyter-python :session zk :async yes
   import numpy as np
-  import random
+
+  # counter-clockwise rotation
+  a = np.array([[0,1],
+                [-1,0]])
+
+  # clockwise rotation
+  a_inv = np.linalg.inv(a)
+
+  print(f"{a}^-1 = {a_inv}")
+
+  # this is the identity matrix, it leaves i_hat and j_hat where they started
+  print(f"a^-1 a = {np.matmul(a, a_inv)}")
+
+#+END_SRC
+
+#+RESULTS:
+: [[ 0  1]
+:  [-1  0]]^-1 = [[-0. -1.]
+:  [ 1.  0.]]
+: a^-1 a = [[1. 0.]
+:  [0. 1.]]
+
+#+BEGIN_SRC jupyter-python :session zk :async yes
+  import numpy as np
+  #from sympy import symbols, solve, Eq, lambdify
+
+  a = np.array([[2,2],
+                [1,3]])
+
+  #x = np.array([symbols('x'),symbols('y')])
+
+  v = np.array([-4,-1])
+
+  # positive determinant
+  print(f"det({a}) = {np.linalg.det(a)}")
+
+  # x = A^{-1} * v
+  a_inv = np.linalg.inv(a)
+  x = np.matmul(a_inv,v)
+  print(f"x = {x}")
+
+#+END_SRC
+
+#+RESULTS:
+: det([[2 2]
+:  [1 3]]) = 4.0
+: x = [-2.5  0.5]
+
+** DONE Nonsquare matrices as transformations between dimensions: https://www.youtube.com/watch?v=v8VSDg_WQlA
+
+---
+
+*NOTE: chapter summary*
+
+- transformations between dimension such as ones that take 2D vectors to 3D vectors
+ - such transformations are still linear (origin maps to the origin and the gridlines remain parallel and evenly spaced)
+- a transformation that takes a 2D space to a 1D (a line) is also perfectly possible
+  - e.g. $\begin{bmatrix} 2 & 1 \end{bmatrix}$ means that $\hat{i}$ lands on 2 and $\hat{j}$ lands on 1
+
+---
+
+#+BEGIN_SRC jupyter-python :session zk :async yes
+  import numpy as np
+
+  # output of a transformation that takes i to:
+  transformed_i = np.array([2,-1,-2])
+  # and j to:
+  transformed_j = np.array([0,1,1])
+
+  # 3 x 2 matrix
+  a = np.array([[transformed_i[0], transformed_j[0]],
+                [transformed_i[1], transformed_j[1]],
+                [transformed_i[2], transformed_j[2]]])
+
+#+END_SRC
+
+#+RESULTS:
+
+** DONE Dot products and duality: https://www.youtube.com/watch?v=LyGKycYT2v0
+
+---
+
+*NOTE: chapter summary*
+
+- matrix-vector product <=> dot product
+
+---
+
+#+BEGIN_SRC jupyter-python :session zk :async yes
+  import numpy as np
+
+  # original vector in 2D space
+  v = np.array([[4], [3]])
+
+  # a transformation that takes 2D to 1D (i to 1, j to -2)
+  a = np.array([1, -2])
+
+  v_transformed = np.matmul(a, v)
+  print(f"L({v}) = {v_transformed}")
+#+END_SRC
+
+#+RESULTS:
+: L([[4]
+:  [3]]) = [-2]
+
+* IN-PROGRESS Practice Problems
+** DONE Exercise 1
+#+BEGIN_SRC jupyter-python :session zk :async yes
+  import numpy as np
+
+  A = [[1,2,3],[4,5,6],[7,8,9]]
+  B = [[1,1,1],[2,2,2],[3,3,3]]
+  C = [[2,3,4],[6,7,8],[10,11,12]]
+
+  def add_arrays(A, B):
+      return np.array(A) + np.array(B)
+
+  assert (add_arrays(A, B) == np.array(C)).all()
+
+  # .all = element-wise equlity check (every element in the array is true)
+  print(np.array([True, True, True]).all())
+  print(np.array([False, True, True]).all())
+#+END_SRC
+
+#+RESULTS:
+: True
+: False
+
+** DONE Exercise 2
+#+BEGIN_SRC jupyter-python :session zk :async yes
+  import numpy as np
+
+  def matrix_multiply(A, B):
+      return np.matmul(A, B)
+
+  A = np.array([[0,1],
+                [-1,0]])
+
+  B = np.array([[-0., -1.],
+                [ 1.,  0.]])
+
+  C = np.array([[1., 0.],
+                [0., 1.]])
+
+  assert (matrix_multiply(A, B) == C).all()
+#+END_SRC
+
+#+RESULTS:
+
+#+BEGIN_SRC jupyter-python :session zk :async yes
+  import numpy as np
+
+  def element_wise_multiply(A, B):
+      return np.multiply(A,B)
+
+  A  = np.array([[0,1],
+                 [-1,0]])
+
+  B = np.array([[-0., -1.],
+                [ 1.,  0.]])
+
+  C = np.array([[0., -1.],
+                [-1, 0.]])
+
+  assert (element_wise_multiply(A, B) == C).all()
+#+END_SRC
+
+#+RESULTS:
+
+** DONE Exercise 3
+#+BEGIN_SRC jupyter-python :session zk :async yes
+  import numpy as np
+
+  def dot_product(A, B):
+      return A @ B
+
+  A = np.array([1,2,3,4])
+  B = np.array([[1],[2],[3],[4]])
+ 
+  assert (dot_product(A, B) == 30)
+#+END_SRC
+
+#+RESULTS:
+
+** IN-PROGRESS Exercise 4
+#+BEGIN_SRC jupyter-python :session zk :async yes
+  import numpy as np
 
 
 #+END_SRC
