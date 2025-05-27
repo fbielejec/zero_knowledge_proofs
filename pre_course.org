@@ -580,7 +580,7 @@ $\begin{bmatrix}
 
 #+RESULTS:
 
-** IN-PROGRESS Exercise 5: modular arithmetic
+** DONE Exercise 5: modular arithmetic
 
 - The challenge here is to compute the modular inverse of 15 % 1223.
 - That is 15 * x % 1223 == 1.
@@ -627,11 +627,36 @@ $\begin{bmatrix}
   # 15 * x1 + 1223 * y1 == 1
   gcd,x1,y1 = gcdExtended(a,m)
 
-  print(f"{gcd} == {a} * {x1} + {m} * {y1} == {a*x1 + m*y1}")
+  print(f"{a*x1 + m*y1} == {a} * {x1} + {m} * {y1} == {gcd}")
   print(f"{a}^-1 * {a} mod {m} = {(x1 * a) % m} => {a}^-1 mod {m} = {x1}")
+
+  assert a * x1 % m == 1
 #+END_SRC
 
 #+RESULTS:
 : GCD(15,1223)=1
 : 1 == 48 * -586 + 1223 * 23 == 1
 : 48^-1 * 48 mod 1223 = 1 => 48^-1 mod 1223 = -586
+
+** IN-PROGRESS Exercise 6: Column and Row Slicing
+
+#+BEGIN_SRC jupyter-python :session zk :async yes
+  import numpy as np
+
+def get_column_as_1d(A, col_number):
+    return A[:, col_number]
+
+def get_row_as_1d(A, row_number):
+    return A[row_number, :]
+
+A = np.array([[1,2,3],[4,5,6],[7,8,9]])
+
+# [2,5,8]
+print(get_column_as_1d(A, 1)) 
+
+print(get_row_as_1d(A, 2)) # [7,8,9]
+#+END_SRC
+
+#+RESULTS:
+: [2 5 8]
+: [7 8 9]
