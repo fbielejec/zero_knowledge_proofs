@@ -1,6 +1,6 @@
 * IN-PROGRESS Pre-Course
 - https://leather-bulb-be5.notion.site/ZKP-Pre-Course-Self-Learn-Material-V2-31b9618231cd424fa72bdc5f11221bea
-* IN-PROGRESS Linear algebra
+* DONE Linear algebra
 ** DONE vectors: https://www.youtube.com/watch?v=fNk_zzaMoSs
 
 ---
@@ -479,7 +479,7 @@ $\begin{bmatrix}
 : L([[4]
 :  [3]]) = [-2]
 
-* IN-PROGRESS Practice Problems
+* DONE Practice Problems
 ** DONE Exercise 1
 
 #+BEGIN_SRC jupyter-python :session zk :async yes
@@ -638,7 +638,7 @@ $\begin{bmatrix}
 : 1 == 48 * -586 + 1223 * 23 == 1
 : 48^-1 * 48 mod 1223 = 1 => 48^-1 mod 1223 = -586
 
-** IN-PROGRESS Exercise 6: Column and Row Slicing
+** DONE Exercise 6: Column and Row Slicing
 
 #+BEGIN_SRC jupyter-python :session zk :async yes
   import numpy as np
@@ -652,7 +652,7 @@ def get_row_as_1d(A, row_number):
 A = np.array([[1,2,3],[4,5,6],[7,8,9]])
 
 # [2,5,8]
-print(get_column_as_1d(A, 1)) 
+print(get_column_as_1d(A, 1))
 
 print(get_row_as_1d(A, 2)) # [7,8,9]
 #+END_SRC
@@ -660,3 +660,93 @@ print(get_row_as_1d(A, 2)) # [7,8,9]
 #+RESULTS:
 : [2 5 8]
 : [7 8 9]
+
+* DONE P vs NP Problem
+- *P (Polynomial) Problems:* problems that can be solved in polynomial time and whose solutions can be verified in polynomial time are called *problems in P*.
+  - e.g. Sorting a list : e.g. mergesort takes $\mathcal{O}(n \cdot log(n))< \mathcal{O}^{2}$ to sort a list and $\mathcal{O}(n)$ to verify that the list is sorted.
+- *The Witness*: proof that you solved a problem correctly
+  - in the example above a sorted list would be a witness
+- *NP (non-deterministic polynomial) Problems:*
+  - Any problem whose proposed solution (a *witness*) can be quickly verified as correct is a problem in NP.
+  - However, finding the solution might require exponential resources.
+  - Example: Computing the solution to a Sudoku puzzle and verifying the proposed solution to a Sudoku puzzle.
+    - we can quickly verify the solution is correct simply by looping over the columns, rows, and subgrids, meaning the witness can be verified in polynomial time.
+    - computing the solution requires significantly more resources: $\mathcal{O}(c^n)$, where $n$ is the number of rows == number of columns in the puzzle
+  - Example: 3-coloring a map: https://www.youtube.com/watch?v=WlcXoz6tn4g
+- *Problems in PSPACE*
+  - Problems that require exponential resources to solve and verify
+- *P vs NP*
+  - P is the class of problems that can be solved and verified efficiently
+  - NP is the class of problems that can be verified efficiently.
+  - are these two classes of the problems the same?
+  - Finding a solution is always *at least as hard as verifying it*. (By definition, solving a problem includes finding the correct answer, which means an algorithm that solves the problem is also verifying its answer in the process)
+  - If P = NP, it would mean that whenever we can find an efficient method for verifying a solution, we can also find an efficient method for finding that solution.
+  - researchers widely speculate that $P \neq NP$ and $NP \neq PSPACE$, no formal mathematical proof exists for these conclusions.
+* IN-PROGRESS Expressing problems and solutions as Boolean formulas
+
+---
+
+*NOTES*
+
+- All problems in P and NP can be verified by transforming them to boolean formulas.
+- For example
+  - $A > B$ can be modeled with $A \land \neg B$
+  - $A = B$ can be modeled with $(A \land B) \lor \neg (A \lor B)$
+
+---
+
+- sage: operators &, |, ~, ^, ->, <->, corresponding to and, or, not, xor, if...then, if and only if.
+
+#+BEGIN_SRC sage :session . :exports both
+  import sage.logic.propcalc as propcalc
+
+  f = propcalc.formula("(x1 | ~x2 | ~x3) & (~x2 | x3 | x4) & (~x2 | ~x3 | ~x4)")
+  f.evaluate({'x1' : True, 'x2' : False, 'x3' : True, 'x4' : False})
+#+END_SRC
+
+#+RESULTS:
+: True
+
+=Example: checking whether A > B (in 4 bit logic)=
+
+#+BEGIN_SRC jupyter-python :session zk :async yes
+  A=11
+  B=9
+
+  def bits(n, endian='little'):
+      bits_le = [(n >> i) & 1 for i in range(4)]
+      if endian == 'big':
+          return bits_le[::-1]
+      return bits_le
+
+  bits_be_11 = bits(A, endian = 'big')
+  print(f"11 = {bits_be_11}")
+
+  bits_be_9 = bits(B, endian = 'big')
+  print(f"9 = {bits_be_9}")
+
+  def compare(bits_p, bits_q):
+      """
+      Compare integers P and Q bit decomposition
+      Assumes BigEndian representation (MSB at index 0)
+      Assumes same number of bits!
+
+      Returns:
+        0 if P == Q, 1 id P > Q, -1 if P < Q
+      """
+      for idx in range(len(bits_p)):
+          p = bits_p[idx] 
+          q = bits_q[idx]
+          if p != q:
+              return p - q
+      return 0
+
+  compare(bits_be_11, bits_be_9)
+#+END_SRC
+
+#+RESULTS:
+:RESULTS:
+: 11 = [1, 0, 1, 1]
+: 9 = [1, 0, 0, 1]
+: 1
+:END:
