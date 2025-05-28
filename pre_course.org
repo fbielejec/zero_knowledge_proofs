@@ -682,11 +682,16 @@ print(get_row_as_1d(A, 2)) # [7,8,9]
   - Finding a solution is always *at least as hard as verifying it*. (By definition, solving a problem includes finding the correct answer, which means an algorithm that solves the problem is also verifying its answer in the process)
   - If P = NP, it would mean that whenever we can find an efficient method for verifying a solution, we can also find an efficient method for finding that solution.
   - researchers widely speculate that $P \neq NP$ and $NP \neq PSPACE$, no formal mathematical proof exists for these conclusions.
-* IN-PROGRESS Expressing problems and solutions as Boolean formulas
+* DONE Expressing problems and solutions as Boolean formulas
 
 - All problems in P and NP can be verified by transforming them to *boolean formulas*.
-- sage: operators &, |, ~, ^ corresponding to and, or, not, xor
-  - also existing ->, <-> : if...then, if and only if.
+
+---
+
+*NOTE: sage boolean logic cheatsheet*
+
+- operators &, |, ~, ^ corresponding to and, or, not, xor
+- also existing ->, <-> : if...then, if and only if.
 
 #+BEGIN_SRC sage :session . :exports both
   import sage.logic.propcalc as propcalc
@@ -697,6 +702,8 @@ print(get_row_as_1d(A, 2)) # [7,8,9]
 
 #+RESULTS:
 : True
+
+---
 
 - For example
   - $A > B$ can be modeled with $A \land \neg B$
@@ -761,19 +768,19 @@ $\begin{cases}
   import sage.logic.propcalc as propcalc
 
   # bit p > q
-  def p_geq_q(bit_p, bit_q):  
+  def p_geq_q(bit_p, bit_q):
       return propcalc.formula("p{bit_p} & ~q{bit_q}".format(bit_p = bit_p, bit_q = bit_q))
 
   # bit p == q
-  def p_eq_q(bit_p, bit_q):  
+  def p_eq_q(bit_p, bit_q):
       return propcalc.formula("(p{bit_p} & q{bit_q}) | ~(p{bit_p} | q{bit_q})".format(bit_p = bit_p, bit_q = bit_q))
 
   witness = {'p4' : True, 'p3' : False, 'p2' : True, 'p1' : True,
              'q4' : True, 'q3' : False, 'q2' : False, 'q1' : True}
 
   # I know a witness (decomposed P and Q) such that P >= Q
-  p_geq_q(4,4).evaluate(witness) | (p_eq_q(4,4).evaluate(witness) & p_geq_q(3,3).evaluate(witness)) | (p_eq_q(4,4).evaluate(witness) & p_eq_q(3,3).evaluate(witness) & p_geq_q(2,2).evaluate(witness)) | (p_eq_q(4,4).evaluate(witness) & p_eq_q(3,3).evaluate(witness) & p_eq_q(2,2).evaluate(witness) & (p_geq_q(1,1).evaluate(witness) | p_eq_q(1,1).evaluate(witness))) 
-   
+  p_geq_q(4,4).evaluate(witness) | (p_eq_q(4,4).evaluate(witness) & p_geq_q(3,3).evaluate(witness)) | (p_eq_q(4,4).evaluate(witness) & p_eq_q(3,3).evaluate(witness) & p_geq_q(2,2).evaluate(witness)) | (p_eq_q(4,4).evaluate(witness) & p_eq_q(3,3).evaluate(witness) & p_eq_q(2,2).evaluate(witness) & (p_geq_q(1,1).evaluate(witness) | p_eq_q(1,1).evaluate(witness)))
+
 #+END_SRC
 
 #+RESULTS:
@@ -781,3 +788,7 @@ $\begin{cases}
 
 - You can *check if a list is sorted* using such an expression:
   - repeatedly apply the above comparison expression to each pair of adjacent elements in the list and combine the comparison expressions using the *AND* operation.
+
+- In the ZK literature, we often refer to Boolean formulas as *Boolean circuits*.
+  - Creating a zero knowledge proof for a problem boils down to translating the problem to a circuit
+
