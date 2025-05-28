@@ -684,18 +684,9 @@ print(get_row_as_1d(A, 2)) # [7,8,9]
   - researchers widely speculate that $P \neq NP$ and $NP \neq PSPACE$, no formal mathematical proof exists for these conclusions.
 * IN-PROGRESS Expressing problems and solutions as Boolean formulas
 
----
-
-*NOTES*
-
-- All problems in P and NP can be verified by transforming them to boolean formulas.
-- For example
-  - $A > B$ can be modeled with $A \land \neg B$
-  - $A = B$ can be modeled with $(A \land B) \lor \neg (A \lor B)$
-
----
-
-- sage: operators &, |, ~, ^, ->, <->, corresponding to and, or, not, xor, if...then, if and only if.
+- All problems in P and NP can be verified by transforming them to *boolean formulas*.
+- sage: operators &, |, ~, ^ corresponding to and, or, not, xor
+  - also existing ->, <-> : if...then, if and only if.
 
 #+BEGIN_SRC sage :session . :exports both
   import sage.logic.propcalc as propcalc
@@ -707,7 +698,11 @@ print(get_row_as_1d(A, 2)) # [7,8,9]
 #+RESULTS:
 : True
 
-=Example: checking whether A > B (in 4 bit logic)=
+- For example
+  - $A > B$ can be modeled with $A \land \neg B$
+  - $A = B$ can be modeled with $(A \land B) \lor \neg (A \lor B)$
+
+- Checking whether A > B (in 4 bit logic)
 
 #+BEGIN_SRC jupyter-python :session zk :async yes
   A=11
@@ -725,17 +720,17 @@ print(get_row_as_1d(A, 2)) # [7,8,9]
   bits_be_9 = bits(B, endian = 'big')
   print(f"9 = {bits_be_9}")
 
+  # Binary comparison by most significant different bit
   def compare(bits_p, bits_q):
       """
       Compare integers P and Q bit decomposition
-      Assumes BigEndian representation (MSB at index 0)
       Assumes same number of bits!
 
       Returns:
         0 if P == Q, 1 id P > Q, -1 if P < Q
       """
       for idx in range(len(bits_p)):
-          p = bits_p[idx] 
+          p = bits_p[idx]
           q = bits_q[idx]
           if p != q:
               return p - q
@@ -750,3 +745,39 @@ print(get_row_as_1d(A, 2)) # [7,8,9]
 : 9 = [1, 0, 0, 1]
 : 1
 :END:
+
+- checking if $P \geq  Q$ using a boolean formula:
+  - bits in P are $[p_{4}, p_{3}, p_{2}, p_{1}]$ (ordered MSB to LSB)
+  - bits in Q are $[q_{4}, q_{3}, q_{2}, q_{1}]$
+
+$\begin{cases}
+ (p_{4} > q_{4}) \hspace{.5em}  \lor \\
+((p_{4} = q_{4}) \land (p_{3} > q_{3})) \hspace{.5em} \lor \\
+((p_{4} = q_{4}) \land (p_{3} = q_{3}) \land (p_{2} > q_{2}) ) \hspace{.5em} \lor \\
+((p_{4} = q_{4}) \land (p_{3} = q_{3}) \land (p_{2} = q_{2}) \land ((p_{1} > q_{1}) \lor (p_{1} = q_{1}) ) )
+\end{cases}$
+
+#+BEGIN_SRC sage :session . :exports both
+  import sage.logic.propcalc as propcalc
+
+  # bit p > q
+  def p_geq_q(bit_p, bit_q):  
+      return propcalc.formula("p{bit_p} & ~q{bit_q}".format(bit_p = bit_p, bit_q = bit_q))
+
+  # bit p == q
+  def p_eq_q(bit_p, bit_q):  
+      return propcalc.formula("(p{bit_p} & q{bit_q}) | ~(p{bit_p} | q{bit_q})".format(bit_p = bit_p, bit_q = bit_q))
+
+  witness = {'p4' : True, 'p3' : False, 'p2' : True, 'p1' : True,
+             'q4' : True, 'q3' : False, 'q2' : False, 'q1' : True}
+
+  # I know a witness (decomposed P and Q) such that P >= Q
+  p_geq_q(4,4).evaluate(witness) | (p_eq_q(4,4).evaluate(witness) & p_geq_q(3,3).evaluate(witness)) | (p_eq_q(4,4).evaluate(witness) & p_eq_q(3,3).evaluate(witness) & p_geq_q(2,2).evaluate(witness)) | (p_eq_q(4,4).evaluate(witness) & p_eq_q(3,3).evaluate(witness) & p_eq_q(2,2).evaluate(witness) & (p_geq_q(1,1).evaluate(witness) | p_eq_q(1,1).evaluate(witness))) 
+   
+#+END_SRC
+
+#+RESULTS:
+: True
+
+- You can *check if a list is sorted* using such an expression:
+  - repeatedly apply the above comparison expression to each pair of adjacent elements in the list and combine the comparison expressions using the *AND* operation.
