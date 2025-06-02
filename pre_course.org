@@ -925,34 +925,76 @@ A *set* is a /well-defined collection/ of distinct objects, called *elements* (o
 
 =Key Properties=
 
-1. *Cardinality*:
-   The number of elements in a set $A$ is denoted $|A|$.
-   - Example: $|\{a, b, c\}| = 3$.
+- *Cardinality*:
+- The number of elements in a set $A$ is denoted $|A|$.
+- Example: $|\{a, b, c\}| = 3$.
+- There are different levels of infinity in set theory.
+  - For example there are infinitely many more real numbers than there are integers.
+  - We say integers are *countably infinite* because you can literally count them out.
+  - But there is no way to start counting real numbers which are *uncountably infinite*.
 
-2. *Subset*:
+- *Subset*:
 
 =Strict/Proper Subset=
+
 - A set $A$ is a strict (or proper) subset of a set $B$, denoted $\subset$ or $\subsetneq$ if:
   1. *Every element of $A$ is in $B$* (i.e., $A \subseteq B$),
   2. *But $B$ contains at least one element not in $A$* (i.e., $A \neq B$).
+- Example: $\{1, 2\} \subsetneq \{1, 2, 3\}$.
 
 =Non-Strict Subset=
+
 - A set $A$ is a /subset/ (not necessarily proper) of $B$, denoted $A \subseteq B$, if every element of $A$ is in $B$.
 - This includes the case where $A = B$.
-- Example: $\{1, 2\} \subseteq \{1, 2, 3\}$.
+
 
 - *Equality*:
-  Two sets $A$ and $B$ are equal ($(A = B$) if they contain the same elements.
-  - Example: $\{x \mid x^2 = 1\} = \{-1, 1\}$.
+- Two sets $A$ and $B$ are equal ($(A = B$) if they contain the same elements.
+- If $A$ is a subset of $B$ and $B$ is a subset of $A$, then $A=B$.
+  - $A=B \Leftrightarrow A \subseteq B \text{ and } B \subseteq A$
+- Example: $\{x \mid x^2 = 1\} = \{-1, 1\}$.
 
 - *Empty Set*:
   The unique set with no elements, denoted $\emptyset$ or $\{\}$.
+
+- *Ordered pair*
+- Sets do not have an inherent order
+- We can introduce *ordered pairs* as a new data structure emerge from sets of sets:
+  - For example $(a,b)$ is an ordered pair created by the set $\{a, \{ b\} \}$.
+  - $(a,b) \neq (b,a)$ because $\{a, \{ b\} \} \neq \{ \{ b\}, a \}$.
 
 - *Operations*:
   - *Union*: $A \cup B = \{x \mid x \in A \text{ or } x \in B\}$.
   - *Intersection*: $A \cap B = \{x \mid x \in A \text{ and } x \in B\}$.
   - *Complement*: $A^c = \{x \mid x \notin A\}$ (relative to a universal set).
   - *Cartesian Product*: $A \times B = \{(a, b) \mid a \in A, b \in B\}$.
+    - *NOTE*: cartesian products are not commutative in a general case.
+
+** IN-PROGRESS Functions as subsets of cartesian products
+
+- In the set-theoretic terms *function* is a subset of the Cartesian product of the *domain set* and *codomain set*.
+- To define a function, we need the set we start from and the set we end at. 
+- We take the Cartesian product of these two sets, which results in every possible assignment from the input set to the output set. 
+- Then we take the subset of the Cartesian product to define the function as we like.
+- When dealing with infinite sets like integers, we aren't bothered that we can't enumerate all the ordered points explicitly.
+
+=Example=
+
+Let $A = \{1,2,3\}$, $B = \{x, y, z\}$. 
+The cartesian product $A \times B= \{ (1,x), (1,y), (1,z), (2,x), \ldots (3,z)\}$.
+The same represented in a tabular format:
+
+|   | x       | y       | z       |
+| 1 | (1,x)   | *(1,y)* | (1,z)   |
+| 2 | (2,x)   | (2,y)   | *(2,z)* |
+| 3 | *(3,x)* | (3,y)   | (3,z)   |
+
+The highlighted subset of the product i.e. $\{ (1,y),(2,z),(3,x) \}$ defines a function:
+
+$1 \rightarrow y$
+$2 \rightarrow z$
+$3 \rightarrow x$
+
 
 ** IN-PROGRESS Exercises
 
@@ -994,6 +1036,32 @@ where:
   - $\pi + (-\pi) = 0$ (algebraic).
   - $e \times e^{-1} = 1$ (algebraic).
 
-Relationship:
+Relationship is strict (proper):
+- $\mathbb{T} \subsetneq \mathbb{C}$
+- Every transcendental number is a complex number (since it can be represented as $t + 0\cdoti$ where $t \in \mathbb{T}$)
+- But the sets are not equal, since e.g. $1 + i$ is complex but not transcendental.
 
-- $\mathbb{T} \subset $
+=Using the formal definition of equality, argue that if two finite sets have different cardinality, they cannot be equal.=
++- Demonstrating this for infinite sets is a little trickier, so we skip that+
+- Let' assume two finite sets $A=\{a_0, \ldots a_n \}$ and $B=\{ b_0, \ldots b_k \}$, where $n \neq k$, with different cardinalities: $|A| \neq |B|$
+- if $A=B$ than they contain the same elements, meaning that $\forall x, \hspace{.5em} x \in A \iff x \in B$, contradicting $n \neq k$. QED
+
+=Compute the Cartesian product of $B \times A$=
+Let $A = \{1,2,3\}$, $B = \{x, y, z\}$
+
+$A \times B$
+
+|   | x     | y     | z     |
+| 1 | (1,x) | (1,y) | (1,z) |
+| 2 | (2,x) | (2,y) | (2,z) |
+| 3 | (3,x) | (3,y) | (3,z) |
+
+$B \times A$
+
+|   | 1     | 2     | 3     |
+| x | (x,1) | (x,2) | (x,3) |
+| y | (y,1) | (y,2) | (y,3) |
+| z | (z,1) | (z,2) | (z,3) |
+
+$A \times B \neq $B \times A$
+
