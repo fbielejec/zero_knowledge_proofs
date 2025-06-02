@@ -901,7 +901,7 @@ A *finite field* $\mathbb{F}_q$ (where $q = p^n$ for prime $p$ and $n \geq 1$) h
 7. *Key Theorems*
    - *Fermat’s Little Theorem* (for $\mathbb{F}_p$):
 
-   $\forall a \ne 0 \in \mathbb{F}_p, \ a^{p-1} \equiv 1 \mod p$
+$\forall a \ne 0 \in \mathbb{F}_p, \ a^{p-1} \equiv 1 \mod p$
 
    - *Lagrange’s Theorem*:
      - The order of any subgroup divides $q-1$.
@@ -915,3 +915,85 @@ A *finite field* $\mathbb{F}_q$ (where $q = p^n$ for prime $p$ and $n \geq 1$) h
  - extended_gcd
 * IN-PROGRESS Elementary set theory: https://www.rareskills.io/post/set-theory
 ** IN-PROGRESS Set
+
+=Definition: Set=
+
+A *set* is a /well-defined collection/ of distinct objects, called *elements* (or *members*), where:
+1) *Unordered*: The arrangement of elements does not matter (e.g., $\{1, 2\} = \{2, 1\}$.
+2) *Distinctness*: No duplicates are allowed (e.g., $\{1, 1, 2\} = \{1, 2\}$).
+3) *Well-defined membership*: For any object $x$ and set $A$, it must be clear whether $x \in A$ (belongs to $A$) or $x \notin A$ (does not belong).
+
+=Key Properties=
+
+1. *Cardinality*:
+   The number of elements in a set $A$ is denoted $|A|$.
+   - Example: $|\{a, b, c\}| = 3$.
+
+2. *Subset*:
+
+=Strict/Proper Subset=
+- A set $A$ is a strict (or proper) subset of a set $B$, denoted $\subset$ or $\subsetneq$ if:
+  1. *Every element of $A$ is in $B$* (i.e., $A \subseteq B$),
+  2. *But $B$ contains at least one element not in $A$* (i.e., $A \neq B$).
+
+=Non-Strict Subset=
+- A set $A$ is a /subset/ (not necessarily proper) of $B$, denoted $A \subseteq B$, if every element of $A$ is in $B$.
+- This includes the case where $A = B$.
+- Example: $\{1, 2\} \subseteq \{1, 2, 3\}$.
+
+- *Equality*:
+  Two sets $A$ and $B$ are equal ($(A = B$) if they contain the same elements.
+  - Example: $\{x \mid x^2 = 1\} = \{-1, 1\}$.
+
+- *Empty Set*:
+  The unique set with no elements, denoted $\emptyset$ or $\{\}$.
+
+- *Operations*:
+  - *Union*: $A \cup B = \{x \mid x \in A \text{ or } x \in B\}$.
+  - *Intersection*: $A \cap B = \{x \mid x \in A \text{ and } x \in B\}$.
+  - *Complement*: $A^c = \{x \mid x \notin A\}$ (relative to a universal set).
+  - *Cartesian Product*: $A \times B = \{(a, b) \mid a \in A, b \in B\}$.
+
+** IN-PROGRESS Exercises
+
+=Assume you have a proper definition for integers. Create a well-defined set of rational numbers.=
+
+$\mathbb{Q}=\{x=\frac{p}{q} \hspace{.5em} | \hspace{.5em} p,q \in \mathbb{Z}, q \neq 0 \}$
+
+=Define the subset relationship between integers, rational numbers, real numbers, and complex numbers.=
+
+- integers: $\mathbb{Z} = \{\dots, -2, -1, 0, 1, 2, \dots\}$
+- rational numbers: $\mathbb{Q} = \left\{\frac{p}{q} \mid p, q \in \mathbb{Z}, q \neq 0\right\}$
+  - proper superset of $\mathbb{Z}$: every integer is a rational number: $\forall z \in \mathbb{Z}: \hspace{.5em} z = \frac{z}{1}$
+  - not every rational number is an integer, e.g. $\frac{1}{2}$ (and every other fractional for that matter).
+- real numbers $\mathbb{R}$: All numbers on the continuous number line, including rational numbers $\mathbb{Q}$ and irrational numbers (e.g. $\pi$, $\sqrt{2}$, ...)
+- complex numbers $\mathbb{C}$: numbers of the form $a + b \cdot i$, where $a, b \in \mathbb{R}$ and $i = \sqrt{-1}$.
+
+Relationships:
+ - $\mathbb{Z} \subseteq \mathbb{Q}$
+ - $\mathbb{Q} \subseteq \mathbb{R}$
+ - $\mathbb{R} \subseteq \mathbb{C}$
+
+where:
+ - $\subseteq$ denotes strict (proper) subset.
+
+=Define the relationship between the set of transcendental numbers and the set of complex numbers in terms of subsets. Is it a proper subset?=
+
+- *Transcendental numbers* are real or complex numbers that are /not/ roots of any non-zero polynomial equation with integer (or rational) coefficients.
+- In other words, they are numbers that *cannot* be defined via algebraic equations.
+- A number $x$ is transcendental if there is /no/ finite polynomial:
+
+$P(x) = a_{n} \cdot x^{n} + a_{n-1} \cdot x^{n-1} + \dots + a_0$
+
+where:
+- $a_i \in \mathbb{Z}$ such that $P(x) = 0$.
+
+- Almost all real numbers are transcendental (they vastly outnumber algebraic numbers, which are countable).
+- All transcendental numbers are irrational, but not all irrationals are transcendental (e.g., $\sqrt{2}$ is irrational but algebraic).
+- Transcendental numbers are /not/ closed under arithmetic operations. For example:
+  - $\pi + (-\pi) = 0$ (algebraic).
+  - $e \times e^{-1} = 1$ (algebraic).
+
+Relationship:
+
+- $\mathbb{T} \subset $
