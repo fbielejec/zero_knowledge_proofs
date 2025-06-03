@@ -791,8 +791,8 @@ $\begin{cases}
 
 - In the ZK literature, we often refer to Boolean formulas as *Boolean circuits*.
   - Creating a zero knowledge proof for a problem boils down to translating the problem to a circuit
-* IN-PROGRESS Finite fields: https://www.youtube.com/watch?app=desktop&v=ColSUxhpn6A
-** IN-PROGRESS Ring
+* DONE Finite fields: https://www.youtube.com/watch?app=desktop&v=ColSUxhpn6A
+** DONE Ring
 
 =Definition=
 
@@ -847,7 +847,7 @@ Ring satisfies the following axioms:
   - *No Zero Divisors*:
     - If $a \cdot b = 0$, then $a = 0$ or $b = 0$.
 
-** IN-PROGRESS Difference Between a Ring and a Field
+** DONE Difference Between a Ring and a Field
 
 A *field* is a *special case of a ring* with stricter requirements:
 
@@ -883,7 +883,6 @@ A *field* is a *special case of a ring* with stricter requirements:
   - $2^{-1} = 3$ (since $2 \cdot 3 = 6 \equiv 1 \mod 5$).
   - $4^{-1} = 4$ (since $4 \cdot 4 = 16 \equiv 1 \mod 5$).
 
-
 ** IN-PROGRESS Finite field (Galois Field)
 
 A *finite field* $\mathbb{F}_q$ (where $q = p^n$ for prime $p$ and $n \geq 1$) has:
@@ -913,7 +912,7 @@ $\forall a \ne 0 \in \mathbb{F}_p, \ a^{p-1} \equiv 1 \mod p$
 - proof that Z_p is a finite field if p is prime (that groups of prime order are fields): https://youtu.be/ColSUxhpn6A?t=1606
  - euler / fermat
  - extended_gcd
-* IN-PROGRESS Elementary set theory: https://www.rareskills.io/post/set-theory
+* DONE Elementary set theory: https://www.rareskills.io/post/set-theory
 ** IN-PROGRESS Set
 
 =Definition: Set=
@@ -1008,9 +1007,9 @@ $\mathbb{R} \time \mathbb{Z}$:
 |   ... | ...        | ...          | ... | ...          | ...            |
 | 500.3 | (500.3, 1) | (500.3, 2)   | ... | (500.3, 499) | *(500.3, 500)* |
 
-** IN-PROGRESS Set relations
+** DONE Set relations
 - The action of taking the [[*Functions as subsets of cartesian products][subsets of cartesian products]] is called a *relation*
-- A relation can be taken from a Cartesian product of a set with itself, or a set with another set. 
+- A relation can be taken from a Cartesian product of a set with itself, or a set with another set.
 - If we have two sets $A$ and $B$ (which may or may not be equal) and we take a subset of $A \times B$, then we say $a \in A$ is related to $b \in B$ if there is an ordered pair $(a,b)$ in the subset of $A \ times B$.
 
 =Example=
@@ -1023,8 +1022,52 @@ $y = x^2$ as the subset of $\mathbb{Z} \times \mathbb{Z}$
 |   3 | (3,1)   | (3,2) | (3,3) | (3,4)   | ... | *(3,9)* |
 | ... |         |       |       |         |     |         |
 
-- 2 from $X$ is related 4 from $Y$ 
+- 2 from $X$ is related 4 from $Y$
 - 3 from $X$ is not related to 4 from $Y$
+
+** IN-PROGRESS Binary operator
+
+=Definition: Binary Operator=
+
+A *binary operator* on a set $A$ is a *function* that maps every ordered pair of elements from $A$ to another element in $A$:
+
+$* : A \times A \to A$
+
+where:
+- $A \times A$ is the *Cartesian product* of $A$ with itself (the set of all ordered pairs $(a \in A, b \in A)$.
+- The output $*(a, b)$  (typically written as $a * b$ must belong to $A$.
+
+Binary operators must accept all members of set as its inputs (mapping is *surjective*).
+Each pair from $A \times A$ must map to exactly one element of $A$ (the result of a binary operation must have one unambiguous answer, i.e. the mapping must be *injective*).
+
+=Examples=
+
+- *addition of integers*: take any two elements from the set of integers and add them together, you get another element from the set of integers (e.g. $(1,3) \mapsto 4$)
+- *concatenation of strings* take any pair of strings from the set of strings, concatenate them, and the result is another string.
+
+=Definition: Closure of a Binary Operator=
+
+A binary operator $*$ on $A$ is *closed* (or $*A$ is closed under $*$) if applying $*$ to any two elements of $A$ *always* produces another element in $A$:
+
+$\forall a, b \in A, \quad a * b \in A$
+
+=Examples=
+
+1. *Closed Operations*:
+   - $+$ on $\mathbb{N}$: $\forall a, b \in \mathbb{N}, a + b \in \mathbb{N}$.
+   - $\times$ on $\mathbb{Q}$: $\forall p/q, r/s \in \mathbb{Q}, (p/q) \times (r/s) \in \mathbb{Q}$.
+
+2. *Not Closed*:
+   - Subtraction ($-$) on $\mathbb{N}$: $3 - 5 = -2 \notin \mathbb{N}$.
+   - Division ($/$) on $\mathbb{Z}$: $3 / 2 \notin \mathbb{Z}$.
+
+=Constructing a binary operator=
+
+- Start with a set $A$.
+- Take a cartesian product $A \times A$ and call this set of ordered pairs $P$.
+- Take a cartesian product $P \times A$
+- Take a subset of that according to the operator definition
+
 
 ** IN-PROGRESS Exercises
 
@@ -1214,3 +1257,33 @@ $5 \mapsto \frac{1}{3}$
 $6 \mapsto 4$
 $7 \mapsto \frac{3}{2}$
 $8 \mapsto \frac{2}{3}$
+
+=Pick a subset of ordered pairs that defines (a \times b) (mod 3)=
+
+Let's use an example of a set $A=\{0,1,2\}$. Taking the Cartesian product $A \times A $
+
+|   | 0     | 1     | 2     |
+| 0 | (0,0) | (0,1) | (0,2) |
+| 1 | (1,0) | (1,1) | (1,2) |
+| 2 | (2,0) | (2,1) | (2,2) |
+
+Then we take the Cartesian product of this new set of pairs with the original set
+
+|       | 0           | 1           | 2           |
+| (0,0) | *((0,0),0)* | ((0,0),1)   | ((0,0),2)   |
+| (0,1) | *((0,1),0)* | ((0,1),1)   | ((0,2),2)   |
+| (0,2) | *((0,2),0)* | ((0,2),1)   | ((0,2),2)   |
+| (1,0) | *((1,0),0)* | ((1,0),1)   | ((1,0),2)   |
+| (1,1) | ((1,1),0)   | *((1,1),1)* | ((1,1),2)   |
+| (1,2) | ((1,2),0)   | ((1,2),1)   | *((1,2),2)* |
+| (2,0) | *((2,0),0)* | ((2,0),1)   | ((2,0),2)   |
+| (2,1) | ((2,1),0)   | ((2,1),1)   | *((2,1),2)* |
+| (2,2) | ((2,2),0)   | *((2,2),1)* | ((2,2),2)   |
+
+Subset which defines $a \times b \hspace{.5em} (\text{mod } 3)$ is in *bold*
+
+=Define our set $A$ to be the numbers ${0,1,2,3,4}$ and our binary operator to be subtraction modulo 5. Define all the ordered pairs of $A \times A$ in a table, then map that set of ordered pairs to $A$.=
+TODO
+
+* TODO Elementary Group Theory
+- https://www.rareskills.io/post/group-theory
