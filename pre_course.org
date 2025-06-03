@@ -1287,3 +1287,21 @@ TODO
 
 * TODO Elementary Group Theory
 - https://www.rareskills.io/post/group-theory
+
+** IN-PROGRESS Exercises
+
+=Show that the set $\{1\}$ with the binary operator $\times$ is a group.=
+
+- Closure: $1 \times 1 = 1$
+- Associativity: $(1 \times 1) \times 1 = 1 \times (1 \times 1)$
+- Identity element is $1$ since: $1 \times 1 = 1$
+- Inverse: $1 \times 1 = 1$
++- Commutativity: $1 \times 1 = 1 \times 1$+
+
+=Integers (positive and negative) are not a group under multiplication. Show which of the four requirements (closed, associative, existence of identity, all elements having an inverse) are not satisfied=
+- Closure: $\forall a,b \in \mathbb{Z} \hspace{.5em} a \cdot b \in \mathbb{Z}$
+- Associativity: $\forall a,b,c \in \mathbb{Z} \hspace{.5em} (a \cdot b) \cdot c = a \cdot (b \cdot c)$
+- Identity element: $\exists 1 \in \mathbb{Z} \hspace{.5em} \text{ s.t. } a \cdot 1 = a$
+- Inverse:
+  - 0 has no multiplicative inverse in \mathbb{Z}: $0 \cdot a^{-1} = 1 \hspace{1em} \Rightarrow \hspace{1em} 0 = 1$. Contradiction.
+  - 2 has no multiplictive inverse in \mathbb{Z}:  $2 \cdot a^{-1} = 1 \hspace{1em} \Leftrightarrow \hspace{1em} a^{-1} = \frac{1}{2} \notin \mathbb{Z}$.
