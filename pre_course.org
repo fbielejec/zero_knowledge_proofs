@@ -973,14 +973,15 @@ A *set* is a /well-defined collection/ of distinct objects, called *elements* (o
 ** IN-PROGRESS Functions as subsets of cartesian products
 
 - In the set-theoretic terms *function* is a subset of the Cartesian product of the *domain set* and *codomain set*.
-- To define a function, we need the set we start from and the set we end at. 
-- We take the Cartesian product of these two sets, which results in every possible assignment from the input set to the output set. 
+  - i.e. function is a mapping from one set to another set.
+- To define a function, we need the set we start from and the set we end at.
+- We take the Cartesian product of these two sets, which results in every possible assignment from the input set to the output set.
 - Then we take the subset of the Cartesian product to define the function as we like.
 - When dealing with infinite sets like integers, we aren't bothered that we can't enumerate all the ordered points explicitly.
 
 =Example=
 
-Let $A = \{1,2,3\}$, $B = \{x, y, z\}$. 
+Let $A = \{1,2,3\}$, $B = \{x, y, z\}$.
 The cartesian product $A \times B= \{ (1,x), (1,y), (1,z), (2,x), \ldots (3,z)\}$.
 The same represented in a tabular format:
 
@@ -995,6 +996,17 @@ $1 \rightarrow y$
 $2 \rightarrow z$
 $3 \rightarrow x$
 
+=Example=
+
+Let's define a mapping between non-negative real numbers (zero or greater) and non-negative integers (zero or greater) using the *floor function* (function that removes the decimal portion of a number):
+
+$\mathbb{R} \time \mathbb{Z}$:
+
+|       | 1          | 2            | ... | 499          | 500            |
+|   1.5 | *(1.5, 1)* | (1.5, 2)     | ... | (1.5, 499)   | (1.5, 500)     |
+| 2.772 | (2.772, 1) | *(2.772, 2)* | ... | (2.772, 499) | (2.772, 500)   |
+|   ... | ...        | ...          | ... | ...          | ...            |
+| 500.3 | (500.3, 1) | (500.3, 2)   | ... | (500.3, 499) | *(500.3, 500)* |
 
 ** IN-PROGRESS Exercises
 
@@ -1065,3 +1077,102 @@ $B \times A$
 
 $A \times B \neq $B \times A$
 
+=Define a mapping (function) from integers $\{ 1,2,3,4,5,6 \}$ to the set $\{ \text{even}, \text{odd} \}$=
+
+|   | even       | odd       |
+| 1 | (1,even)   | *(1,odd)* |
+| 2 | *(2,even)* | (2,odd)   |
+| 3 | (3,even)   | *(3,odd)* |
+| 4 | *(4,even)* | (4,odd)   |
+| 5 | (5,even)   | *(5,odd)* |
+| 6 | *(6,even)* | (6,odd)   |
+
+$f(x) = \begin{cases}
+\text{even} & \text{if }  x \mod 2 = 0 \\
+\text{odd} & \text{else}
+\end{cases}$
+
+---
+
+*NOTE*
+
+This is the *parity function*, a canonical example of a surjective but non-injective function.
+
+---
+
+=The Cartesian product of the polygons and the set of integers representing the number of sides=
+
+Let $polygons = \{triange, square, pentagon, hexagon, heptagon, octagon \}$ and a set of integers $\{0,1,2,3,4,5,6,7,8\}$.
+Define a mapping such that the polygon maps to an integer representing the number of sides.
+
+|          | 0 | 1 | 2 |            3 |          4 |            5 |           6 |            7 |           8 |
+| triangle |   |   |   | (triangle,3) |            |              |             |              |             |
+| square   |   |   |   |              | (square,4) |              |             |              |             |
+| pentagon |   |   |   |              |            | (pentagon,5) |             |              |             |
+| hexagon  |   |   |   |              |            |              | (hexagon,6) |              |             |
+| heptagon |   |   |   |              |            |              |             | (heptagon,7) |             |
+| octagon  |   |   |   |              |            |              |             |              | (octagon,8) |
+
+=Define a mapping between positive integers and positive rational numbers=
+
+*Solution 1 (using the Fundamental Theorem of Arithmetic)*
+
+---
+
+*NOTE: Fundamental Theorem of Arithmetic*
+
+Every positive integer (i.e. every integer greater than 1) can be uniquely expressed as a product of prime numbers, up to permutation (i.e. up to the order of the factors) as:
+
+$p_1^{k_1} \cdot p_2^{k_2} \cdots p_n^{k_n}$
+
+where:
+- $p_1,\ldots p_n$ are distinct prime numbers.
+- $k_1,\ldots, k_n$ are positive integers that represent multiplicities of the primes.
+
+---
+
+By the [[file:~/CloudStation/Cryptography_101/zkSNARKs-notes/arithmetics.org::*Fundamental Theorem of Arithmetic][Fundamental Theorem of Arithmetic]], every integer can be represented as a product of primes.
+Similarly every rational number, only that now $k_1,\ldots, k_n$ can be negative.
+
+We take:
+
+$k_j \mapsto \begin{cases} \frac{k_{j}+1}{2} & \text { if odd} \\ -\frac{k_{j}}{2} & \text { if even} \end{cases}$
+
+Example:
+
+
+$1=1^1 \mapsto 1^{\frac{1+1}{1}}=1$
+$2=2^1 \mapsto 2^{\frac{1+1}{2}}=2$
+$3=3^1 \mapsto 3^{\frac{1+1}{2}}=3$
+$4=2^2 \mapsto 2^{-\frac{2}{2}}=\frac{1}{2}$
+$5 \mapsto 5$
+$6= 2^1 \cdot 3^1 \mapsto 2^{\frac{1+1}{2}} \cdot 3^{\frac{1+1}{2}}=6$
+$7 \mapsto 7$
+$8 = 2^3 \mapsto 2^{\frac{3+1}{2}}=4$
+$\vdots$
+
+Such a mapping is a bijection:
+- It's *injective (One-to-One)*: No two integers map to the same rational
+- It's *surjective (Onto)*: Every positive rational appears in the list
+
+*Solution 2*
+
+1. Draw a table to construct rational numbers where the columns are the numerators and the rows are the denominators (a cartesian product of naturals with naturals)
+2. Traverse the table grid diagonally (Cantor's Pairing):
+   - First diagonal: $\frac{1}{1}$
+   - Second diagonal: $\frac{2}{1}, \frac{1}{2}$
+   - Third diagonal: $\frac{3}{1}, \frac{2}{2}, \frac{1}{3}$
+   - ...
+3. Skip the duplicates
+   - Omit fractions where $\gcd(p, q) \neq 1$ (e.g., skip $\frac{2}{2}$ since it equals $\frac{1}{1}$).
+
+| *q\p* | *1*     | *2*    | *3*    | *4*    | *5*     | *6* | *7* | *8* |
+|-------+---------+--------+--------+--------+---------+-----+-----+-----|
+| *1*   | 1: 1/1  | 2: 2/1 | 4: 3/1 | 6: 4/1 | 10: 5/1 | ... |     |     |
+| *2*   | 3: 1/2  | +2/2+  | 7: 3/2 | +4/2+  | ...     |     |     |     |
+| *3*   | 5: 1/3  | 8: 2/3 | +3/3+  | ...    |         |     |     |     |
+| *4*   | 9: 1/4  | +2/4+  | ...    |        |         |     |     |     |
+| *5*   | 11: 1/5 | ...    |        |        |         |     |     |     |
+| *6*   | ...     |        |        |        |         |     |     |     |
+| *7*   |         |        |        |        |         |     |     |     |
+| *8*   |         |        |        |        |         |     |     |     |
