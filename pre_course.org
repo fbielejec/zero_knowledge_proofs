@@ -970,7 +970,7 @@ A *set* is a /well-defined collection/ of distinct objects, called *elements* (o
   - *Cartesian Product*: $A \times B = \{(a, b) \mid a \in A, b \in B\}$.
     - *NOTE*: cartesian products are not commutative in a general case.
 
-** IN-PROGRESS Functions as subsets of cartesian products
+** DONE Functions as subsets of cartesian products
 
 - In the set-theoretic terms *function* is a subset of the Cartesian product of the *domain set* and *codomain set*.
   - i.e. function is a mapping from one set to another set.
@@ -1007,6 +1007,24 @@ $\mathbb{R} \time \mathbb{Z}$:
 | 2.772 | (2.772, 1) | *(2.772, 2)* | ... | (2.772, 499) | (2.772, 500)   |
 |   ... | ...        | ...          | ... | ...          | ...            |
 | 500.3 | (500.3, 1) | (500.3, 2)   | ... | (500.3, 499) | *(500.3, 500)* |
+
+** IN-PROGRESS Set relations
+- The action of taking the [[*Functions as subsets of cartesian products][subsets of cartesian products]] is called a *relation*
+- A relation can be taken from a Cartesian product of a set with itself, or a set with another set. 
+- If we have two sets $A$ and $B$ (which may or may not be equal) and we take a subset of $A \times B$, then we say $a \in A$ is related to $b \in B$ if there is an ordered pair $(a,b)$ in the subset of $A \ times B$.
+
+=Example=
+
+$y = x^2$ as the subset of $\mathbb{Z} \times \mathbb{Z}$
+
+| X\Y | 1       | 2     | 3     | 4       | ... |       9 |
+|   1 | *(1,1)* | (1,2) | (1,3) | (1,4)   | ... |         |
+|   2 | (2,1)   | (2,2) | (2,3) | *(2,4)* | ... |         |
+|   3 | (3,1)   | (3,2) | (3,3) | (3,4)   | ... | *(3,9)* |
+| ... |         |       |       |         |     |         |
+
+- 2 from $X$ is related 4 from $Y$ 
+- 3 from $X$ is not related to 4 from $Y$
 
 ** IN-PROGRESS Exercises
 
@@ -1149,6 +1167,16 @@ $5 \mapsto 5$
 $6= 2^1 \cdot 3^1 \mapsto 2^{\frac{1+1}{2}} \cdot 3^{\frac{1+1}{2}}=6$
 $7 \mapsto 7$
 $8 = 2^3 \mapsto 2^{\frac{3+1}{2}}=4$
+
+$\vdots$
+
+More generally:
+
+$p \mapsto p$
+$p^2 \mapsto p^{-1}$
+$p^3 \mapsto p^{2}$
+$p^4 \mapsto p^{-2}$
+
 $\vdots$
 
 Such a mapping is a bijection:
@@ -1176,3 +1204,13 @@ Such a mapping is a bijection:
 | *6*   | ...     |        |        |        |         |     |     |     |
 | *7*   |         |        |        |        |         |     |     |     |
 | *8*   |         |        |        |        |         |     |     |     |
+
+Example:
+$1 \mapsto 1$
+$2 \mapsto 2$
+$3 \mapsto \frac{1}{2}$
+$4 \mapsto 3$
+$5 \mapsto \frac{1}{3}$
+$6 \mapsto 4$
+$7 \mapsto \frac{3}{2}$
+$8 \mapsto \frac{2}{3}$
