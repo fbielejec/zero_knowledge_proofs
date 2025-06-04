@@ -1070,11 +1070,11 @@ $\forall a, b \in A, \quad a * b \in A$
 
 ** IN-PROGRESS Exercises
 
-=Assume you have a proper definition for integers. Create a well-defined set of rational numbers.=
+*** Assume you have a proper definition for integers. Create a well-defined set of rational numbers.
 
 $\mathbb{Q}=\{x=\frac{p}{q} \hspace{.5em} | \hspace{.5em} p,q \in \mathbb{Z}, q \neq 0 \}$
 
-=Define the subset relationship between integers, rational numbers, real numbers, and complex numbers.=
+*** Define the subset relationship between integers, rational numbers, real numbers, and complex numbers.
 
 - integers: $\mathbb{Z} = \{\dots, -2, -1, 0, 1, 2, \dots\}$
 - rational numbers: $\mathbb{Q} = \left\{\frac{p}{q} \mid p, q \in \mathbb{Z}, q \neq 0\right\}$
@@ -1091,7 +1091,7 @@ Relationships:
 where:
  - $\subseteq$ denotes strict (proper) subset.
 
-=Define the relationship between the set of transcendental numbers and the set of complex numbers in terms of subsets. Is it a proper subset?=
+*** Define the relationship between the set of transcendental numbers and the set of complex numbers in terms of subsets. Is it a proper subset?
 
 - *Transcendental numbers* are real or complex numbers that are /not/ roots of any non-zero polynomial equation with integer (or rational) coefficients.
 - In other words, they are numbers that *cannot* be defined via algebraic equations.
@@ -1113,12 +1113,12 @@ Relationship is strict (proper):
 - Every transcendental number is a complex number (since it can be represented as $t + 0\cdoti$ where $t \in \mathbb{T}$)
 - But the sets are not equal, since e.g. $1 + i$ is complex but not transcendental.
 
-=Using the formal definition of equality, argue that if two finite sets have different cardinality, they cannot be equal.=
+*** Using the formal definition of equality, argue that if two finite sets have different cardinality, they cannot be equal.
 +- Demonstrating this for infinite sets is a little trickier, so we skip that+
 - Let' assume two finite sets $A=\{a_0, \ldots a_n \}$ and $B=\{ b_0, \ldots b_k \}$, where $n \neq k$, with different cardinalities: $|A| \neq |B|$
 - if $A=B$ than they contain the same elements, meaning that $\forall x, \hspace{.5em} x \in A \iff x \in B$, contradicting $n \neq k$. QED
 
-=Compute the Cartesian product of $B \times A$=
+*** Compute the Cartesian product of $B \times A$
 Let $A = \{1,2,3\}$, $B = \{x, y, z\}$
 
 $A \times B$
@@ -1137,7 +1137,7 @@ $B \times A$
 
 $A \times B \neq $B \times A$
 
-=Define a mapping (function) from integers $\{ 1,2,3,4,5,6 \}$ to the set $\{ \text{even}, \text{odd} \}$=
+*** Define a mapping (function) from integers $\{ 1,2,3,4,5,6 \}$ to the set $\{ \text{even}, \text{odd} \}$
 
 |   | even       | odd       |
 | 1 | (1,even)   | *(1,odd)* |
@@ -1160,7 +1160,7 @@ This is the *parity function*, a canonical example of a surjective but non-injec
 
 ---
 
-=The Cartesian product of the polygons and the set of integers representing the number of sides=
+*** The Cartesian product of the polygons and the set of integers representing the number of sides
 
 Let $polygons = \{triange, square, pentagon, hexagon, heptagon, octagon \}$ and a set of integers $\{0,1,2,3,4,5,6,7,8\}$.
 Define a mapping such that the polygon maps to an integer representing the number of sides.
@@ -1173,7 +1173,7 @@ Define a mapping such that the polygon maps to an integer representing the numbe
 | heptagon |   |   |   |              |            |              |             | (heptagon,7) |             |
 | octagon  |   |   |   |              |            |              |             |              | (octagon,8) |
 
-=Define a mapping between positive integers and positive rational numbers=
+*** Define a mapping between positive integers and positive rational numbers
 
 *Solution 1 (using the Fundamental Theorem of Arithmetic)*
 
@@ -1257,7 +1257,7 @@ $6 \mapsto 4$
 $7 \mapsto \frac{3}{2}$
 $8 \mapsto \frac{2}{3}$
 
-=Pick a subset of ordered pairs that defines (a \times b) (mod 3)=
+*** Pick a subset of ordered pairs that defines (a \times b) (mod 3)
 
 Let's use an example of a set $A=\{0,1,2\}$. Taking the Cartesian product $A \times A $
 
@@ -1281,8 +1281,7 @@ Then we take the Cartesian product of this new set of pairs with the original se
 
 Subset which defines $a \times b \hspace{.5em} (\text{mod } 3)$ is in *bold*
 
-=Define our set $A$ to be the numbers ${0,1,2,3,4}$ and our binary operator to be subtraction modulo 5. Define all the ordered pairs of $A \times A$ in a table, then map that set of ordered pairs to $A$.=
-TODO
+*** TODO Define our set $A$ to be the numbers ${0,1,2,3,4}$ and our binary operator to be subtraction modulo 5. Define all the ordered pairs of $A \times A$ in a table, then map that set of ordered pairs to $A$.
 
 * IN-PROGRESS Elementary Group Theory
 - https://www.rareskills.io/post/group-theory
@@ -1341,8 +1340,7 @@ primitive roots of Z7^*: [3, 5]
 - If a group is cyclic, then it is abelian
 
 ** DONE Exercises
-
-=Show that the set $\{1\}$ with the binary operator $\times$ is a group.=
+*** DONE Show that the set $\{1\}$ with the binary operator $\times$ is a group.
 
 - Closure: $1 \times 1 = 1$
 - Associativity: $(1 \times 1) \times 1 = 1 \times (1 \times 1)$
@@ -1350,7 +1348,7 @@ primitive roots of Z7^*: [3, 5]
 - Inverse: $1 \times 1 = 1$
 +- Commutativity: $1 \times 1 = 1 \times 1$+
 
-=Integers (positive and negative) are not a group under multiplication. Show which of the four requirements (closed, associative, existence of identity, all elements having an inverse) are not satisfied=
+*** DONE Integers (positive and negative) are not a group under multiplication. Show which of the four requirements (closed, associative, existence of identity, all elements having an inverse) are not satisfied
 
 - Closure: $\forall a,b \in \mathbb{Z} \hspace{.5em} a \cdot b \in \mathbb{Z}$
 - Associativity: $\forall a,b,c \in \mathbb{Z} \hspace{.5em} (a \cdot b) \cdot c = a \cdot (b \cdot c)$
@@ -1360,8 +1358,7 @@ primitive roots of Z7^*: [3, 5]
   - 2 has no multiplictive inverse in \mathbb{Z}:  $2 \cdot a^{-1} = 1 \hspace{1em} \Leftrightarrow \hspace{1em} a^{-1} = \frac{1}{2} \notin \mathbb{Z}$.
 
 * IN-PROGRESS Pre-course problem set
-
-=Suppose you have a set A={monyet, kodok, burung, ular}. Define a binary operator that turns it into a group using set-theoretic definitions=
+** DONE Suppose you have a set A={monyet, kodok, burung, ular}. Define a binary operator that turns it into a group using set-theoretic definitions
 
 - Choose one element as identity and fill the column for the identity element such that if a * e = a then e*a = a where e is the assigned inverse.
   - for example: kodok is the identity element
@@ -1431,3 +1428,5 @@ primitive roots of Z7^*: [3, 5]
 
 - Identity element: $kodok$
 - *Inverses*:
+
+** TODO Find a binary operator that is closed but not associative for real numbers
