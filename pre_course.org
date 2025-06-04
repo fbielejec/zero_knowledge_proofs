@@ -1025,7 +1025,7 @@ $y = x^2$ as the subset of $\mathbb{Z} \times \mathbb{Z}$
 - 2 from $X$ is related 4 from $Y$
 - 3 from $X$ is not related to 4 from $Y$
 
-** IN-PROGRESS Binary operator
+** DONE Binary operator
 
 =Definition: Binary Operator=
 
@@ -1067,7 +1067,6 @@ $\forall a, b \in A, \quad a * b \in A$
 - Take a cartesian product $A \times A$ and call this set of ordered pairs $P$.
 - Take a cartesian product $P \times A$
 - Take a subset of that according to the operator definition
-
 
 ** IN-PROGRESS Exercises
 
@@ -1285,10 +1284,63 @@ Subset which defines $a \times b \hspace{.5em} (\text{mod } 3)$ is in *bold*
 =Define our set $A$ to be the numbers ${0,1,2,3,4}$ and our binary operator to be subtraction modulo 5. Define all the ordered pairs of $A \times A$ in a table, then map that set of ordered pairs to $A$.=
 TODO
 
-* TODO Elementary Group Theory
+* IN-PROGRESS Elementary Group Theory
 - https://www.rareskills.io/post/group-theory
 
-** IN-PROGRESS Exercises
+- [ ] cyclic groups
+
+#+BEGIN_SRC sage :session . :exports both
+q=7
+F = GF(q)
+[x for x in F if x.is_primitive_root()]
+
+# or by hand
+
+Z = Zmod(q)
+G = Z.unit_group() # multiplicative group mod 7
+
+Z
+[x for x in Z]
+G
+[x for x in G]
+
+G.inject_variables()
+
+primitive_roots = []
+
+for x in G:
+  elem = Z(x)
+  generates = set()
+  for i in range(1,q):
+    generates.add(elem^i)
+  print(f"element {elem} generates {generates}")
+  if len(generates) == G.order():
+    primitive_roots.append(elem)
+
+print(f"primitive roots of Z7^*: {primitive_roots}")
+
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+[3, 5]
+Ring of integers modulo 7
+[0, 1, 2, 3, 4, 5, 6]
+Multiplicative Abelian group isomorphic to C6
+[1, f, f^2, f^3, f^4, f^5]
+Defining f
+element 1 generates {1}
+element 3 generates {1, 2, 3, 4, 5, 6}
+element 2 generates {1, 2, 4}
+element 6 generates {1, 6}
+element 4 generates {1, 2, 4}
+element 5 generates {1, 2, 3, 4, 5, 6}
+primitive roots of Z7^*: [3, 5]
+#+end_example
+
+- If a group is cyclic, then it is abelian
+
+** DONE Exercises
 
 =Show that the set $\{1\}$ with the binary operator $\times$ is a group.=
 
@@ -1299,9 +1351,69 @@ TODO
 +- Commutativity: $1 \times 1 = 1 \times 1$+
 
 =Integers (positive and negative) are not a group under multiplication. Show which of the four requirements (closed, associative, existence of identity, all elements having an inverse) are not satisfied=
+
 - Closure: $\forall a,b \in \mathbb{Z} \hspace{.5em} a \cdot b \in \mathbb{Z}$
 - Associativity: $\forall a,b,c \in \mathbb{Z} \hspace{.5em} (a \cdot b) \cdot c = a \cdot (b \cdot c)$
 - Identity element: $\exists 1 \in \mathbb{Z} \hspace{.5em} \text{ s.t. } a \cdot 1 = a$
 - Inverse:
   - 0 has no multiplicative inverse in \mathbb{Z}: $0 \cdot a^{-1} = 1 \hspace{1em} \Rightarrow \hspace{1em} 0 = 1$. Contradiction.
   - 2 has no multiplictive inverse in \mathbb{Z}:  $2 \cdot a^{-1} = 1 \hspace{1em} \Leftrightarrow \hspace{1em} a^{-1} = \frac{1}{2} \notin \mathbb{Z}$.
+
+* IN-PROGRESS Pre-course problem set
+
+=Suppose you have a set F={monyet, kodok, burung, ular}. Define a binary operator that turns it into a group using set-theoretic definitions=
+
+| $*$    | monyet | kodok  | burung | ular  |
+| monyet |        | monyet | kodok  |       |
+| kodok  |        | kodok  |        |       |
+| burung |        | burung |        | kodok |
+| ular   | kodok  | ular   |        |       |
+
+
+
+|                  | monyet                    | kodok                    | burung                    | ular                    |
+|------------------+---------------------------+--------------------------+---------------------------+-------------------------|
+| (monyet, monyet) | ((monyet, monyet),monyet) | ((monyet, monyet),kodok) | ((monyet, monyet),burung) | ((monyet, monyet),ular) |
+| (monyet, kodok)  | ((monyet, kodok),monyet)  | ((monyet, kodok),kodok)  | ((monyet, kodok),burung)  | ((monyet, kodok),ular)  |
+| (monyet, burung) | ((monyet, burung),monyet) | ((monyet, burung),kodok) | ((monyet, burung),burung) | ((monyet, burung),ular) |
+| (monyet, ular)   | ((monyet, ular),monyet)   | ((monyet, ular),kodok)   | ((monyet, ular),burung)   | ((monyet, ular),ular)   |
+| (kodok, monyet)  | ((kodok, monyet),monyet)  | ((kodok, monyet),kodok)  | ((kodok, monyet),burung)  | ((kodok, monyet),ular)  |
+| (kodok, kodok)   | ((kodok, kodok),monyet)   | ((kodok, kodok),kodok)   | ((kodok, kodok),burung)   | ((kodok, kodok),ular)   |
+| (kodok, burung)  | ((kodok, burung),monyet)  | ((kodok, burung),kodok)  | ((kodok, burung),burung)  | ((kodok, burung),ular)  |
+| (kodok, ular)    | ((kodok, ular),monyet)    | ((kodok, ular),kodok)    | ((kodok, ular),burung)    | ((kodok, ular),ular)    |
+| (burung, monyet) | ((burung, monyet),monyet) | ((burung, monyet),kodok) | ((burung, monyet),burung) | ((burung, monyet),ular) |
+| (burung, kodok)  | ((burung, kodok),monyet)  | ((burung, kodok),kodok)  | ((burung, kodok),burung)  | ((burung, kodok),ular)  |
+| (burung, burung) | ((burung, burung),monyet) | ((burung, burung),kodok) | ((burung, burung),burung) | ((burung, burung),ular) |
+| (burung, ular)   | ((burung, ular),monyet)   | ((burung, ular),kodok)   | ((burung, ular),burung)   | ((burung, ular),ular)   |
+| (ular, monyet)   | ((ular, monyet),monyet)   | ((ular, monyet),kodok)   | ((ular, monyet),burung)   | ((ular, monyet),ular)   |
+| (ular, kodok)    | ((ular, kodok),monyet)    | ((ular, kodok),kodok)    | ((ular, kodok),burung)    | ((ular, kodok),ular)    |
+| (ular, burung)   | ((ular, burung),monyet)   | ((ular, burung),kodok)   | ((ular, burung),burung)   | ((ular, burung),ular)   |
+| (ular, ular)     | ((ular, ular),monyet)     | ((ular, ular),kodok)     | ((ular, ular),burung)     | ((ular, ular),ular)     |
+
+- *Closure*: $\forall a,b \in F \hspace{.5em} (a * b) \in F$
+- Associativity:
+
+(monyet * monyet) * monyet = monyet * (monyet * monyet) =
+(monyet * monyet) * kodok  = monyet * (monyet * kodok)  = monyet * monyet
+(monyet * monyet) * burung = monyet * (monyet * burung) = moneyt * kodok = monyet
+(monyet * monyet) * ular   = monyet * (monyet * ular)   =
+
+(monyet * kodok) * monyet = monyet * (kodok * monyet) =
+(monyet * kodok) * kodok  = monyet * (kodok * kodok)  = monyet * kodok = monyet
+(monyet * kodok) * burung = monyet * (kodok * burung) =
+(monyet * kodok) * ular   = monyet * (kodok * ular)   =
+
+(monyet * burung) * monyet = monyet * (burung * monyet) =
+(monyet * burung) * kodok  = monyet * (burung * kodok)  = monyet * burung
+(monyet * burung) * burung = monyet * (burung * burung) =
+(monyet * burung) * ular   = monyet * (burung * ular)   = monyet * kodok = monyet
+
+(monyet * ular) * monyet = monyet * (ular * monyet) = monyet * kodok = monyet
+(monyet * ular) * kodok  = monyet * (ular * kodok)  = monyet * ular = 
+(monyet * ular) * burung = monyet * (ular * burung) = 
+(monyet * ular) * ular   = monyet * (ular * ular)   = 
+
+
+
+- Identity element: $kodok$
+- Inverse:
