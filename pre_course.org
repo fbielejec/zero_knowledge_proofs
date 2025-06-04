@@ -1392,41 +1392,95 @@ primitive roots of Z7^*: [3, 5]
 | burung | ular   | burung | kodok  | monyet |
 | ular   | burung | ular   | monyet | kodok  |
 
+*Set-theory operator (case 2)*
 
-
-|                  | monyet                    | kodok                    | burung                    | ular                    |
-|------------------+---------------------------+--------------------------+---------------------------+-------------------------|
-| (monyet, monyet) | ((monyet, monyet),monyet) | ((monyet, monyet),kodok) | ((monyet, monyet),burung) | ((monyet, monyet),ular) |
-| (monyet, kodok)  | ((monyet, kodok),monyet)  | ((monyet, kodok),kodok)  | ((monyet, kodok),burung)  | ((monyet, kodok),ular)  |
-| (monyet, burung) | ((monyet, burung),monyet) | ((monyet, burung),kodok) | ((monyet, burung),burung) | ((monyet, burung),ular) |
-| (monyet, ular)   | ((monyet, ular),monyet)   | ((monyet, ular),kodok)   | ((monyet, ular),burung)   | ((monyet, ular),ular)   |
-| (kodok, monyet)  | ((kodok, monyet),monyet)  | ((kodok, monyet),kodok)  | ((kodok, monyet),burung)  | ((kodok, monyet),ular)  |
-| (kodok, kodok)   | ((kodok, kodok),monyet)   | ((kodok, kodok),kodok)   | ((kodok, kodok),burung)   | ((kodok, kodok),ular)   |
-| (kodok, burung)  | ((kodok, burung),monyet)  | ((kodok, burung),kodok)  | ((kodok, burung),burung)  | ((kodok, burung),ular)  |
-| (kodok, ular)    | ((kodok, ular),monyet)    | ((kodok, ular),kodok)    | ((kodok, ular),burung)    | ((kodok, ular),ular)    |
-| (burung, monyet) | ((burung, monyet),monyet) | ((burung, monyet),kodok) | ((burung, monyet),burung) | ((burung, monyet),ular) |
-| (burung, kodok)  | ((burung, kodok),monyet)  | ((burung, kodok),kodok)  | ((burung, kodok),burung)  | ((burung, kodok),ular)  |
-| (burung, burung) | ((burung, burung),monyet) | ((burung, burung),kodok) | ((burung, burung),burung) | ((burung, burung),ular) |
-| (burung, ular)   | ((burung, ular),monyet)   | ((burung, ular),kodok)   | ((burung, ular),burung)   | ((burung, ular),ular)   |
-| (ular, monyet)   | ((ular, monyet),monyet)   | ((ular, monyet),kodok)   | ((ular, monyet),burung)   | ((ular, monyet),ular)   |
-| (ular, kodok)    | ((ular, kodok),monyet)    | ((ular, kodok),kodok)    | ((ular, kodok),burung)    | ((ular, kodok),ular)    |
-| (ular, burung)   | ((ular, burung),monyet)   | ((ular, burung),kodok)   | ((ular, burung),burung)   | ((ular, burung),ular)   |
-| (ular, ular)     | ((ular, ular),monyet)     | ((ular, ular),kodok)     | ((ular, ular),burung)     | ((ular, ular),ular)     |
+|                  | monyet                     | kodok                      | burung                     | ular                      |
+|------------------+----------------------------+----------------------------+----------------------------+---------------------------|
+| (monyet, monyet) | ((monyet, monyet),monyet)  | *((monyet, monyet),kodok)* | ((monyet, monyet),burung)  | ((monyet, monyet),ular)   |
+| (monyet, kodok)  | *((monyet, kodok),monyet)* | ((monyet, kodok),kodok)    | ((monyet, kodok),burung)   | ((monyet, kodok),ular)    |
+| (monyet, burung) | ((monyet, burung),monyet)  | ((monyet, burung),kodok)   | ((monyet, burung),burung)  | *((monyet, burung),ular)* |
+| (monyet, ular)   | ((monyet, ular),monyet)    | ((monyet, ular),kodok)     | *((monyet, ular),burung)*  | ((monyet, ular),ular)     |
+| (kodok, monyet)  | *((kodok, monyet),monyet)* | ((kodok, monyet),kodok)    | ((kodok, monyet),burung)   | ((kodok, monyet),ular)    |
+| (kodok, kodok)   | ((kodok, kodok),monyet)    | *((kodok, kodok),kodok)*   | ((kodok, kodok),burung)    | ((kodok, kodok),ular)     |
+| (kodok, burung)  | ((kodok, burung),monyet)   | ((kodok, burung),kodok)    | *((kodok, burung),burung)* | ((kodok, burung),ular)    |
+| (kodok, ular)    | ((kodok, ular),monyet)     | ((kodok, ular),kodok)      | ((kodok, ular),burung)     | *((kodok, ular),ular)*    |
+| (burung, monyet) | ((burung, monyet),monyet)  | ((burung, monyet),kodok)   | ((burung, monyet),burung)  | *((burung, monyet),ular)* |
+| (burung, kodok)  | ((burung, kodok),monyet)   | ((burung, kodok),kodok)    | *((burung, kodok),burung)* | ((burung, kodok),ular)    |
+| (burung, burung) | ((burung, burung),monyet)  | *((burung, burung),kodok)* | ((burung, burung),burung)  | ((burung, burung),ular)   |
+| (burung, ular)   | *((burung, ular),monyet)*  | ((burung, ular),kodok)     | ((burung, ular),burung)    | ((burung, ular),ular)     |
+| (ular, monyet)   | ((ular, monyet),monyet)    | ((ular, monyet),kodok)     | *((ular, monyet),burung)*  | ((ular, monyet),ular)     |
+| (ular, kodok)    | ((ular, kodok),monyet)     | ((ular, kodok),kodok)      | ((ular, kodok),burung)     | *((ular, kodok),ular)*    |
+| (ular, burung)   | *((ular, burung),monyet)*  | ((ular, burung),kodok)     | ((ular, burung),burung)    | ((ular, burung),ular)     |
+| (ular, ular)     | ((ular, ular),monyet)      | *((ular, ular),kodok)*     | ((ular, ular),burung)      | ((ular, ular),ular)       |
 
 - *Closure*: $\forall a,b \in F \hspace{.5em} (a * b) \in F$
-- Associativity:
-
-4C3 = 4
-
-(monyet * kodok)  * burung = monyet * (kodok  * burung)
-(monyet * burung) * ular   = monyet * (burung * ular)
-(kodok  * burung) * ular   = kodok  * (burung * ular) = kodok * kodok = kodok
-(ular   * monyet) * kodok  = ular   * (monyet * kodok) = ular * monyet = kodok
-
-
--+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-
-- Identity element: $kodok$
+- *Associativity*: manual check on a 4C3 = 4 (a subset):
+  - (monyet * kodok)  * burung = monyet * (kodok  * burung) <=> ular = ular
+  - (monyet * burung) * ular   = monyet * (burung * ular)   <=> kodok = kodok
+  - (kodok  * burung) * ular   = kodok  * (burung * ular)   <=> monyet = monyet
+  - (ular   * monyet) * kodok  = ular   * (monyet * kodok)  <=> burung = burung
+- *Identity element*: kodok (by choice)
 - *Inverses*:
+  - monyet^{-1} = monyet
+  - kodok^{-1}  = kodok
+  - burung^{-1} = burung
+  - ular^{-1}   = ular
 
-** TODO Find a binary operator that is closed but not associative for real numbers
+** DONE Find a binary operator that is closed but not associative for real numbers
+
+For example $f: \mathbb{R} \times \mathbb{R} -> \mathbb{R}$ s.t f(a,b) = exp(a*b)
+
+#+BEGIN_SRC jupyter-python :session zk :async yes
+import numpy as np
+a=1;b=2;c=3
+
+def f(a,b):
+  return np.exp(a * b)
+
+f(f(a,b),c) == f(a,f(b,c))
+#+END_SRC
+
+#+RESULTS:
+: False
+
+Another example is f(a,b) = a^b:
+
+#+BEGIN_SRC jupyter-python :session zk :async yes
+import numpy as np
+a=2;b=3;c=2
+
+def g(a,b):
+  return np.power(a,b)
+
+g(g(a,b),c) == g(a,g(b,c))
+#+END_SRC
+
+#+RESULTS:
+: False
+
+** DONE Let our set be real numbers. Show a binary operator that is not closed
+
+$f(a,b)=\sqrt{a} + \sqrt{b}$ is a binary operator that is not closed:
+
+$f(4,-1) = \sqrt{2} + \sqrt{-1} = 2+i \notin \mathbb{R}$
+
+** DONE What algebraic structure is all odd integers under multiplication? All even integers under addition?
+
+The set of integers not divisible by $2$ (odd integers): $A=\{x \in \mathbb{Z}: \hspace{.5em} \exists{k} \in N: \hspace{.5em} x=2k+1 \}=\{-5, -3,-1,1,3,5, \ldots \}$ under multiplications is:
+
+- *closed*: odd numbers multiplied by odd numbers are odd
+- *associative*: generally holds for multiplication
+- *identity*: $1$ is the identity element
+- *existence of inverse elements*:
+  - take $3 \in A$ there is no $3^{-1} \in A$ such that $3*3^{-1} =1$
+
+Such a structure is called a *monoid*
+
+The set of integers divisible by $2$ (even): $B=\{x \in \mathbb{Z}: \hspace{.5em} \exists{k} \in N: \hspace{.5em} x=2k \} = \{ -4,-2,0,2,4, \ldots \}$ under addition is:
+
+- *closed*: even numbers multiplied by even numbers are even
+- *associative*: holds for addition
+- *identity*: $0$ is the identity element
+- *existence of inverse elements*: for every $x \in B$ $-x \in B$ is the inverse.
+
+This is a group
