@@ -1361,13 +1361,39 @@ primitive roots of Z7^*: [3, 5]
 
 * IN-PROGRESS Pre-course problem set
 
-=Suppose you have a set F={monyet, kodok, burung, ular}. Define a binary operator that turns it into a group using set-theoretic definitions=
+=Suppose you have a set A={monyet, kodok, burung, ular}. Define a binary operator that turns it into a group using set-theoretic definitions=
 
-| $*$    | monyet | kodok  | burung | ular  |
-| monyet |        | monyet | kodok  |       |
-| kodok  |        | kodok  |        |       |
-| burung |        | burung |        | kodok |
-| ular   | kodok  | ular   |        |       |
+- Choose one element as identity and fill the column for the identity element such that if a * e = a then e*a = a where e is the assigned inverse.
+  - for example: kodok is the identity element
+  - this defines the row and column for the identity element
+- Fill the rest of the table (9 entries), there are two cases here:
+  1. We choose the group generator and assign such that g^1 = g, g^2 = a_1, g^3 = a_2, g^4 = a_3
+     - e.g. monyet is the generator: monyet^1 = monyet, monyet^2 = burung, monyet^3 = ular, monyet^4 = e
+     - this forces the choice of inverses:
+     - m^3 = u <=> m^4 * m^-1 = u <=> m^2 * m^2 * m^-1 = u <-> b * b * m^-1 = u <=> k * m^-1 = u <=> m^-1 = u (therefore m * u = k)
+     - m^4 = k <=> m^2 * m^2 = k <=> b * b = k
+     - b * b = k <=> b = k * b^-1 <=> b^-1 = b (b * b =k)
+     - ...
+  2. We assign such that non-identity elements are self-inverses: monyet^2 = burung^2 = ular^2 = kodok^2 = e)
++- Ensure associativity: define products such that if a1 * a2 = a3 then a2 * a1 = a3 also.+
+- Other solutions are isomorphic by relabeling
+- Each row and column is the permutation of the elements (because of the inverses)
+
+*Case 1:*
+
+| $*$    | monyet | kodok  | burung | ular   |
+| monyet | burung | monyet | ular   | kodok  |
+| kodok  | monyet | kodok  | burung | ular   |
+| burung | ular   | burung | kodok  | monyet |
+| ular   | kodok  | ular   | monyet | burung |
+
+*Case 2:*
+
+| $*$    | monyet | kodok  | burung | ular   |
+| monyet | kodok  | monyet | ular   | burung |
+| kodok  | monyet | kodok  | burung | ular   |
+| burung | ular   | burung | kodok  | monyet |
+| ular   | burung | ular   | monyet | kodok  |
 
 
 
@@ -1393,27 +1419,15 @@ primitive roots of Z7^*: [3, 5]
 - *Closure*: $\forall a,b \in F \hspace{.5em} (a * b) \in F$
 - Associativity:
 
-(monyet * monyet) * monyet = monyet * (monyet * monyet) =
-(monyet * monyet) * kodok  = monyet * (monyet * kodok)  = monyet * monyet
-(monyet * monyet) * burung = monyet * (monyet * burung) = moneyt * kodok = monyet
-(monyet * monyet) * ular   = monyet * (monyet * ular)   =
+4C3 = 4
 
-(monyet * kodok) * monyet = monyet * (kodok * monyet) =
-(monyet * kodok) * kodok  = monyet * (kodok * kodok)  = monyet * kodok = monyet
-(monyet * kodok) * burung = monyet * (kodok * burung) =
-(monyet * kodok) * ular   = monyet * (kodok * ular)   =
-
-(monyet * burung) * monyet = monyet * (burung * monyet) =
-(monyet * burung) * kodok  = monyet * (burung * kodok)  = monyet * burung
-(monyet * burung) * burung = monyet * (burung * burung) =
-(monyet * burung) * ular   = monyet * (burung * ular)   = monyet * kodok = monyet
-
-(monyet * ular) * monyet = monyet * (ular * monyet) = monyet * kodok = monyet
-(monyet * ular) * kodok  = monyet * (ular * kodok)  = monyet * ular = 
-(monyet * ular) * burung = monyet * (ular * burung) = 
-(monyet * ular) * ular   = monyet * (ular * ular)   = 
+(monyet * kodok)  * burung = monyet * (kodok  * burung)
+(monyet * burung) * ular   = monyet * (burung * ular)
+(kodok  * burung) * ular   = kodok  * (burung * ular) = kodok * kodok = kodok
+(ular   * monyet) * kodok  = ular   * (monyet * kodok) = ular * monyet = kodok
 
 
+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
 - Identity element: $kodok$
-- Inverse:
+- *Inverses*:
