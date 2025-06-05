@@ -1633,7 +1633,23 @@ $\begin{cases}
 = (a + b) + c
 \end{cases}$
 
-** TODO Demonstrate that $g^{n} \pmod p, n = \ldots -2, -1, 0, 1, 2 \ldots$, where $g$ and $p$ are relatively prime is a group under multiplication. That is, given elements $g^a$, $g^b$, $(g^a) \cdot (g^b)$ is in the group and the binary operator follows the group laws.
+** IN-PROGRESS Demonstrate that $g^{n} \pmod p, n = \ldots -2, -1, 0, 1, 2 \ldots$, where $g$ and $p$ are relatively prime is a group under multiplication. That is, given elements $g^a$, $g^b$, $(g^a) \cdot (g^b)$ is in the group and the binary operator follows the group laws.
+
+*closure*
+
+$g^a \cdot g^b = g^(a+b)$
+
+*identity*
+
+$g^{0}$ is the identity element.
+
+*inverses*
+
+$g^a \cdot (g^a)^{-1} = g^(a-a) = g^{0}$
+
+*associativity*
+
+Follows from associativity of multiplication.
 
 #+BEGIN_SRC sage :session . :exports both
 import itertools
