@@ -258,8 +258,6 @@ print(f"span of i={i} and j={j}: {span(i,j)}")
 
   v = np.array([3,2,1])
 
-
-
   print(f"{m}")
 #+END_SRC
 
@@ -414,7 +412,6 @@ $\begin{bmatrix}
   a_inv = np.linalg.inv(a)
   x = np.matmul(a_inv,v)
   print(f"x = {x}")
-
 #+END_SRC
 
 #+RESULTS:
@@ -447,7 +444,6 @@ $\begin{bmatrix}
   a = np.array([[transformed_i[0], transformed_j[0]],
                 [transformed_i[1], transformed_j[1]],
                 [transformed_i[2], transformed_j[2]]])
-
 #+END_SRC
 
 #+RESULTS:
@@ -1070,7 +1066,6 @@ $\forall a, b \in A, \quad a * b \in A$
 - Take a subset of that according to the operator definition
 
 ** IN-PROGRESS Exercises
-
 *** Assume you have a proper definition for integers. Create a well-defined set of rational numbers.
 
 $\mathbb{Q}=\{x=\frac{p}{q} \hspace{.5em} | \hspace{.5em} p,q \in \mathbb{Z}, q \neq 0 \}$
@@ -1284,9 +1279,9 @@ Subset which defines $a \times b \hspace{.5em} (\text{mod } 3)$ is in *bold*
 
 *** TODO Define our set $A$ to be the numbers ${0,1,2,3,4}$ and our binary operator to be subtraction modulo 5. Define all the ordered pairs of $A \times A$ in a table, then map that set of ordered pairs to $A$.
 
-* IN-PROGRESS Elementary Group Theory
+* DONE Elementary Group Theory
 - https://www.rareskills.io/post/group-theory
-** IN-PROGRESS Cyclic groups
+** DONE Cyclic groups
 
 =Definition: cyclic group=
 
@@ -1347,7 +1342,6 @@ for x in G:
     primitive_roots.append(elem)
 
 print(f"primitive roots of Z7^*: {primitive_roots}")
-
 #+END_SRC
 
 #+RESULTS:
@@ -1554,7 +1548,7 @@ The set of integers divisible by $2$ (even): $B=\{x \in \mathbb{Z}: \hspace{.5em
 
 This is a group
 
-** IN-PROGRESS Let our group be 3 x 2 matrices of integers under addition. What is the identity and inverse? Can this be a cyclic group, why or why not? (Pay very close attention to the definition of a cyclic group)
+** DONE Let our group be 3 x 2 matrices of integers under addition. What is the identity and inverse? Can this be a cyclic group, why or why not? (Pay very close attention to the definition of a cyclic group)
 
 - *identity*: matrix $E=\begin{bmatrix} 0 & 0  \\ 0 & 0  \\0 & 0 \end{bmatrix}$ of all $0$'s is the identity element
 - *existence of inverse elements*: For every $M=\begin{bmatrix} m_{11} & m_{12}  \\ m_{21} & m_{22}  \\ m_{31} & m_{32} \end{bmatrix}$ matrix $-M$ is it's inverse.
@@ -1589,3 +1583,94 @@ This is a group
 #+END_SRC
 
 #+RESULTS:
+
+** DONE Demonstrate that $n \hspace{.5em} \text{mod } p, \hspace{.5em} n= \{ \ldots, -2,-1,0,1,2,\ldots \}$ is a group under addition.
+
+This is the $(\mathbb{Z}/p\mathbb{Z}, +)$ group (integers modulo $p$ under addition) and the underlying set is $\{0,1, \ldots, p-1\}$.
+
+*Closure*
+
+Elements of $\mathbb{Z}_{p}$ are integers that can be written in the form:
+
+ $\{x \in \mathbb{Z}; \quad z = k\cdot p + x, \quad k,z \in \mathbb{Z}, \quad |x| < |p| \}$
+
+For any two arbitrarily chosen $a,b \in \mathbb{Z}_{p}$ we have:
+
+$\begin{cases}
+z_1 = k_{1}\cdot p + a  \\
+z_2 = k_{2}\cdot p + b
+\end{cases} \Rightarrow z_{1}+z_{2} = (k_{1}+k_{2})\cdot p + (a+b)$
+
+*Existence of the identity element*
+
+$0$ is the identity (by the properties of $+$).
+
+*Inverses*
+
+Let's pick an arbitrary $a \in \mathbb{Z}_{p}$, it is of the form:
+
+$a=\overbrace{1+ \ldots + 1}^{\text{k \leq p times}}$
+
+We need to find $a^{-1}$ s.t.
+
+$a + a^{-1} =0$
+
+If $k=p$ it is trivial:
+
+$a^{-1} =0$
+
+If $k<p$:
+
+$a^{-1} =\overbrace{1+\ldots+1}^{\text{p-k times}}$
+
+*Associativity*
+
+$\begin{cases}
+(a + b) + c = \\
+= (\overbrace{1+\ldots+1}^{\text{i times}} + \overbrace{1+\ldots+1}^{\text{j times}}) + \overbrace{1+\ldots+1}^{\text{k times}} \\
+= \overbrace{1+\ldots+1}^{\text{i times}} + \overbrace{1+\ldots+1}^{\text{j times}} + \overbrace{1+\ldots+1}^{\text{k times}} \\
+= \overbrace{1+\ldots+1}^{\text{i times}} + (\overbrace{1+\ldots+1}^{\text{j times}} + \overbrace{1+\ldots+1}^{\text{k times}}) \\
+= (a + b) + c
+\end{cases}$
+
+** TODO Demonstrate that $g^{n} \pmod p, n = \ldots -2, -1, 0, 1, 2 \ldots$, where $g$ and $p$ are relatively prime is a group under multiplication. That is, given elements $g^a$, $g^b$, $(g^a) \cdot (g^b)$ is in the group and the binary operator follows the group laws.
+
+#+BEGIN_SRC sage :session . :exports both
+import itertools
+import numpy as np
+
+g = 3
+p = 5
+
+# assert that g and p are relatively prime
+assert(gcd(g,p) == 1)
+
+e = g^0
+
+G=[g^i % p for i in range(0,p-1) ]
+print(f"G={G}")
+
+def op(a,b):
+  return (a * b) % p
+
+# closed?
+assert([op(a[0],a[1]) in G for a in itertools.product(G, G)])
+
+# identity
+assert([op(a,e) == a for a in (G)])
+
+# inverses
+inverses = {}
+for a in G:
+  for a_inv in G:
+    if op(a,a_inv) == e: inverses.update({a: a_inv})
+
+print(f"{inverses}")
+
+# associativity
+assert([op(op(a[0],a[1]), a[2]) == op(a[0],op(a[1], a[2])) for a in itertools.product(G,G,G)])
+#+END_SRC
+
+#+RESULTS:
+: G=[1, 3, 4, 2]
+: {1: 1, 3: 2, 4: 4, 2: 3}
