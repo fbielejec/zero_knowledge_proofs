@@ -1,0 +1,37 @@
+#+STARTUP: overview
+#+latex_class_options: [14pt]
+
+* IN-PROGRESS Notes: Lecture 1
+- shafi-goldwasser paper
+- fiat shamir transformation
+- using FLT to find a multiplicative inverse
+- Galois lib in python
+
+#+BEGIN_SRC python :session zk :kernel zero_knowledge :async yes
+import galois
+galois.__version__
+#+END_SRC
+
+#+RESULTS:
+: 0.4.6
+
+- efficient algo for powers of larger numbers (e.g. 2^large)
+
+#+BEGIN_SRC sage :session . :exports both
+q=7
+F = GF(q)
+
+F(-6) == q-6
+
+3+F(-6)
+
+# TODO from fermats little theorem
+F(-6)
+F(6)^5
+#+END_SRC
+
+#+RESULTS:
+: True
+: 4
+: 1
+: 6

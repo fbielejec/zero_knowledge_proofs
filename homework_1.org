@@ -1,0 +1,64 @@
+#+STARTUP: overview
+#+latex_class_options: [12pt]
+
+* Contents
+:PROPERTIES:
+:VISIBILITY:  all
+:TOC:      :include all :ignore this
+:END:
+:CONTENTS:
+- [[#homework-1][Homework 1]]
+  - [[#problem-1][Problem 1]]
+:END:
+
+* IN-PROGRESS Homework 1
+- https://almondine-song-c43.notion.site/Homework-1-26cad185ffbc479faf060b5867b442ec
+
+For all problems below, assume the finite field is p = 71.
+
+*** IN-PROGRESS Problem 1
+
+---
+
+*NOTES*
+
+- congruent = compatible, similar
+
+=Definition: congruence=
+
+Two integers $a,b \in \mathbb{Z}$ are *congruent* modulo some $p \geq 1$ if there is an integer $k \in \mathbb{Z}$ such that:
+
+$a=k \cdot p + b$
+
+We then write the *congruence relation* as:
+
+$a \equiv b \quad \text{ mod } m$
+
+where:
+- $m$ is called the *modulus*
+
+Congruence relation is compatible with the operations of addition, subtraction, and multiplication
+
+---
+
+Find the elements in a finite field that are congruent to the following values:
+- $-1$
+- $-4$
+- $-160$
+- $500$
+
+#+BEGIN_SRC jupyter-python :session zk :kernel zero_knowledge :async yes
+# from galois import GF
+
+p = 71
+congruent = {}
+
+for field_element in range(0,p+1):
+  for z in [-1,-4,-160,500]:
+    if z % p == field_element: congruent.setdefault(field_element, []).append(z)
+
+print(f"{congruent}");
+#+END_SRC
+
+#+RESULTS:
+: {3: [500], 53: [-160], 67: [-4], 70: [-1]}

@@ -910,7 +910,7 @@ $\forall a \ne 0 \in \mathbb{F}_p, \ a^{p-1} \equiv 1 \mod p$
  - euler / fermat
  - extended_gcd
 * DONE Elementary set theory: https://www.rareskills.io/post/set-theory
-** IN-PROGRESS Set
+** IN-PROGRESS Sets
 
 =Definition: Set=
 
