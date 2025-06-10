@@ -48,7 +48,7 @@ Find the elements in a finite field that are congruent to the following values:
 - $-160$
 - $500$
 
-#+BEGIN_SRC jupyter-python :session zk :kernel zero_knowledge :async yes
+#+BEGIN_SRC jupyter-python :session zk :kernel zero_knowledge :async yes :exports both
 p = 71
 congruent = {}
 
