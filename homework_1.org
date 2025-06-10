@@ -14,7 +14,7 @@
   - [[#problem-4][Problem 4]]
 :END:
 
-* IN-PROGRESS Homework 1
+* DONE Homework 1
 - https://almondine-song-c43.notion.site/Homework-1-26cad185ffbc479faf060b5867b442ec
 
 For all problems below, assume the finite field is p = 71.
