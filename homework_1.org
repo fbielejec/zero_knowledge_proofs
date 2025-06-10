@@ -62,4 +62,23 @@ print(f"{congruent}");
 #+RESULTS:
 : {3: [500], 53: [-160], 67: [-4], 70: [-1]}
 
-** IN-PROGRESS Problem 2
+** DONE Problem 2
+Find the elements that are congruent to a = 5/6, b = 11/12, and c = 21/12
+Verify your answer by checking that a + b = c (in the finite field)
+
+#+BEGIN_SRC jupyter-python :session zk :kernel zero_knowledge :async yes :exports both
+p = 71
+
+def field_div(a, b, p):
+  '''a * b^{-1} mod p'''
+  return (a * pow(b, -1, p)) % p
+
+a=field_div(5,6,p)
+b=field_div(11,12,p)
+c=field_div(21,12,p)
+
+(a+b) % p == c
+#+END_SRC
+
+#+RESULTS:
+: True
