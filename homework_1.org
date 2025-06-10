@@ -19,6 +19,13 @@
 
 For all problems below, assume the finite field is p = 71.
 
+The following Python code will be useful:
+
+#+BEGIN_SRC jupyter-python :session zk :kernel zero_knowledge :async yes :exports both
+-5 % p # number congruent to -5
+pow(5, -1, p) # multiplicative inverse of 5
+#+END_SRC
+
 ** DONE Problem 1
 
 ---
@@ -131,8 +138,32 @@ $AA^{-1}=I$
 Where $I$ is the identity matrix.
 
 #+BEGIN_SRC jupyter-python :session zk :kernel zero_knowledge :async yes :exports both
+import numpy as np
+
 p = 71
 
+a = [[1,1],
+     [1,4]]
 
+# 2x2 identity matrix 
+e = [[1,0],
+     [0,1]]
+
+def additive_inv(a,p):
+  return p - a % p
+
+def det(a):
+  return a[0][0] * a[1][1] - a[0][1] * a[1][0]
+
+def m_inv(a,p):
+  det_inv = pow(det(a),-1,p) # det(a)^{-1}
+  return [[(a[1][1] * det_inv) % p, additive_inv(a[0][1] * det_inv, p)],
+          [additive_inv(a[1][0] * det_inv,p), (a[0][0] * det_inv) % p]]
+
+print(f"{a}^-1 = {m_inv(a,p)} (in GF({p})")
+print("a x a^-1 == e:",(np.matmul(a, m_inv(a,p)) % p == e).all())
 #+END_SRC
 
+#+RESULTS:
+: [[1, 1], [1, 4]]^-1 = [[25, 47], [47, 24]] (in GF(71)
+: a x a^-1 == e: True
