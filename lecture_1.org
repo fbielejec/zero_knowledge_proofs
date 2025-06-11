@@ -1,7 +1,7 @@
 #+STARTUP: overview
 #+latex_class_options: [14pt]
 
-* IN-PROGRESS Finite Fields
+* DONE Finite Fields
 - Informally a *Field* is a set on which common arithmetic operations (addition and multiplication)  behave "nicely", e.g. as we wopuld expect them to behave on the real numbers, e.g.:
   - add/multiply two numbers in a set and you get a number that is also in a set
   - for addition operation there is a number that acts trivially ($a+0=a$)
@@ -132,7 +132,7 @@ galois.__version__
 #+END_SRC
 
 
-* TODO cleanup notes
+* IN-PROGRESS Other topics
 - shafi-goldwasser paper
 - fiat shamir transformation
-- efficient algo for powers of larger numbers (e.g. 2^large)
+- Algorithms for fast computation of large powers of integers
