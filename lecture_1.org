@@ -124,7 +124,7 @@ for elem, inv in multiplicative_inverse.items():
 : 5 * 3 = 1
 : 6 * 6 = 1
 
-* IN-PROGRESS Quadratic residue
+* DONE Quadratic residue
 
 =Definition: Quadratic residue=
 
@@ -147,18 +147,17 @@ Conversly $x$ is then called the *square root* of $y$ in $F_{p}$.
 p = 17
 F = GF(p)
 
-#F(-5)
-
+y=8
 for x in F:
-  if x * x == F(8) : print(f"{x}")
+  if x * x == F(y) : print(f"sqrt({y}) = {x}")
 
 # same up to the sign
 [F(-5) == F(12), F(-12) == F(5) ]
 #+END_SRC
 
 #+RESULTS:
-: 5
-: 12
+: sqrt(8) = 5
+: sqrt(8) = 12
 : [True, True]
 
 * DONE Galois lib in python
@@ -173,7 +172,7 @@ galois.__version__
 
 * IN-PROGRESS Other topics
 - shafi goldwasser paper (the knowledge complexity of interactive proof systems)
-- fiat shamir transformation
+- fiat-shamir transformation
 ** IN-PROGRESS Binary Exponentiation: algorithm for fast computation of large powers of integers
 
 Binary Exponentiation, also known as square-and-multiply is a general purpose method for computing large positive integer powers of numbers.
@@ -206,29 +205,7 @@ $a^{n} = \begin{cases}
 a \cdot (a^{\frac{n-1}{2}})^{2} & \text {if } n \text{ is even}
 \end{cases}$
 
-
-In each recursive call the least significant bit of $n$ is removed (with the division by $2$).
-
-#+BEGIN_SRC rustic  :exports both
-fn binary_exponentiation(a: i32, n: i32) -> i32 {
-    let is_even = |x: i32| -> bool { x % 2 == 0 };
-
-    if n == 0 {
-        return 1;
-    }
-
-    if is_even(n) {
-        binary_exponentiation(a * a, n / 2)
-    } else {
-        a * binary_exponentiation(a * a, (n - 1) / 2)
-    }
-}
-
-println!("{} == {}", binary_exponentiation(3, 13), 3i32.pow(13));
-#+END_SRC
-
-#+RESULTS:
-: 1594323 == 1594323
+In each recursive call the least significant bit of $n$ is removed (with the division by $2$), hence the time complexity of $\mathcal{O}(log(N))$.
 
 #+BEGIN_SRC jupyter-python :session zk :kernel zero_knowledge :async yes :exports both
 import math
@@ -264,3 +241,58 @@ print(f"{n}:  {bin(n)}")
 : 3:  0b11
 : 1:  0b1
 : 0:  0b0
+
+*** Rust implementation
+
+#+BEGIN_SRC rustic :exports both
+fn binary_exponentiation(a: i32, n: i32) -> i32 {
+    let is_even = |x: i32| -> bool { x % 2 == 0 };
+
+    if n == 0 {
+        return 1;
+    }
+
+    if is_even(n) {
+        binary_exponentiation(a * a, n / 2)
+    } else {
+        a * binary_exponentiation(a * a, (n - 1) / 2)
+    }
+}
+
+println!("{} == {}", binary_exponentiation(3, 13), 3i32.pow(13));
+#+END_SRC
+
+#+RESULTS:
+: 1594323 == 1594323
+
+We can extend the algorithm to negative exponents using:
+
+$a^{n} = (a^{-1})^{-n}=(\frac{1}{a})^{-n}$
+
+#+BEGIN_SRC rustic :exports both
+fn binary_exponentiation(a: f32, n: i32) -> f32 {
+    let is_even = |x: i32| -> bool { x % 2 == 0 };
+
+    if n == 0 {
+        return 1.0;
+    }
+
+    if n < 0 {
+        return binary_exponentiation(1f32/a, -n);
+    }
+
+    if is_even(n) {
+        binary_exponentiation(a * a, n / 2)
+    } else {
+        a * binary_exponentiation(a * a, (n - 1) / 2)
+    }
+}
+
+println!("{} == 1/2", binary_exponentiation(2.0, -1));
+#+END_SRC
+
+#+RESULTS:
+: 0.5 == 1/2
+
+
+
