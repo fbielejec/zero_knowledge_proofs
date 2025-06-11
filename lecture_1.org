@@ -298,7 +298,7 @@ Since the modulo operator is *distributive* with respect to multiplication (and 
 
 $a \cdot b \quad \text{mod } m \equiv (a \quad \text{mod } m) \cdot (b \quad  \quad \text{mod } m)$
 
-We can extend it to compute $a^n \quad \text{m}$ to e.g. compute [[*Multiplicative inverses in a Finite Field][Multiplicative inverses in a Finite Field]].
+We can extend it to compute $a^n \quad \text{mod } m$ to e.g. compute [[*Multiplicative inverses in a Finite Field][Multiplicative inverses in a Finite Field]].
 
 #+BEGIN_SRC rustic :exports both
 fn binary_exponentiation_mod(a: u32, n: i32, m: u32) -> u32 {
