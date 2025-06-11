@@ -124,6 +124,43 @@ for elem, inv in multiplicative_inverse.items():
 : 5 * 3 = 1
 : 6 * 6 = 1
 
+* IN-PROGRESS Quadratic residue
+
+=Definition: Quadratic residue=
+
+A number $y \in F_p$ given by $x*x$ is called a quadratic residue:
+
+$x^2 = y$
+
+Conversly $x$ is then called the *square root* of $y$ in $F_{p}$.
+
+---
+
+*NOTE*
+
+- Solutions to the quadratic equation are unique in a finite field (up to a sign).
+- if $y$ is given and the quadratic equation has no solution $x$ we call $y$ a *quadratic non-residue*.
+
+---
+
+#+BEGIN_SRC sage :session . :exports both
+p = 17
+F = GF(p)
+
+#F(-5)
+
+for x in F:
+  if x * x == F(8) : print(f"{x}")
+
+# same up to the sign
+[F(-5) == F(12), F(-12) == F(5) ]
+#+END_SRC
+
+#+RESULTS:
+: 5
+: 12
+: [True, True]
+
 * DONE Galois lib in python
 
 #+BEGIN_SRC jupyter-python :session zk :kernel zero_knowledge :async yes :exports both
@@ -206,7 +243,7 @@ print(f"{n}: {bin(n)}")
 # n is odd
 n = int((n-1)/2)
 print(f"{n}:  {bin(n)}")
-#res = 
+#res =
 
 # n is even
 n = int(n/2)
