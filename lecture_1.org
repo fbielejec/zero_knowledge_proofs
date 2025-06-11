@@ -161,7 +161,7 @@ $3^2 = (3^1)^2=3^2=9$
 $3^4 = (3^2)^2=9^2=81$
 $3^8 = (3^4)^2=81^2=6561$
 
-The following approach expresses the entire idea recursively:
+The following formula expresses the entire idea recursively:
 
 $a^{n} = \begin{cases}
 1 & \text {if } n==0 \\
@@ -172,7 +172,7 @@ a \cdot (a^{\frac{n-1}{2}})^{2} & \text {if } n \text{ is even}
 
 In each recursive call the least significant bit of $n$ is removed (with the division by $2$).
 
-#+BEGIN_SRC rustic
+#+BEGIN_SRC rustic  :exports both
 fn binary_exponentiation(a: i32, n: i32) -> i32 {
     let is_even = |x: i32| -> bool { x % 2 == 0 };
 
@@ -183,7 +183,7 @@ fn binary_exponentiation(a: i32, n: i32) -> i32 {
     if is_even(n) {
         binary_exponentiation(a * a, n / 2)
     } else {
-        a * binary_exponentiation(a * a, n / 2)
+        a * binary_exponentiation(a * a, (n - 1) / 2)
     }
 }
 
@@ -206,6 +206,7 @@ print(f"{n}: {bin(n)}")
 # n is odd
 n = int((n-1)/2)
 print(f"{n}:  {bin(n)}")
+#res = 
 
 # n is even
 n = int(n/2)
