@@ -126,13 +126,103 @@ for elem, inv in multiplicative_inverse.items():
 
 * DONE Galois lib in python
 
-#+BEGIN_SRC python :session zk :kernel zero_knowledge :async yes
+#+BEGIN_SRC jupyter-python :session zk :kernel zero_knowledge :async yes :exports both
 import galois
 galois.__version__
 #+END_SRC
 
+#+RESULTS:
+: 0.4.6
 
 * IN-PROGRESS Other topics
-- shafi-goldwasser paper
+- shafi goldwasser paper (the knowledge complexity of interactive proof systems)
 - fiat shamir transformation
-- Algorithms for fast computation of large powers of integers
+** IN-PROGRESS Binary Exponentiation: algorithm for fast computation of large powers of integers
+
+Binary Exponentiation, also known as square-and-multiply is a general purpose method for computing large positive integer powers of numbers.
+
+Let's take the example of computing $a^{n}=3^{13}$.
+In a naive case exponentiation takes $n-1$ steps (it's time complexity is $\mathcal{O}(N)$):
+
+$3^{13}=\underbrace{3 \cdot 3 \cdot \ldots \cdot 3 \cdot 3}_{13 \text{ times}}$
+
+The idea behind the binary exponentiation is that we can split the work using the binary representation (big endian, MSB to LSB) of the exponent:
+
+$3^{13}=3^{1102_{2}}=3^{1 \cdot 2^{3}} \cdot 3^{1 \cdot 2^{2}} \cdot 3^{0 \cdot 2^{1}} \cdot 3^{1 \cdot 2^{0}}=3^8 \cdot 3^4 \cdot 3^1$
+
+Since binary representation of $n$ has exactly $\lfloor {log_{2}(n)} \rfloor +1$ bits we can bring the time complexity down to $\mathcal{O}(log(N))$.
+To be exact the number of multiplications is one less than the number of ones in the binary representation of $n$.
+
+In our example we only need the three multiplications (since the bit with index $2$ is 0).
+These, since it's consecutive squaring, we can compute quite quickly:
+
+$3^1 = 3$
+$3^2 = (3^1)^2=3^2=9$
+$3^4 = (3^2)^2=9^2=81$
+$3^8 = (3^4)^2=81^2=6561$
+
+The following approach expresses the entire idea recursively:
+
+$a^{n} = \begin{cases}
+1 & \text {if } n==0 \\
+(a^{\frac{n}{2}})^{2} & \text {if } n \text{ is even} \\
+a \cdot (a^{\frac{n-1}{2}})^{2} & \text {if } n \text{ is even}
+\end{cases}$
+
+
+In each recursive call the least significant bit of $n$ is removed (with the division by $2$).
+
+#+BEGIN_SRC rustic
+fn binary_exponentiation(a: i32, n: i32) -> i32 {
+    let is_even = |x: i32| -> bool { x % 2 == 0 };
+
+    if n == 0 {
+        return 1;
+    }
+
+    if is_even(n) {
+        binary_exponentiation(a * a, n / 2)
+    } else {
+        a * binary_exponentiation(a * a, n / 2)
+    }
+}
+
+println!("{} == {}", binary_exponentiation(3, 13), 3i32.pow(13));
+#+END_SRC
+
+#+RESULTS:
+: 1594323 == 1594323
+
+#+BEGIN_SRC jupyter-python :session zk :kernel zero_knowledge :async yes :exports both
+import math
+
+n=13
+a=3
+
+print(int(math.log2(n))+1)
+
+print(f"{n}: {bin(n)}")
+
+# n is odd
+n = int((n-1)/2)
+print(f"{n}:  {bin(n)}")
+
+# n is even
+n = int(n/2)
+print(f"{n}:  {bin(n)}")
+
+# n is odd
+n = int((n-1)/2)
+print(f"{n}:  {bin(n)}")
+
+n = int((n-1)/2)
+print(f"{n}:  {bin(n)}")
+#+END_SRC
+
+#+RESULTS:
+: 4
+: 13: 0b1101
+: 6:  0b110
+: 3:  0b11
+: 1:  0b1
+: 0:  0b0
