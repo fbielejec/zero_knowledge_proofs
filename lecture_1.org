@@ -1,37 +1,138 @@
 #+STARTUP: overview
 #+latex_class_options: [14pt]
 
-* IN-PROGRESS Notes: Lecture 1
-- shafi-goldwasser paper
-- fiat shamir transformation
-- using FLT to find a multiplicative inverse
-- Galois lib in python
+* IN-PROGRESS Finite Fields
+- Informally a *Field* is a set on which common arithmetic operations (addition and multiplication)  behave "nicely", e.g. as we wopuld expect them to behave on the real numbers, e.g.:
+  - add/multiply two numbers in a set and you get a number that is also in a set
+  - for addition operation there is a number that acts trivially ($a+0=a$)
+  - for multiplication operation there is a number that acts trivially ($1*a=a$)
+  - division by 0 is exludded
+  - every element has an inverse (for addition this is $-a$, for multiplication $1/a=a^{-1}$
+  - ...
+- For a more formal definition see: [[file:pre_course.org::*Field][Field]].
+- *Finite Field* is a Field with finitely many elements (countable finite).
+- For a formal definition see: [[file:pre_course.org::*Finite field (Galois Field)][Finite field (Galois Field)]]
+* DONE Addition and subtraction, additive inverses in a Finite Field
+Let's assume $GF(7)= \{ 0,1,2,3,4,5,6\}$
+
+Addition in the field: addition modulo p
+
+#+BEGIN_SRC sage :session . :exports both
+p=7
+F = GF(p)
+
+print(f"F(3) + F(6) = {F(3)+F(6)}")
+print(f"(3 + 6) mod {p} = {(3+6) % p}", )
+#+END_SRC
+
+#+RESULTS:
+: F(3) + F(6) = 2
+: (3 + 6) mod 7 = 2
+
+Subtraction is the addition of an *additive inverse*:
+
+$\forall a,b \in F_{p} \quad a - b = a + (-b)$
+
+where:
+- $p$ is the field characteristic
+
+In $F_{p}$ *Additive inverse* of $b$ is the element that when added to $b$ yields additive neutral element (that is 0):
+
+$\forall b \in F_{p} \quad b + (-b) = (-b) + b = 0$
+
+In a finite field of characteristic $$p the additive inverse of $b \in F_{p}$ is:
+
+$-b = p-b$
+
+#+BEGIN_SRC sage :session . :exports both
+p = 7
+F = GF(p)
+
+additive_inverse = {}
+for x in F:
+  additive_inverse[x]=-x
+
+print(f"GF({7}) elements and their additive inverse elements: {additive_inverse}")
+
+for elem, inv in additive_inverse.items():
+  print(f"{elem} + {inv} = {elem + inv}")
+#+END_SRC
+
+#+RESULTS:
+: GF(7) elements and their additive inverse elements: {0: 0, 1: 6, 2: 5, 3: 4, 4: 3, 5: 2, 6: 1}
+: 0 + 0 = 0
+: 1 + 6 = 0
+: 2 + 5 = 0
+: 3 + 4 = 0
+: 4 + 3 = 0
+: 5 + 2 = 0
+: 6 + 1 = 0
+
+* DONE Multiplicative inverses in a Finite Field
+
+---
+
+*NOTE*
+
+In the context of a Finite Field $F_{p}$ when we are talking about the *multiplicative group* $(F, \times)$ we are excluding the $0$, as it does not have an *inverse* (as similar to real numbers, division by $0$ is undefined so we cannot have $0^{-1} = 1/0$).
+
+---
+
+=Definition: multiplicative inverse=
+
+Multiplicative inverse of $a \in F_{p}$ is an element $a^{-1} \in F_{p}$ s.t.:
+
+$a \cdot a^{-1} = a^{-1} \cdot a = 1$
+
+=Theorem: Fermat's Little Theorem=
+
+If $p$ is a prime number then for any $a \in \mathbb{Z}$:
+
+$a^p \equiv a \quad \text{mod } p$
+
+If a is not an integer multiple of $p$ (which is clearly the case in a finite field, as for every $a \in F_{p} \quad gcd(a,p) = 1$) Fermat's Little Theorem is equivalent to:
+
+$a^{p-1} \equiv 1 \quad \text{mod } p$
+
+which we can write as:
+
+$a \cdot a^{p-2} \equiv 1 \quad \text{mod } p$
+
+Meaning that $a^{p-2}$ is the *multiplicative inverse* of $a$ in $F_{p}$.
+
+#+BEGIN_SRC sage :session . :exports both
+p = 7
+F = GF(p)
+
+multiplicative_inverse = {}
+# excluding 0!
+for x in [x for x in F][1:p]:
+  multiplicative_inverse[x]=x**(p-2)
+
+print(f"GF({7},*) elements and their multiplicative inverse elements: {multiplicative_inverse}")
+
+for elem, inv in multiplicative_inverse.items():
+  print(f"{elem} * {inv} = {elem * inv}")
+#+END_SRC
+
+#+RESULTS:
+: GF(7,*) elements and their multiplicative inverse elements: {1: 1, 2: 4, 3: 5, 4: 2, 5: 3, 6: 6}
+: 1 * 1 = 1
+: 2 * 4 = 1
+: 3 * 5 = 1
+: 4 * 2 = 1
+: 5 * 3 = 1
+: 6 * 6 = 1
+
+* DONE Galois lib in python
 
 #+BEGIN_SRC python :session zk :kernel zero_knowledge :async yes
 import galois
 galois.__version__
 #+END_SRC
 
-#+RESULTS:
-: 0.4.6
 
+* TODO cleanup notes
+- shafi-goldwasser paper
+- fiat shamir transformation
 - efficient algo for powers of larger numbers (e.g. 2^large)
-
-#+BEGIN_SRC sage :session . :exports both
-q=7
-F = GF(q)
-
-F(-6) == q-6
-
-3+F(-6)
-
-# TODO from fermats little theorem
-F(-6)
-F(6)^5
-#+END_SRC
-
-#+RESULTS:
-: True
-: 4
-: 1
-: 6
