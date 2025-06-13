@@ -9,3 +9,4 @@
 |------------+------------------|
 | [[file:pre_course.org][Pre-Course]] | Course Prep      |
 | [[file:lecture_1.org][Lecture 1]]  | Notes: lecture 1 |
+| [[file:homework_1.org][Homework 1]] | Homework 1       |
