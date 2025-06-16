@@ -309,7 +309,7 @@ fn binary_exponentiation_mod(a: u32, n: i32, m: u32) -> u32 {
     }
 
     if n < 0 {
-        // (1/a)^-n but in modular arithmetic
+        // 1 / a
         return binary_exponentiation_mod(m - m / a, -n, m);
     }
 
@@ -330,7 +330,10 @@ Just to confirm the result:
 
 #+BEGIN_SRC jupyter-python :session zk :kernel zero_knowledge :async yes :exports both
 pow(3,-1,7)
+
+
+pow(4,-1,7)
 #+END_SRC
 
 #+RESULTS:
-: 5
+: 2
