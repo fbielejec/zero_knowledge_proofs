@@ -1,0 +1,24 @@
+#+STARTUP: overview
+#+latex_class_options: [14pt]
+
+* IN-PROGRESS lecture NOTES
+
+#+BEGIN_SRC sage :session . :exports both
+p=7
+F = GF(p)
+
+F(3^-1)
+F(4^-1)
+#+END_SRC
+
+#+RESULTS:
+: 5
+: 2
+
+
+#+BEGIN_SRC jupyter-python :session zk :kernel zero_knowledge :async yes :exports both
+
+#+END_SRC
+
+#+RESULTS:
+: 0.4.6
