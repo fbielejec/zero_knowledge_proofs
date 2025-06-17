@@ -167,6 +167,8 @@ This is a *magma*.
      | snake | snake | fish  | snake |
      | fish  | owl   | snake | fish  |
 
+*** TODO How many ways to fill it in orde rto make a group is there?
+
 ** DONE Define a binary operator that makes it *not* a group (but it should be closed). Hint: if there is no identity element, then it is not a group
 
 This is relatively straigh-forward, if I define a constant operator, that takes every pair and maps it to any one element, I effectively have a *magma*, a closure with no identity element:
