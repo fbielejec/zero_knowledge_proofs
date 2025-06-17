@@ -120,3 +120,10 @@ This is a *monoid*.
 
 This is an *abelian group*.
 * DONE Suppose our set is all rational numbers $\mathbb{Q}$ except $0$ and our binary operator is division. What algebraic structure is this?
+
+- *closed*: yes, dividing two rationals results in a rational
+- *associative*: no, $(a/b)/c = \frac{a}{bc}  \quad \neq \quad a/(b/c) = \frac{ac}{b}$, in a general case.
+- *identity*: no there is no rational $e$ s.t. $a / e = a$ and $e / a = a$. ($1$ does not work becasue although $a/1 = a$, $1/a \neq a$ in a general case).
+- *inverses*: no identity, so no inverses either.
+
+This is a *magma*.
