@@ -167,7 +167,7 @@ This is a *magma*.
      | snake | snake | fish  | snake |
      | fish  | owl   | snake | fish  |
 
-*** TODO How many ways to fill it in orde rto make a group is there?
+*** TODO How many ways to fill the table, and still have all the group axioms hold is there?
 
 ** DONE Define a binary operator that makes it *not* a group (but it should be closed). Hint: if there is no identity element, then it is not a group
 
