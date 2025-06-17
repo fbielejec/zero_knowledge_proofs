@@ -957,7 +957,7 @@ A *set* is a /well-defined collection/ of distinct objects, called *elements* (o
 - Sets do not have an inherent order
 - We can introduce *ordered pairs* as a new data structure emerge from sets of sets:
   - For example $(a,b)$ is an ordered pair created by the set $\{a, \{ b\} \}$.
-  - $(a,b) \neq (b,a)$ because $\{a, \{ b\} \} \neq \{ \{ b\}, a \}$.
+  - $(a,b) \neq (b,a)$ because $\{a, \{ b\} \} \neq \{ \{ a\}, b \}$.
 
 - *Operations*:
   - *Union*: $A \cup B = \{x \mid x \in A \text{ or } x \in B\}$.
@@ -968,17 +968,38 @@ A *set* is a /well-defined collection/ of distinct objects, called *elements* (o
 
 ** DONE Functions as subsets of cartesian products
 
-- In the set-theoretic terms *function* is a subset of the Cartesian product of the *domain set* and *codomain set*.
-  - i.e. function is a mapping from one set to another set.
-- To define a function, we need the set we start from and the set we end at.
-- We take the Cartesian product of these two sets, which results in every possible assignment from the input set to the output set.
-- Then we take the subset of the Cartesian product to define the function as we like.
-- When dealing with infinite sets like integers, we aren't bothered that we can't enumerate all the ordered points explicitly.
+=Definition: function=
 
-=Example=
+A *function* $f$ from a set $X$ (the function's *domain set*) to a set $Y$ (*codomain* set) is a *binary relation* (a /subset of the Cartesian product/ $X \times Y$) between $X$ and $Y$ that satisfies these two conditions:
+
+1. For every $x \in X$, there is *exactly one* $y \in Y$ such that $(x, y) \in f$.
+2. If $(x,y) \in f$ and $(x,z) \in f$ than $y=z$.
+
+=Informally=
+
+- We can say that $f$ is a function if:
+  1. *Every element of $X$ appears exactly once* as the first element of an ordered pair.
+  2. *No "repeats" of $x$-values* (but $y$ values can repeat).
+- $f$ maps $x$ to $y$ is commonly written as $y=f(x)$ (or $x \mapsto y$))
+- To define a function:
+  - We take the Cartesian product of these two sets, which results in every possible assignment from the input set to the output set.
+  - Then we take a restricted subset of the Cartesian product to define the function as we like
+  - Each input $x \in X$ must map to /exactly one/ $y \in Y$.
+  - Outputs can repeat but inputs cannot.
+  - When dealing with infinite sets like integers, we aren't bothered that we can't enumerate all the ordered points explicitly.
+
+=Properties=
+
+For finite sets  $X$ and $Y$, the number of possible functions $f: X \to Y$ is:
+
+$|Y|^{|X|}$
+
+=Examples: valid and invalid functions=
 
 Let $A = \{1,2,3\}$, $B = \{x, y, z\}$.
 The cartesian product $A \times B= \{ (1,x), (1,y), (1,z), (2,x), \ldots (3,z)\}$.
+Here, $|X| = 3$ and $|Y| = 3, so there are $3^3 = 27$ possible functions.
+
 The same represented in a tabular format:
 
 |   | x       | y       | z       |
@@ -988,15 +1009,46 @@ The same represented in a tabular format:
 
 The highlighted subset of the product i.e. $\{ (1,y),(2,z),(3,x) \}$ defines a function:
 
-$1 \rightarrow y$
-$2 \rightarrow z$
-$3 \rightarrow x$
+$1 \mapsto y$
+$2 \mapsto z$
+$3 \mapsto x$
+
+Another valid function would be the mapping:
+
+$1 \mapsto x$
+$2 \mapsto x$
+$3 \mapsto x$
+
+($f = \{ (1,x), (2,x), (3,) \}$, this is a constant function.)
+
+Yet another valid function:
+
+$1 \mapsto x$
+$2 \mapsto y$
+$3 \mapsto x$
+
+($f = \{ (1,x), (2,y), (3,x) \}$, this is a non-injective function)
+
+An *invalid* example is:
+
+$1 \mapsto x$
+$2 \mapsto y$
+
+There is no mapping for $3$ (undefined)
+
+Another *invalid* example:
+
+$1 \mapsto x$
+$2 \mapsto y$
+$1 \mapsto z$
+
+Ambiguous mapping of $1$ to both $x$ and $z$.
 
 =Example=
 
 Let's define a mapping between non-negative real numbers (zero or greater) and non-negative integers (zero or greater) using the *floor function* (function that removes the decimal portion of a number):
 
-$\mathbb{R} \time \mathbb{Z}$:
+$\mathbb{R} \times \mathbb{Z}$:
 
 |       | 1          | 2            | ... | 499          | 500            |
 |   1.5 | *(1.5, 1)* | (1.5, 2)     | ... | (1.5, 499)   | (1.5, 500)     |
@@ -1278,7 +1330,6 @@ Then we take the Cartesian product of this new set of pairs with the original se
 Subset which defines $a \times b \hspace{.5em} (\text{mod } 3)$ is in *bold*
 
 *** TODO Define our set $A$ to be the numbers ${0,1,2,3,4}$ and our binary operator to be subtraction modulo 5. Define all the ordered pairs of $A \times A$ in a table, then map that set of ordered pairs to $A$.
-
 * DONE Elementary Group Theory
 - https://www.rareskills.io/post/group-theory
 ** DONE Cyclic groups
@@ -1552,7 +1603,6 @@ This is a group
 
 - *identity*: matrix $E=\begin{bmatrix} 0 & 0  \\ 0 & 0  \\0 & 0 \end{bmatrix}$ of all $0$'s is the identity element
 - *existence of inverse elements*: For every $M=\begin{bmatrix} m_{11} & m_{12}  \\ m_{21} & m_{22}  \\ m_{31} & m_{32} \end{bmatrix}$ matrix $-M$ is it's inverse.
-
 - *cyclic*: The group is not cyclic, because there is no generator.
 
 #+BEGIN_SRC jupyter-python :session zk :async yes
