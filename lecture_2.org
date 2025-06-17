@@ -2,23 +2,27 @@
 #+latex_class_options: [14pt]
 
 * IN-PROGRESS lecture NOTES
+- bound for number of quadratic resides in a finite field
+- polynomials in a finite field
+- lagrange interpolation
+- d+1 points uniquely define a d-degreee polynomial which in turn is uniquely defined by its d+1 coefficients
+- the difference between the *order* (of a group / field) and a *characteristic* (of a field)
+- can a field have ene element?
 
 #+BEGIN_SRC sage :session . :exports both
-p=7
+p = 11
 F = GF(p)
 
-F(3^-1)
-F(4^-1)
+# maps elements in the field to it's square roots (if any)
+# for a given element it's square roots are the inverse of each other (obviously)
+square_roots = {}
+for y in F:
+  square_roots[y] = [];
+  for x in F:
+    if x * x == y : square_roots[y].append(x);
+
+print(f"GF{p} elements and it's square roots: {square_roots}")
 #+END_SRC
 
 #+RESULTS:
-: 5
-: 2
-
-
-#+BEGIN_SRC jupyter-python :session zk :kernel zero_knowledge :async yes :exports both
-
-#+END_SRC
-
-#+RESULTS:
-: 0.4.6
+: GF11 elements and it's square roots: {0: [0], 1: [1, 10], 2: [], 3: [5, 6], 4: [2, 9], 5: [4, 7], 6: [], 7: [], 8: [], 9: [3, 8], 10: []}
