@@ -1,0 +1,122 @@
+* DONE Let our set be real numbers. Show a binary operator that is not closed
+
+---
+
+*NOTES*
+
+=Binary Operator=
+
+Let $A$ be a set. A *binary operator* $*$ maps every possible pair of elements from A to another element in $A$:
+
+$* : A \times A \rightarrow A$
+
+where:
+
+- $A \times A$ is the *cartesian product* of $A$ with itself, i.e. the set of *ordered pairs* $(a,b) = \{ a \in A, b \in A \}$ (2-tuples as they are often called in CS).
+- ordered pairs can be defined as sets of sets, e.g. $(a,b) = \{a, \{ b \} \}$, $(b,a) = \{ \{ a \}, b \}$.
+
+Binary operator $*$ is *closed* on the set $A$ if applying it to any ordered pair from $A \times A$ always results in an element from $A$.
+
+---
+
+We need a function that takes two elements from \mathbb{R} as input, but in some cases can take us to a set different that $\mathbb{R}$. Reals number are a subset of the set of complex numbers $\mathb{C}$, therefore for example:
+
+$f: \mathbb{R} \times  \mathbb{R} \text{ s.t} \quad f(a,b) = \sqrt{a+b}$
+
+$f$ is a function because it:
+- takes as an input every ordered pair from $\mathbb{R} \times \mathbb{R}$
+- for every ordered pair (a,b) there is
+
+For example for $f(2,-3)=\sqrt{-1}=i \in \mathbb{C}$
+* DONE Find a binary operator that is closed but not associative for real numbers
+
+---
+
+*NOTE*
+
+=Definition: associativity=
+
+Let A be a set and $*$ a binary operator s.t:
+
+$*: A \times A \rightarrow A$
+
+We would say that $*$ is *associative* if $\forall a,b,c \in A$
+
+$*(*(a,b),c) = *(a,*(b,c))$
+
+---
+
+Let's take $f: \mathbb{R} \times \mathbb{R} \rightarrow \mathbb{R}$ s.t.
+
+$f(a,b) = a^b$
+
+Such an operator is closed, it will never result in a number that is not real (when applied to a pair of reals)
+It is not associative because generally:
+
+$(a^{b})^{c} = a^{b\cdot c} \quad \neq \quad a^{(b^{c})}= a^{b^{c}}$
+
+For example:
+
+#+BEGIN_SRC jupyter-python :session zk :async yes
+a=2;b=3;c=4
+
+def f(a,b):
+  return pow(a,b)
+
+f(f(a,b),c) == f(a,f(b,c))
+#+END_SRC
+
+#+RESULTS:
+: False
+* DONE What algebraic structure (group, monoid, semigroup, etc) is all even integers under addition
+
+---
+
+*NOTE*
+
+Here is a taxonomy of basic algebraic structures (ordered from the least to the most restrictive):
+
+| Structure       | Closure  | Associativity | Identity | Inverses | Commutativity/ | Example(s)                                       |
+|-----------------+----------+---------------+----------+----------+----------------+--------------------------------------------------|
+| *Magma*         | ✔        | ❌           | ❌      | ❌      | ❌            | Any operation on a set (e.g., subtraction on ℕ) |
+| *Semigroup*     | ✔        | ✔             | ❌      | ❌      | ❌            | Strings under concatenation                      |
+| *Monoid*        | ✔        | ✔             | ✔        | ❌      | ❌            | (ℕ, +, 0), (Strings, concat, "")                |
+| *Group*         | ✔        | ✔             | ✔        | ✔        | ❌            | (ℤ, +, 0), invertible matrices                  |
+| *Abelian Group* | ✔        | ✔             | ✔        | ✔        | ✔              | (ℤ, +, 0), (ℝ/, ×, 1)                           |
+| *Ring*          | ✔ (+, ×) | ✔ (+, ×)      | ✔ (+)    | ✔ (+)    | ❌ (×)        | (ℤ, +, ×), polynomials                          |
+| *Field*         | ✔ (+, ×) | ✔ (+, ×)      | ✔ (+, ×) | ✔ (+, ×) | ✔ (+, ×)       | (ℚ, +, ×), (𝔽ₚ, +, ×) for prime 𝑝                |
+
+We can summarize the inclusivity with:
+- Magma ⊃ Semigroup ⊃ Monoid ⊃ Group ⊃ Abelian Group
+- Ring ⊃ Field
+
+---
+
+- *closed*: adding two even integers results in an even integer.
+- *associative*: yes, by the fact that addition is associative.
+- *identity element*: yes, $0$ is the natural candidate for an identity under addition, and $0$ fullfills the definition of an even number ($0 \equiv 0 \text{ mod } 2$).
+- *existence of inverse elements*: yes, negation is the inverse of every element under addition.
+- *commutativity*: yes, by the fact that addition operator is commutative.
+
+Therefore it is an *abelian group*.
+
+* DONE What algebraic structure is all odd integers under multiplication?
+
+- *closed*: yes, multiplying two odd integers results in an odd integer (GCD of two odd integers is an odd integer).
+- *associative*: yes, multiplication is associative.
+- *identity*:, yes, $1$ is the identity element
+- *inverses*: no, inverses are of form $1/a$ (rational)
+
+This is a *monoid*.
+
+* DONE Let our set be 3 x 2 matrices of integers under addition. What algebraic structure is this?
+
+- *closed*: yes, we can add two matrices and we get a matrix of the same dimensionality as a result.
+- *associative*: yes.
+- *identity*: matrix $E=\begin{bmatrix} 0 & 0  \\ 0 & 0  \\0 & 0 \end{bmatrix}$ is the identity element.
+- *existence of inverse elements*: For every $M=\begin{bmatrix} m_{11} & m_{12}  \\ m_{21} & m_{22}  \\ m_{31} & m_{32} \end{bmatrix}$, $-M=\begin{bmatrix} -m_{11} & -m_{12}  \\ -m_{21} & -m_{22}  \\ -m_{31} & -m_{32} \end{bmatrix}$ is it's inverse.
+- *commutativity*: yes
+
+
+This is an *abelian group*.
+* DONE Suppose our set is all rational numbers $\mathbb{Q}$ except $0$ and our binary operator is division. What algebraic structure is this?
