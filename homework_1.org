@@ -14,6 +14,10 @@
 - [[#problem-4][Problem 4]]
 - [[#problem-5][Problem 5]]
 - [[#problem-6][Problem 6]]
+  - [[#what-is-px--qx][What is p(x) + q(x)?]]
+  - [[#what-is-px--qx][What is p(x) * q(x)?]]
+  - [[#use-the-galois-library-in-python-to-find-the-roots-of-px-and-qx][Use the galois library in Python to find the roots of p(x) and q(x).]]
+  - [[#what-are-the-roots-of-pxqx][What are the roots of p(x)q(x)?]]
 - [[#problem-7][Problem 7]]
 - [[#problem-8][Problem 8]]
   - [[#manual-implementation][Manual implementation]]
@@ -201,14 +205,107 @@ Suppose we have the following polynomials:
 $p(x)=52x^2+24x+61$
 $q(x)=40x^2+40x+58$
 
-Use the galois library in Python to find the roots of p(x) and q(x).
+** DONE What is p(x) + q(x)?
 
 #+BEGIN_SRC jupyter-python :session zk :kernel zero_knowledge :async yes :exports both
 import galois
 
+p = 71
+GF = galois.GF(71)
+
+p = galois.Poly([52, 24, 61], GF)
+q = galois.Poly([40, 40, 58], GF)
+
+print(f"{p+q}")
 #+END_SRC
 
-* TODO Problem 7
+#+RESULTS:
+: 21x^2 + 64x + 48
+
+** DONE What is p(x) * q(x)?
+
+#+BEGIN_SRC jupyter-python :session zk :kernel zero_knowledge :async yes :exports both
+import galois
+
+p = 71
+GF = galois.GF(71)
+
+p = galois.Poly([52, 24, 61], GF)
+q = galois.Poly([40, 40, 58], GF)
+
+print(f"{p*q}")
+#+END_SRC
+
+#+RESULTS:
+: 21x^4 + 58x^3 + 26x^2 + 69x + 59
+
+** DONE Use the galois library in Python to find the roots of p(x) and q(x).
+
+#+BEGIN_SRC jupyter-python :session zk :kernel zero_knowledge :async yes :exports both
+import galois
+
+p = 71
+GF = galois.GF(71)
+
+p = galois.Poly([52, 24, 61], GF)
+q = galois.Poly([40, 40, 58], GF)
+
+print(f"roots of p(x)={p}: {p.roots()}")
+print(f"roots of q(x)={q}: {q.roots()}")
+#+END_SRC
+
+#+RESULTS:
+: roots of p(x)=52x^2 + 24x + 61: [34 42]
+: roots of q(x)=40x^2 + 40x + 58: []
+
+** TODO What are the roots of p(x)q(x)?
+
+#+BEGIN_SRC jupyter-python :session zk :kernel zero_knowledge :async yes :exports both
+import galois
+
+p = 71
+GF = galois.GF(71)
+
+p = galois.Poly([52, 24, 61], GF)
+q = galois.Poly([40, 40, 58], GF)
+
+pq = p*q
+
+print(f"roots of p(x)*q(x)={pq}: {pq.roots()} (same as p(x))")
+#+END_SRC
+
+#+RESULTS:
+: roots of p(x)*q(x)=21x^4 + 58x^3 + 26x^2 + 69x + 59: [34 42] (same as p(x))
+
+* DONE Problem 7
+
+Find a polynomial f(x) that crosses the points (10, 15), (23, 29).
+Since these are two points, the polynomial will be of degree 1 and be the equation for a line (y = ax + b).
+Verify your answer by checking that f(10) = 15 and f(23) = 29.
+
+#+BEGIN_SRC maxima :exports both :results output replace
+modulus:71;
+
+eq1: a*10 + b;
+eq2: a*23 + b;
+
+coeff: solve([eq1 = 15, eq2 = 29], [a,b]);
+
+a: rhs(first(first(coeff)));
+b: rhs(second(first(coeff)));
+
+f(x) := (a * x + b);
+
+print("f(x) =", f(x));
+print("f(10) =", mod(f(10),71));
+print("f(23) =", mod(f(23),71));
+#+END_SRC
+
+#+RESULTS:
+: f(x) = 12 x - 34 
+: f(10) = 15 
+: f(23) = 29 
+
 * IN-PROGRESS Problem 8
 What is Lagrange interpolation and what does it do?
 
@@ -248,8 +345,7 @@ print(f"Unique polynomial passing through ({x[0]},{y[0]}), ({x[1]},{y[1]}), ({x[
 : Unique polynomial passing through (0,1), (1,2), (2,1): P(x)=70x^2 + 2x + 1 in GF(71)
 
 ** IN-PROGRESS Manual implementation
-
-#+BEGIN_SRC sage  :session . :exports both
+#+BEGIN_SRC sage :session . :exports both
 p = 71
 F=GF(p)
 R = PolynomialRing(F,'x')
@@ -257,17 +353,8 @@ x = R.gen()
 
 points = [(0, 1), (1, 2), (2, 1)]
 
-def lagrange_basis(i, points):
-    xi, yi = points[i]
-    product = 1
-    for j in range(len(points)):
-        if j != i:
-            xj = points[j][0]
-            product *= (x - xj) / (xi - xj)
-    return product
+#def lagrange_basis(i, points):
 
-P = sum(yi * lagrange_basis(i, points) for i, (xi, yi) in enumerate(points))
-P
 #+END_SRC
 
 #+RESULTS:
