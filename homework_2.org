@@ -218,14 +218,11 @@ Therefore although not very usefull, such a group (a *trivial group*) is even an
 
 ** DONE What is the smallest possible finite field?
 
-One would think that this is $GF(1)$, with $G=\{e\}$ and $+:e+e=e$ and $*: e*e = e$ but this contradicts the definition of a field, which requires:
+One would think that this is $GF(1)$, with $G=\{e\}$ and $+:e+e=e$ and $*: e*e = e$ but this contradicts the definition of a field, which requires that $0 \neq 1$, where:
 
-$0 \neq 1$,
-
-where:
 - $0$ is the identy element under $+$.
 - $1$ is the identy element under $*$.
 
-Therefore the smallest finite field is $GF(2)$ where $G=\{0,1}$.
+Therefore the smallest finite field is $GF(2)$ where $G=\{0,1\}$.
 
 $GF(1)$ is a trivial ring, more in this [[https://en.wikipedia.org/wiki/Field_with_one_element][wiki article]].
