@@ -1,3 +1,29 @@
+#+STARTUP: overview
+#+latex_class_options: [12pt]
+
+* Contents
+:PROPERTIES:
+:VISIBILITY:  all
+:TOC:      :include all :ignore this
+:END:
+:CONTENTS:
+- [[#problem-set][Problem set]]
+- [[#let-our-set-be-real-numbers-show-a-binary-operator-that-is-not-closed][Let our set be real numbers. Show a binary operator that is not closed]]
+- [[#find-a-binary-operator-that-is-closed-but-not-associative-for-real-numbers][Find a binary operator that is closed but not associative for real numbers]]
+- [[#what-algebraic-structure-group-monoid-semigroup-etc-is-all-even-integers-under-addition][What algebraic structure (group, monoid, semigroup, etc) is all even integers under addition]]
+- [[#what-algebraic-structure-is-all-odd-integers-under-multiplication][What algebraic structure is all odd integers under multiplication?]]
+- [[#let-our-set-be-3-x-2-matrices-of-integers-under-addition-what-algebraic-structure-is-this][Let our set be 3 x 2 matrices of integers under addition. What algebraic structure is this?]]
+- [[#suppose-our-set-is-all-rational-numbers-mathbbq-except-0-and-our-binary-operator-is-division-what-algebraic-structure-is-this][Suppose our set is all rational numbers $\mathbb{Q}$ except $0$ and our binary operator is division. What algebraic structure is this?]]
+- [[#suppose-our-set-is-𓅔-𓆓-𓆟][Suppose our set is 𓅔 𓆓 𓆟]]
+  - [[#define-a-binary-operator-that-makes-it-a-group-you-can-define-the-binary-operators-property-by-constructing-a-table-where-the-left-two-columns-are-the-inputs-and-the-right-column-is-the-result-remember-you-need-to-allow-that-the-inputs-can-be-the-same-for-example-𓅔𓅔---][Define a binary operator that makes it a group. You can define the binary operator's property by constructing a table where the left two columns are the inputs and the right column is the result. Remember you need to allow that the inputs can be the same, for example (𓅔,𓅔) -> ?]]
+    - [[#how-many-ways-to-fill-the-table-and-still-have-all-the-group-axioms-hold-is-there][How many ways to fill the table, and still have all the group axioms hold is there?]]
+  - [[#define-a-binary-operator-that-makes-it-not-a-group-but-it-should-be-closed-hint-if-there-is-no-identity-element-then-it-is-not-a-group][Define a binary operator that makes it not a group (but it should be closed). Hint: if there is no identity element, then it is not a group]]
+- [[#what-is-the-size-of-the-smallest-possible-group-remember-a-group-is-a-set-so-this-is-asking-how-large-the-set-is][What is the size of the smallest possible group? (Remember, a group is a set, so this is asking how large the set is).]]
+  - [[#what-is-the-smallest-possible-finite-field][What is the smallest possible finite field?]]
+:END:
+
+* Problem set
+- https://www.notion.so/Homework-2-11c09cb3e962805897d8f20c7d527d7c
 * DONE Let our set be real numbers. Show a binary operator that is not closed
 
 ---
