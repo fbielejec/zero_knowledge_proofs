@@ -11,4 +11,4 @@
 | [[file:lecture_1.org][Lecture 1]]  | Notes: lecture 1 |
 | [[file:homework_1.org][Homework 1]] | Homework 1       |
 | [[file:lecture_2.org][Lecture 2]]  | Notes: lecture 2 |
-| [[file:homework_2.org][Homework 2]] | Homework 1       |
+| [[file:homework_2.org][Homework 2]] | Homework 2       |
