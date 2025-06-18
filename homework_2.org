@@ -206,7 +206,7 @@ This is relatively straigh-forward, if I define a constant operator, that takes 
 
 * DONE What is the size of the smallest possible group? (Remember, a group is a set, so this is asking how large the set is).
 
-The smallest possible group is a set consisting of only the identity element i.e. $G=(\{e\}, *) where $*$ is an binary operator s.t $e*e=e$.
+The smallest possible group is a set consisting of only the identity element i.e. $G=(\{e\}, *)$ where $*$ is an binary operator s.t $e*e=e$.
 
 - we have the *closure* property (by the definition of the operator).
 - $(e*e)*e = e*e = e * (e*e)$, therefore the *associativity* holds.

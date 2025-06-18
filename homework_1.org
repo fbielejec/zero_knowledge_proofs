@@ -309,7 +309,7 @@ print("f(23) =", mod(f(23),71));
 * IN-PROGRESS Problem 8
 What is Lagrange interpolation and what does it do?
 
-Find a polynomial that crosses through the points $(0, 1), (1, 2), (2, 1).$
+Find a polynomial that crosses through the points $(0, 1), (1, 2), (2, 1)$.
 
 Use this Stackoverflow answer as a starting point: https://stackoverflow.com/a/73434775
 
