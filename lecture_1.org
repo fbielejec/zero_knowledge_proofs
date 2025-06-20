@@ -202,7 +202,7 @@ The following formula expresses the entire idea recursively:
 $a^{n} = \begin{cases}
 1 & \text {if } n==0 \\
 (a^{\frac{n}{2}})^{2} & \text {if } n \text{ is even} \\
-a \cdot (a^{\frac{n-1}{2}})^{2} & \text {if } n \text{ is even}
+a \cdot (a^{\frac{n-1}{2}})^{2} & \text {if } n \text{ is odd}
 \end{cases}$
 
 In each recursive call the least significant bit of $n$ is removed (with the division by $2$), hence the time complexity of $\mathcal{O}(log(N))$.
