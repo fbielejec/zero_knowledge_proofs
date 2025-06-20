@@ -1,0 +1,234 @@
+#+STARTUP: overview
+#+latex_class_options: [12pt]
+
+* Contents
+:PROPERTIES:
+:VISIBILITY:  all
+:TOC:      :include all :ignore this
+:END:
+:CONTENTS:
+- [[#problem-set][Problem set]]
+- [[#let-our-set-be-real-numbers-show-a-binary-operator-that-is-not-closed][Let our set be real numbers. Show a binary operator that is not closed]]
+- [[#find-a-binary-operator-that-is-closed-but-not-associative-for-real-numbers][Find a binary operator that is closed but not associative for real numbers]]
+- [[#what-algebraic-structure-group-monoid-semigroup-etc-is-all-even-integers-under-addition][What algebraic structure (group, monoid, semigroup, etc) is all even integers under addition]]
+- [[#what-algebraic-structure-is-all-odd-integers-under-multiplication][What algebraic structure is all odd integers under multiplication?]]
+- [[#let-our-set-be-3-x-2-matrices-of-integers-under-addition-what-algebraic-structure-is-this][Let our set be 3 x 2 matrices of integers under addition. What algebraic structure is this?]]
+- [[#suppose-our-set-is-all-rational-numbers-mathbbq-except-0-and-our-binary-operator-is-division-what-algebraic-structure-is-this][Suppose our set is all rational numbers $\mathbb{Q}$ except $0$ and our binary operator is division. What algebraic structure is this?]]
+- [[#suppose-our-set-is-𓅔-𓆓-𓆟][Suppose our set is 𓅔 𓆓 𓆟]]
+  - [[#define-a-binary-operator-that-makes-it-a-group-you-can-define-the-binary-operators-property-by-constructing-a-table-where-the-left-two-columns-are-the-inputs-and-the-right-column-is-the-result-remember-you-need-to-allow-that-the-inputs-can-be-the-same-for-example-𓅔𓅔---][Define a binary operator that makes it a group. You can define the binary operator's property by constructing a table where the left two columns are the inputs and the right column is the result. Remember you need to allow that the inputs can be the same, for example (𓅔,𓅔) -> ?]]
+    - [[#follow-up-how-many-ways-to-fill-the-table-and-still-have-all-the-group-axioms-hold-are-there][Follow-up: How many ways to fill the table, and still have all the group axioms hold are there?]]
+  - [[#define-a-binary-operator-that-makes-it-not-a-group-but-it-should-be-closed-hint-if-there-is-no-identity-element-then-it-is-not-a-group][Define a binary operator that makes it not a group (but it should be closed). Hint: if there is no identity element, then it is not a group]]
+- [[#what-is-the-size-of-the-smallest-possible-group-remember-a-group-is-a-set-so-this-is-asking-how-large-the-set-is][What is the size of the smallest possible group? (Remember, a group is a set, so this is asking how large the set is).]]
+  - [[#what-is-the-smallest-possible-finite-field][What is the smallest possible finite field?]]
+:END:
+
+* Problem set
+- https://www.notion.so/Homework-2-11c09cb3e962805897d8f20c7d527d7c
+* DONE Let our set be real numbers. Show a binary operator that is not closed
+
+---
+
+*NOTES*
+
+=Binary Operator=
+
+Let $A$ be a set. A *binary operator* $*$ maps every possible pair of elements from A to another element in $A$:
+
+$* : A \times A \rightarrow A$
+
+where:
+
+- $A \times A$ is the *cartesian product* of $A$ with itself, i.e. the set of *ordered pairs* $(a,b) = \{ a \in A, b \in A \}$ (2-tuples as they are often called in CS).
+- ordered pairs can be defined as sets of sets, e.g. $(a,b) = \{a, \{ b \} \}$, $(b,a) = \{ \{ a \}, b \}$.
+
+Binary operator $*$ is *closed* on the set $A$ if applying it to any ordered pair from $A \times A$ always results in an element from $A$.
+
+---
+
+We need a function that takes two elements from \mathbb{R} as input, but in some cases can take us to a set different that $\mathbb{R}$. Reals number are a subset of the set of complex numbers $\mathb{C}$, therefore for example:
+
+$f: \mathbb{R} \times  \mathbb{R} \text{ s.t} \quad f(a,b) = \sqrt{a+b}$
+
+$f$ is a function because it:
+- takes as an input every ordered pair from $\mathbb{R} \times \mathbb{R}$
+- for every ordered pair (a,b) there is
+
+For example for $f(2,-3)=\sqrt{-1}=i \in \mathbb{C}$
+* DONE Find a binary operator that is closed but not associative for real numbers
+
+---
+
+*NOTE*
+
+=Definition: associativity=
+
+Let A be a set and $*$ a binary operator s.t:
+
+$*: A \times A \rightarrow A$
+
+We would say that $*$ is *associative* if $\forall a,b,c \in A$
+
+$*(*(a,b),c) = *(a,*(b,c))$
+
+---
+
+Let's take $f: \mathbb{R} \times \mathbb{R} \rightarrow \mathbb{R}$ s.t.
+
+$f(a,b) = a^b$
+
+Such an operator is closed, it will never result in a number that is not real (when applied to a pair of reals)
+It is not associative because generally:
+
+$(a^{b})^{c} = a^{b\cdot c} \quad \neq \quad a^{(b^{c})}= a^{b^{c}}$
+
+For example:
+
+#+BEGIN_SRC jupyter-python :session zk :async yes
+a=2;b=3;c=4
+
+def f(a,b):
+  return pow(a,b)
+
+f(f(a,b),c) == f(a,f(b,c))
+#+END_SRC
+
+#+RESULTS:
+: False
+* DONE What algebraic structure (group, monoid, semigroup, etc) is all even integers under addition
+
+---
+
+*NOTE*
+
+Here is a taxonomy of basic algebraic structures (ordered from the least to the most restrictive):
+
+| Structure       | Closure  | Associativity | Identity | Inverses | Commutativity/ | Example(s)                                       |
+|-----------------+----------+---------------+----------+----------+----------------+--------------------------------------------------|
+| *Magma*         | ✔        | ❌           | ❌      | ❌      | ❌            | Any operation on a set (e.g., subtraction on ℕ) |
+| *Semigroup*     | ✔        | ✔             | ❌      | ❌      | ❌            | Strings under concatenation                      |
+| *Monoid*        | ✔        | ✔             | ✔        | ❌      | ❌            | (ℕ, +, 0), (Strings, concat, "")                |
+| *Group*         | ✔        | ✔             | ✔        | ✔        | ❌            | (ℤ, +, 0), invertible matrices                  |
+| *Abelian Group* | ✔        | ✔             | ✔        | ✔        | ✔              | (ℤ, +, 0), (ℝ/, ×, 1)                           |
+| *Ring*          | ✔ (+, ×) | ✔ (+, ×)      | ✔ (+)    | ✔ (+)    | ❌ (×)        | (ℤ, +, ×), polynomials                          |
+| *Field*         | ✔ (+, ×) | ✔ (+, ×)      | ✔ (+, ×) | ✔ (+, ×) | ✔ (+, ×)       | (ℚ, +, ×), (𝔽ₚ, +, ×) for prime 𝑝                |
+
+We can summarize the inclusivity with:
+- Magma ⊃ Semigroup ⊃ Monoid ⊃ Group ⊃ Abelian Group
+- Ring ⊃ Field
+
+---
+
+- *closed*: adding two even integers results in an even integer.
+- *associative*: yes, by the fact that addition is associative.
+- *identity element*: yes, $0$ is the natural candidate for an identity under addition, and $0$ fullfills the definition of an even number ($0 \equiv 0 \text{ mod } 2$).
+- *existence of inverse elements*: yes, negation is the inverse of every element under addition.
+- *commutativity*: yes, by the fact that addition operator is commutative.
+
+Therefore it is an *abelian group*.
+
+* DONE What algebraic structure is all odd integers under multiplication?
+
+- *closed*: yes, multiplying two odd integers results in an odd integer (GCD of two odd integers is an odd integer).
+- *associative*: yes, multiplication is associative.
+- *identity*:, yes, $1$ is the identity element
+- *inverses*: no, inverses are of form $1/a$ (rational)
+
+This is a *monoid*.
+
+* DONE Let our set be 3 x 2 matrices of integers under addition. What algebraic structure is this?
+
+- *closed*: yes, we can add two matrices and we get a matrix of the same dimensionality as a result.
+- *associative*: yes.
+- *identity*: matrix $E=\begin{bmatrix} 0 & 0  \\ 0 & 0  \\0 & 0 \end{bmatrix}$ is the identity element.
+- *existence of inverse elements*: For every $M=\begin{bmatrix} m_{11} & m_{12}  \\ m_{21} & m_{22}  \\ m_{31} & m_{32} \end{bmatrix}$, $-M=\begin{bmatrix} -m_{11} & -m_{12}  \\ -m_{21} & -m_{22}  \\ -m_{31} & -m_{32} \end{bmatrix}$ is it's inverse.
+- *commutativity*: yes
+
+
+This is an *abelian group*.
+* DONE Suppose our set is all rational numbers $\mathbb{Q}$ except $0$ and our binary operator is division. What algebraic structure is this?
+
+- *closed*: yes, dividing two rationals results in a rational
+- *associative*: no, $(a/b)/c = \frac{a}{bc}  \quad \neq \quad a/(b/c) = \frac{ac}{b}$, in a general case.
+- *identity*: no there is no rational $e$ s.t. $a / e = a$ and $e / a = a$. ($1$ does not work becasue although $a/1 = a$, $1/a \neq a$ in a general case).
+- *inverses*: no identity, so no inverses either.
+
+This is a *magma*.
+
+* IN-PROGRESS Suppose our set is 𓅔 𓆓 𓆟
+** IN-PROGRESS Define a binary operator that makes it a group. You can define the binary operator's property by constructing a table where the left two columns are the inputs and the right column is the result. Remember you need to allow that the inputs can be the same, for example (𓅔,𓅔) -> ?
+
+- Pick up a neutral element, for example *fish*:
+  - owl * fish = owl and fish * owl = owl
+  - snake * fish = snake and fish * snake = snake
+  - fish * fish = fish
+
+- Fill the rest of the table. I can do it in two ways:
+  1. Pick up an element as the group generator, for example: snake^1 = snake, snake^2 = owl, snake^3 = fish.
+     - immediately: snake^2 = owl
+     - if snake^3 = fish than owl * snake = fish
+     - two remaining entries: snake needs it's inverse: so snake * owl = fish
+     - owl * owl = snake, because owl * owl = owl * (snake * snake) = (owl * snake) * snake = fish * snake = snake
+     - Resulting table:
+
+     | *     | owl   | snake | fish  |
+     | owl   | snake | fish  | owl   |
+     | snake | fish  | owl   | snake |
+     | fish  | owl   | snake | fish  |
+
+     - Checking group axioms:
+       - *Closure*: All results in the table are in {owl, snake, fish}, so closure holds.
+       - *Associativity*: Checking if (x * y) * z = x * (y * z) for all $3^3$ permutations is too long, but since we have *commutativity* (the table is symmetrical along the diagonal) we should also have associativity.
+       - *Identity element*: By choice the fish is the identity element.
+       - *Inverse elements*:
+         - owl * snake = fish  so $owl^-1$ = snake and automatically snake^-1 = owl.
+         - fish is it's own inverse: fish^-1 = fish.
+     - group is also *commutative*, as already mentioned
+
+  2. Arrange it so that the non-identity elements are their own inverses: owl * owl = fish, snake * snake = fish
+     - I have two remaining entries owl * snake and snake * owl. As long as I fill them with the same non-identity entry (snake or owl) I will have a commutative group, which means associativity will hold as well.
+     - Resulting table:
+
+     | *     | owl   | snake | fish  |
+     | owl   | fish  | snake | owl   |
+     | snake | snake | fish  | snake |
+     | fish  | owl   | snake | fish  |
+
+     - Checking group axioms:
+       - *Closure*: All results in the table are in {owl, snake, fish}, so closure holds.
+       - *Associativity*: TODO: write python script to check
+       - *Identity element*: By choice the fish is the identity element.
+       - *Inverse elements*: TODO
+       - *commutativity*: TODO
+
+*** TODO Follow-up: How many ways to fill the table, and still have all the group axioms hold are there?
+** DONE Define a binary operator that makes it *not* a group (but it should be closed). Hint: if there is no identity element, then it is not a group
+
+This is relatively straigh-forward, if I define a constant operator, that takes every pair and maps it to any one element, I effectively have a *magma*, a closure with no identity element:
+
+| *     | owl   | snake | fish  |
+| owl   | snake | snake | snake |
+| snake | snake | snake | snake |
+| fish  | snake | snake | snake |
+
+* DONE What is the size of the smallest possible group? (Remember, a group is a set, so this is asking how large the set is).
+
+The smallest possible group is a set consisting of only the identity element i.e. $G=(\{e\}, *)$ where $*$ is an binary operator s.t $e*e=e$.
+
+- we have the *closure* property (by the definition of the operator).
+- $(e*e)*e = e*e = e * (e*e)$, therefore the *associativity* holds.
+- $e$ is the *identity* element (by definition)
+- $e$ is the only element and since $e*e = e$ the *inverses exist* for every element of the set.
+- the operator is also *commutative*, since $e*e = e*e$
+
+Therefore although not very usefull, such a group (a *trivial group*) is even an abelian one.
+
+** DONE What is the smallest possible finite field?
+
+One would think that this is $GF(1)$, with $G=\{e\}$ and $+:e+e=e$ and $*: e*e = e$ but this contradicts the definition of a field, which requires that $0 \neq 1$, where:
+
+- $0$ is the identy element under $+$.
+- $1$ is the identy element under $*$.
+
+Therefore the smallest finite field is $GF(2)$ where $G=\{0,1\}$.
+
+$GF(1)$ is a trivial ring, more in this [[https://en.wikipedia.org/wiki/Field_with_one_element][wiki article]].
