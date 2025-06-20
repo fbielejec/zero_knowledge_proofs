@@ -154,7 +154,7 @@ This is an *abelian group*.
 
 This is a *magma*.
 
-* DONE Suppose our set is 𓅔 𓆓 𓆟
+* IN-PROGRESS Suppose our set is 𓅔 𓆓 𓆟
 ** IN-PROGRESS Define a binary operator that makes it a group. You can define the binary operator's property by constructing a table where the left two columns are the inputs and the right column is the result. Remember you need to allow that the inputs can be the same, for example (𓅔,𓅔) -> ?
 
 - Pick up a neutral element, for example *fish*:
@@ -177,12 +177,12 @@ This is a *magma*.
 
      - Checking group axioms:
        - *Closure*: All results in the table are in {owl, snake, fish}, so closure holds.
-       - *Associativity*: Checking if (x * y) * z = x * (y * z) for all $3^3$ permutations is too long, but since we have *commutativity* (the table is symmetrical along the diagonal) we also have associativity.
+       - *Associativity*: Checking if (x * y) * z = x * (y * z) for all $3^3$ permutations is too long, but since we have *commutativity* (the table is symmetrical along the diagonal) we should also have associativity.
        - *Identity element*: By choice the fish is the identity element.
        - *Inverse elements*:
          - owl * snake = fish  so $owl^-1$ = snake and automatically snake^-1 = owl.
          - fish is it's own inverse: fish^-1 = fish.
-      - group is also *commutative*, as already mentioned
+     - group is also *commutative*, as already mentioned
 
   2. Arrange it so that the non-identity elements are their own inverses: owl * owl = fish, snake * snake = fish
      - I have two remaining entries owl * snake and snake * owl. As long as I fill them with the same non-identity entry (snake or owl) I will have a commutative group, which means associativity will hold as well.
@@ -193,8 +193,14 @@ This is a *magma*.
      | snake | snake | fish  | snake |
      | fish  | owl   | snake | fish  |
 
-*** TODO Follow-up: How many ways to fill the table, and still have all the group axioms hold are there?
+     - Checking group axioms:
+       - *Closure*: All results in the table are in {owl, snake, fish}, so closure holds.
+       - *Associativity*: TODO: write python script to check
+       - *Identity element*: By choice the fish is the identity element.
+       - *Inverse elements*: TODO
+       - *commutativity*: TODO
 
+*** TODO Follow-up: How many ways to fill the table, and still have all the group axioms hold are there?
 ** DONE Define a binary operator that makes it *not* a group (but it should be closed). Hint: if there is no identity element, then it is not a group
 
 This is relatively straigh-forward, if I define a constant operator, that takes every pair and maps it to any one element, I effectively have a *magma*, a closure with no identity element:
