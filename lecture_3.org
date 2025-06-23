@@ -1,0 +1,28 @@
+* Notes
+- homomorphism not yet covered
+  - https://www.rareskills.io/post/homomorphisms
+- ecdsa
+- weierstrasst, montgomery, edwards representations of ECs
+  - affine and projective coordinates
+  - behaviour of the point at infty in the affine / projective coordinates
+- why do we flip in the chord and tangent law?
+- enumerating ec points
+  - naively
+  - using curve's symmetry along the x axis
+- explicit bounds for the number of points on the EC defined on a GF
+#+BEGIN_SRC sage :session . :exports both
+# over real
+ER = EllipticCurve([AA(3),AA(16)])
+ER
+
+# over F
+F = GF(13)
+E_F = EllipticCurve(F, [8,8])
+E_F
+E_F.order()
+#+END_SRC
+
+#+RESULTS:
+: Elliptic Curve defined by y^2 = x^3 + 3*x + 16 over Algebraic Real Field
+: Elliptic Curve defined by y^2 = x^3 + 8*x + 8 over Finite Field of size 13
+: 20
