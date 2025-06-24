@@ -1,1 +1,35 @@
-* IN-PROGRESS Elliptic Curve Point Addition
+* DONE Implementing Elliptic Curve Point Addition (affine coordinates)
+#+BEGIN_SRC sage :session . :exports both
+def add(P1,P2):
+  x1=P1[0];x2=P2[0];y1=P1[1];y2=P2[1];
+  lbda = (y2-y1) / (x2-x1);
+  x3 = lbda^2 - x1 - x2
+  return (x3, lbda*(x1 - x3) - y1);
+
+def double(P,a):
+  x=P[0];y=P[1];
+  lbda = (3*x^2 + a) / (2*y);
+  x3 = lbda^2 - 2*x;
+  return (x3,lbda*(x-x3) - y);
+
+a=0;b=9
+
+E = EllipticCurve([AA(a),AA(b)])
+E
+
+P=E(3,6)
+Q=E(6,15)
+
+print(f"{P}+{Q}={add(P,Q)}")
+
+assert(P+Q == E(add(P,Q)))
+
+print(f"2{P}={double(P,a)}")
+
+assert(2*P == E(double(P,a)))
+#+END_SRC
+
+#+RESULTS:
+: Elliptic Curve defined by y^2 = x^3 + 9 over Algebraic Real Field
+: (3 : 6 : 1)+(6 : 15 : 1)=(0, 3)
+: 2(3 : 6 : 1)=(-15/16, 183/64)
