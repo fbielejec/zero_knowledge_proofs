@@ -111,7 +111,7 @@ $\Delta = -16(4a^3 + 27b^2)$
 - If $\Delta \neq 0$, the curve is *smooth* (no singular points).
 - If $\Delta = 0$, the curve is *singular* (has cusps, self-intersections or isolated points).
 
-=Example=
+=Example: smooth curve=
 
 $y^2=x^3 + x$
 
@@ -131,29 +131,20 @@ print("Is smooth?", E_R.is_smooth())       # True if Δ != 0
 : Discriminant: -64
 : Is smooth? True
 
+=Example: singular curve=
+
 $y^2=x^3$
 
-#+begin_src maxima :results graphics file :file singular-ecc.png :exports results
+#+BEGIN_SRC maxima :results graphics file :file singular-ecc.png :exports results
 programmode: false;
 
 E1(x) := 1*sqrt(x^3);
 E2(x) := -1*sqrt(x^3);
 plot2d([E1,E2], [x, -5, 5], [y,-5,5], [png_file, "./singular-ecc.png"]);
-#+end_src
+#+END_SRC
 
 #+RESULTS:
 [[file:singular-ecc.png]]
-
-#+BEGIN_SRC sage :session . :exports both
-# fails, singular curve:
-#a,b=0,0
-#E_R = EllipticCurve([AA(a),AA(b)])
-
-a, b = 1, 0
-E_R
-print("Discriminant:", E_R.discriminant())  # Δ ≠ 0 -> smooth
-print("Is smooth?", E_R.is_smooth())        # True if Δ != 0
-#+END_SRC
 
 *** IN-PROGRESS Deriving the discriminant
 The curve's "smoothness" condition is equivalent to the *non-vanishing* of all partial derivatives of the curve’s defining equation.

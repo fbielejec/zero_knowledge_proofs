@@ -68,7 +68,7 @@ for elem, inv in additive_inverse.items():
 : 5 + 2 = 0
 : 6 + 1 = 0
 
-* DONE Multiplicative inverses in a Finite Field
+* DONE Multiplicative Inverses
 :PROPERTIES:
 :ID:       479ea448-94c4-438e-98dc-2920ffe5fac8
 :END:
