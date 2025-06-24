@@ -124,6 +124,9 @@ a,b=1,0
 E_R
 print("Discriminant:", E_R.discriminant())  # Δ ≠ 0 -> smooth
 print("Is smooth?", E_R.is_smooth())       # True if Δ != 0
+
+#plot(E_R, -2.5, 1, thickness = 1);
+#show(E_R);
 #+END_SRC
 
 #+RESULTS:
