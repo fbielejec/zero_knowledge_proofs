@@ -26,3 +26,203 @@ E_F.order()
 : Elliptic Curve defined by y^2 = x^3 + 3*x + 16 over Algebraic Real Field
 : Elliptic Curve defined by y^2 = x^3 + 8*x + 8 over Finite Field of size 13
 : 20
+* IN-PROGRESS Elliptic Curves Point Addition
+- https://www.rareskills.io/post/elliptic-curve-addition
+** DONE Elliptic Curves: General Weierstrass Form
+:PROPERTIES:
+:ID:       042006cc-2a76-438e-9aff-350b8ac6c762
+:END:
+
+=Definition: Elliptic Curve Weierstrass form=
+
+An *elliptic curve* is a smooth, projective algebraic curve of genus 1, defined by a non-singular cubic equation over a field $K$, typically written in its *Weierstrass form*:
+
+$y^2 + a_1xy + a_3y = x^3 + a_2x^2 + a_4x + a_6$
+
+where $a_1, a_2, a_3, a_4, a_6 \in K$ , and the curve has no cusps, self-intersections, or isolated points (i.e., its *discriminant* $\Delta \neq 0$).
+
+** DONE Elliptic Curve: Short Weierstrass Form
+:PROPERTIES:
+:ID:       37c60c61-c719-466a-a6a8-5677303a74ce
+:END:
+
+=Definition: Elliptic Curve Short Weierstrass form=
+
+The *Short Weierstrass form* is the simplest and most common representation of an elliptic curve, when the characteristic of the field $K$ is neither *2 nor 3* (e.g., over $\mathbb{R}$, $\mathbb{Q}$, or $\mathbb{F}_p$ where $p > 3$).
+
+An elliptic curve in *Short Weierstrass form* is given by:
+
+$y^2 = x^3 + a x + b$
+
+where:
+- $a, b \in K$ are the coefficients from the field $K$
+- The [[id:14c68250-d016-4ee3-89c3-6cba7e34aa13][Discriminant $\Delta$:]] $\Delta = -16(4a^3 + 27b^2) \neq 0$ (ensures smoothness, i.e., no cusps, self-intersections or isolated points).
+
+---
+
+*NOTE: why short?*
+
+The [[id:042006cc-2a76-438e-9aff-350b8ac6c762][General Weierstrass Form]] includes more terms ($a_1xy, a_3y, a_2x^2, \dots$), but when $\text{char}(K) \neq 2, 3$, a linear transformation simplifies it to $y^2 = x^3 + a x + b$.
+
+----
+
+=Properties=
+
+- The Short Weierstrass form is the *standard* for elliptic curves in cryptography.
+- Most standardized curves (e.g. Bitcoin's secp256k1) use this form.
+- It simplifies computations in cryptography (e.g., ECDSA, ECDH).
+
+*** Isomorphism of the [[id:042006cc-2a76-438e-9aff-350b8ac6c762][General Weierstrass Form]] and [[id:37c60c61-c719-466a-a6a8-5677303a74ce][Short Weierstrass Form]]
+:PROPERTIES:
+:ID:       834c5ec9-3741-4c4d-8588-9f83d6da8cca
+:END:
+
+When the field characteristic $\text{char}(K) > 3$, the general Weierstrass form of an elliptic curve can always be transformed into the short Weierstrass form (and vice versa) via an invertible linear change of variables. 
+These forms are *isomorphic* over $K$ (they describe the same curve up to a coordinate transformation) 
+
+Here's how the transformations works:
+
+If the field characteristic is not 2 or 3, then divisions by 2 and 3 in the field $K$ permits the following substitutions:
+
+$y \mapsto \frac{y − a_{1} x − a_{3}}{2}$ 
+which gives 
+
+$E: \quad y^2 = 4x^3 + b_{2} x^2 + 2b_{4} x + b_{6}$
+
+and then:
+
+$(x, y) \mapsto (\frac{x-3b_{2}}{36},\frac{y}{108})$
+
+which (upon rescaling) gives
+
+$E: \quad y^2 = x^3 ax +b$
+
+** IN-PROGRESS Elliptic Curve: Discriminant $\Delta$
+:PROPERTIES:
+:ID:       14c68250-d016-4ee3-89c3-6cba7e34aa13
+:END:
+
+=Definition: Discriminant of an Elliptic Curve=
+
+For a curve in [[id:37c60c61-c719-466a-a6a8-5677303a74ce][Short Weierstrass Form]] $y^2 = x^3 + a x + b$, the discriminant is:
+
+$\Delta = -16(4a^3 + 27b^2)$
+
+- If $\Delta \neq 0$, the curve is *smooth* (no singular points).
+- If $\Delta = 0$, the curve is *singular* (has cusps, self-intersections or isolated points).
+
+=Example=
+
+$y^2=x^3 + x$
+
+#+BEGIN_SRC sage :session . :exports both
+# fails, singular curve
+#a,b=0,0
+#E_R = EllipticCurve([AA(a),AA(b)])
+
+a,b=1,0
+E_R
+print("Discriminant:", E_R.discriminant())  # Δ ≠ 0 -> smooth
+print("Is smooth?", E_R.is_smooth())       # True if Δ != 0
+#+END_SRC
+
+#+RESULTS:
+: Elliptic Curve defined by y^2 = x^3 + x over Algebraic Real Field
+: Discriminant: -64
+: Is smooth? True
+
+$y^2=x^3$
+
+#+begin_src maxima :results graphics file :file singular-ecc.png :exports results
+programmode: false;
+
+E1(x) := 1*sqrt(x^3);
+E2(x) := -1*sqrt(x^3);
+plot2d([E1,E2], [x, -5, 5], [y,-5,5], [png_file, "./singular-ecc.png"]);
+#+end_src
+
+#+RESULTS:
+[[file:singular-ecc.png]]
+
+#+BEGIN_SRC sage :session . :exports both
+# fails, singular curve:
+#a,b=0,0
+#E_R = EllipticCurve([AA(a),AA(b)])
+
+a, b = 1, 0
+E_R
+print("Discriminant:", E_R.discriminant())  # Δ ≠ 0 -> smooth
+print("Is smooth?", E_R.is_smooth())        # True if Δ != 0
+#+END_SRC
+
+*** IN-PROGRESS Deriving the discriminant
+The curve's "smoothness" condition is equivalent to the *non-vanishing* of all partial derivatives of the curve’s defining equation.
+
+Let's assume a point $P = (x_0, y_0)$ on the curve.
+If both derivatives vanish at P:
+
+$E(x_0, y_0) = \frac{\partial E}{\partial x}\bigg|_{(x_0,y_0)} = \frac{\partial E}{\partial y}\bigg|_{(x_0,y_0)} = 0 $
+
+Then the point is singular.
+If curve has no such $P$ exists it is smooth (non-singular).
+
+For $E(x,y) = y^2 - x^3 - a x - b$ we have:
+
+$\frac{\partial E}{\partial x} = -3x^2 - a$
+
+$\frac{\partial E}{\partial y} = 2y$
+
+Solving $\frac{\partial F}{\partial x} = \frac{\partial F}{\partial y} = 0$ leads to $y = 0$ and $3x^2 + a = 0$.
+
+#+BEGIN_SRC maxima :exports both :results output replace
+print(solve([-3*x^2 - a=0, 2*y=0], [x,y]));
+#+END_SRC
+
+#+RESULTS:
+:         sqrt(- a)               sqrt(- a)
+: [[x = - ---------, y = 0], [x = ---------, y = 0]]
+:          sqrt(3)                 sqrt(3)
+
+Substituting into $E(x,y) = 0$ gives $x^3 + a x + b = 0$, which has a (repeated) root if $\Delta = 0$.
+
+#+BEGIN_SRC maxima :exports both :results output replace
+eq1: y^2=x^3+a*x+b;
+eq2: y=0;
+eq3: 3*x^2+1=0;
+
+eq4: subst([eq2,eq3],eq1);
+
+print(eq4);
+
+print(solve([eq4], [x,y]));
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+     3
+0 = x  + a x + b 
+                           2      3        2/3
+[[x = - ((sqrt(3) sqrt(27 b  + 4 a ) - 9 b)
+            1/3          2      3        1/3
+ (sqrt(3) 18    sqrt(27 b  + 4 a ) + 9 18    b)
+       2/3  2                   2      3        1/3       2
+ - 2 18    a  (sqrt(3) sqrt(27 b  + 4 a ) - 9 b)   )/(36 a ), y = %r1], 
+                   2/3          2/3   2                   2      3        1/3
+[x = ((2 sqrt(3) 18    %i - 2 18   ) a  (sqrt(3) sqrt(27 b  + 4 a ) - 9 b)
+                     2      3        2/3
+ + (sqrt(3) sqrt(27 b  + 4 a ) - 9 b)
+       1/3                1/3           2      3
+ ((3 18    %i + sqrt(3) 18   ) sqrt(27 b  + 4 a )
+     5/2   1/3          1/3           2
+ + (3    18    %i + 9 18   ) b))/(72 a ), y = %r2], 
+                     2/3          2/3   2                   2      3        1/3
+[x = - ((2 sqrt(3) 18    %i + 2 18   ) a  (sqrt(3) sqrt(27 b  + 4 a ) - 9 b)
+                     2      3        2/3
+ + (sqrt(3) sqrt(27 b  + 4 a ) - 9 b)
+       1/3                1/3           2      3
+ ((3 18    %i - sqrt(3) 18   ) sqrt(27 b  + 4 a )
+     5/2   1/3          1/3           2
+ + (3    18    %i - 9 18   ) b))/(72 a ), y = %r3]] 
+#+end_example
+
+* IN-PROGRESS Elliptic Curves form an abelian group under addition

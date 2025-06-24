@@ -199,7 +199,7 @@ assert(-square_root[0] % p == square_root[1]) # multiplicative inverse
 #+RESULTS:
 : Square root of 12 (mod 71): [15, 56]
 
-* IN-PROGRESS Problem 6
+* DONE Problem 6
 Suppose we have the following polynomials:
 
 $p(x)=52x^2+24x+61$
@@ -258,7 +258,7 @@ print(f"roots of q(x)={q}: {q.roots()}")
 : roots of p(x)=52x^2 + 24x + 61: [34 42]
 : roots of q(x)=40x^2 + 40x + 58: []
 
-** TODO What are the roots of p(x)q(x)?
+** DONE What are the roots of p(x)q(x)?
 
 #+BEGIN_SRC jupyter-python :session zk :kernel zero_knowledge :async yes :exports both
 import galois
