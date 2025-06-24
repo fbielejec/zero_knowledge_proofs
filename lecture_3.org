@@ -354,5 +354,6 @@ For $\lambda=(\frac{3x^{2}+a}{2y})$ (the slope of the tangent line).
 For $P=(x,y),\quad -P=(x,-y)$
 For $\mathcal{O}$ the inverse is $\mathcal{O}$.
 
-* IN-PROGRESS Elliptic Curves form an abelian group under point addition
+* TODO Elliptic Curves form an abelian group under point addition
 - [ ] check all group axioms
+* TODO [#A] ECDSA
