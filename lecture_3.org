@@ -35,7 +35,7 @@ E_F.order()
 
 =Definition: Elliptic Curve Weierstrass form=
 
-An *elliptic curve* is a smooth, projective algebraic curve of genus 1, defined by a non-singular cubic equation over a field $K$, typically written in its *Weierstrass form*:
+An *elliptic curve* is a smooth, projective algebraic curve of genus 1, defined by a non-singular cubic equation over a field $F$, typically written in its *Weierstrass form*:
 
 $y^2 + a_1xy + a_3y = x^3 + a_2x^2 + a_4x + a_6$
 
@@ -48,14 +48,14 @@ where $a_1, a_2, a_3, a_4, a_6 \in K$ , and the curve has no cusps, self-interse
 
 =Definition: Elliptic Curve Short Weierstrass form=
 
-The *Short Weierstrass form* is the simplest and most common representation of an elliptic curve, when the characteristic of the field $K$ is neither *2 nor 3* (e.g., over $\mathbb{R}$, $\mathbb{Q}$, or $\mathbb{F}_p$ where $p > 3$).
+The *Short Weierstrass form* is the simplest and most common representation of an elliptic curve, when the characteristic of the field $F$ is neither *2 nor 3* (e.g., over $\mathbb{R}$, $\mathbb{Q}$, or $\mathbb{F}_p$ where $p > 3$).
 
 An elliptic curve in *Short Weierstrass form* is given by:
 
 $y^2 = x^3 + a x + b$
 
 where:
-- $a, b \in K$ are the coefficients from the field $K$
+- $a, b \in F$ are the coefficients from the field $F$
 - The [[id:14c68250-d016-4ee3-89c3-6cba7e34aa13][Discriminant $\Delta$:]] $\Delta = -16(4a^3 + 27b^2) \neq 0$ (ensures smoothness, i.e., no cusps, self-intersections or isolated points).
 
 ---
@@ -97,7 +97,7 @@ which (upon rescaling) gives
 
 $E: \quad y^2 = x^3 ax +b$
 
-** IN-PROGRESS Elliptic Curve: Discriminant $\Delta$
+** Elliptic Curve: Discriminant $\Delta$
 :PROPERTIES:
 :ID:       14c68250-d016-4ee3-89c3-6cba7e34aa13
 :END:
@@ -225,7 +225,134 @@ print(solve([eq4], [x,y]));
  + (3    18    %i - 9 18   ) b))/(72 a ), y = %r3]]
 #+end_example
 
-** IN-PROGRESS Elliptic Curves: Point Addition
-- geometric interpretation
-- explicit formulas
+Therefore singularity occurs if and only if $4a^3 + 27b^2 = 0$.
+
+** DONE Elliptic Curves: Group Law
+One of the key properties of an elliptic curve is that it is possible to define a [[id:4c9d3fac-53fc-40a3-9dfd-1014ffb633a2][Group]] law on the set of its points such that [[id:e7c740fb-6ec2-428b-9e47-2fa8ddd3a643][Point at infinity]] serves as the neutral element, and inverses are reflections on the x-axis.
+
+Group law is a [[id:d17ab6af-78f3-4b78-a3ec-0f1ba7c1dbf0][Binary operator]] that takes any two points on the curve (together with the $\mathcal{O}$) and returns another point on the curve:
+
+${\footnotesize \textcircled{+}}:  \quad E(F) \cup {\mathcal{O}} \times E(F) \cup {\mathcal{O}} \rightarrow E(F) \cup {\mathcal{O}}$
+
+If $P$ and $Q$ are two distinct points on an elliptic curve, neither of them the point at infinity, that is:
+
+$P,Q \in E(F) /\ \{ \mathcal{O} \}$ and $P\neq Q$.
+
+Then the sum of $P$ and $Q$ $P {\footnotesize \textcircled{+}} Q$ follows the so called [[id:b1ac58cd-76b2-42f2-ba44-51dfb490780a][chord rule]].
+
+Point addition exploits the fact that, over any field, a line (a degree one equation in $x$ and $y$) intersects a cubic curve (a degree three equation in $x$ and $y$) in *three places*.
+This is a special case of the more general [[id:d65be3c6-88b2-4c93-9ba5-f1551ba8a8c0][Bezout's theorem]].
+
+If $P$ is a point on an elliptic curve, which again is not the point at infinity:
+
+$P \in E(F) /\ \{ \mathcal{O} \}$
+
+The sum of P with itself (the doubling of P) follows the so called [[id:aa76d696-e2a2-4651-b95d-e30f47623c3b][tangent rule]].
+
+*** DONE Point at infinity
+:PROPERTIES:
+:ID:       e7c740fb-6ec2-428b-9e47-2fa8ddd3a643
+:END:
+We define the point at infinity as the neutral element of point addition, that is, we define:
+
+$P {\footnotesize\textcircled{+}} \mathcal{O}=\mathcal{O} {\footnotesize \textcircled{+}}P = \mathcal{O}$
+
+For all points $P \in E(F)$.
+
+*** DONE Point addition: Geometric Interpretation
+:PROPERTIES:
+:ID:       b1ac58cd-76b2-42f2-ba44-51dfb490780a
+:END:
+Over any field a line (a degree one equation in $x$ and $y$) intersects a cubic equation (a degree three equation in $x$ and $y$) in three places.
+
+In other words if we run a line:
+
+$\ell: \hspace{.5em} y = \lambda x + \upsilon$
+
+between two points $P=(x_P, y_P)$ and $Q=(x_Q,y_Q)$ on E, then substitute this line into:
+
+$E: \hspace{.5em} y^2=x^3+ax+b$
+
+will give a cubic polynomial in $x$:
+
+#+BEGIN_SRC maxima :exports both :results output replace
+eq1: y^2 = x^3 + a * x + b;
+eq2: y = lambda * x + v;
+eq3: subst(eq2,eq1);
+
+print(expand(eq3));
+
+/*print(solve([eq3], [x]));*/
+#+END_SRC
+
+#+RESULTS:
+:  2       2                   2    3
+: x  lambda  + 2 v x lambda + v  = x  + a x + b
+
+The roots of which are the x-coordinates of the three points of intersection between $\ell$ and $E$.
+
+Knowing the two roots ($x_P$ and $x_Q$) allows us to determine a unique third root that corresponds to the third point in the (affine) intersection $\ell \cap E$, which we denote $\textcircled{-}R$.
+This point is then flipped over the x-axis to the point $R=P {\footnotesize \textcircled{+}} Q$.
+The inverse of any element $R = (x_R , y_R )$ is taken as $\textcircled{-} R = (x_{R}, - y_{R} )$
+
+#+BEGIN_SRC maxima :results graphics file :file chord-line.png :exports results
+programmode: false;
+/*E(x) := if x < 0 then -1*sqrt(x^3 -2*x) else sqrt(x^3 -2*x);*/
+E1(x) := 1*sqrt(x^3 -2*x);
+E2(x) := -1*sqrt(x^3 -2*x);
+l(x) := x;
+plot2d([E1,E2, l], [x, -5, 5], [y,-5,5], [png_file, "./chord-line.png"]);
+#+END_SRC
+
+#+RESULTS:
+[[file:chord-line.png]]
+
+*** DONE Point doubling: Geometric Interpretation
+:PROPERTIES:
+:ID:       aa76d696-e2a2-4651-b95d-e30f47623c3b
+:END:
+When computing $R = P \textcircled{\\+} P$ , the line $\ell$ is computed as the tangent to E at P.
+That is, the derivatives of $\ell$ and E are matched at P, so (counting multiplicities) $\ell$ intersects E twice at P.
+
+#+BEGIN_SRC maxima :results graphics file :file tangent-line.png :exports results
+programmode: false;
+/*E(x) := if x < 0 then -1*sqrt(x^3 -2*x) else sqrt(x^3 -2*x);*/
+E1(x) := 1*sqrt(x^3 -2*x);
+E2(x) := -1*sqrt(x^3 -2*x);
+l(x) := -x/2-3/2;
+plot2d([E1,E2, l], [x, -5, 5], [y,-5,5], [png_file, "./tangent-line.png"]);
+#+END_SRC
+
+#+RESULTS:
+[[file:tangent-line.png]]
+
+*** DONE Chord-and-tangent group law: Explicit formulas
+
+=Point addition: P+Q (chord rule)=
+
+If $P = (x_1,y_1)$ and $Q = (x_2,y_2)$ such that $x_1 \neq x_2$ $R=(x_3,y_3)=P \textcircled{\\+} Q$ is defined as:
+
+$\lambda = \frac{y_2 - y_1}{x_2 - x_1}$
+$x_3=\lambda^2-x_1-x_2$
+$y_3 = \lambda(x_1-x_3) - y_1$
+
+=Point doubling: [2]P=P+P (tangent rule)=
+
+The formula for doubling a point $P=(x,y)$ with $y\neq 0$ on $E: y^2=x^3+ax+b$ is:
+
+$2[P]=(x_3,y_3)$
+
+where:
+
+$x^{'}=\lambda^2 - 2x$
+$y^{'}=\lambda \cdot (x-x^{'}) - y$
+
+For $\lambda=(\frac{3x^{2}+a}{2y})$ (the slope of the tangent line).
+
+=Point inversion=
+
+For $P=(x,y),\quad -P=(x,-y)$
+For $\mathcal{O}$ the inverse is $\mathcal{O}$.
+
 * IN-PROGRESS Elliptic Curves form an abelian group under point addition
+- [ ] check all group axioms

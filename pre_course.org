@@ -1087,6 +1087,9 @@ $y = x^2$ as the subset of $\mathbb{Z} \times \mathbb{Z}$
 - 3 from $X$ is not related to 4 from $Y$
 
 ** DONE Binary operator
+:PROPERTIES:
+:ID:       d17ab6af-78f3-4b78-a3ec-0f1ba7c1dbf0
+:END:
 
 =Definition: Binary Operator=
 
