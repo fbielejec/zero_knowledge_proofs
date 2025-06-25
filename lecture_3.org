@@ -97,6 +97,115 @@ which (upon rescaling) gives
 
 $E: \quad y^2 = x^3 ax +b$
 
+** DONE Enumerating points on EC
+In the exmaples we assume $E: y^2 = x^3 + 8 + 8$ defined over $F_{13}$
+
+1. Naively, brute force
+
+#+BEGIN_SRC sage :session . :exports both
+q = 13
+a = 8
+b = 8
+
+points = [[0,1]]
+for x in range(q):
+  for y in range(q):
+    if (y*y) % q == (x^3 + a*x + b) % q:
+      points.append([x,y])
+
+points
+
+len(points)
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+[[0, 1],
+ [1, 2],
+ [1, 11],
+ [4, 0],
+ [5, 2],
+ [5, 11],
+ [6, 5],
+ [6, 8],
+ [7, 2],
+ [7, 11],
+ [8, 5],
+ [8, 8],
+ [9, 4],
+ [9, 9],
+ [10, 3],
+ [10, 10],
+ [11, 6],
+ [11, 7],
+ [12, 5],
+ [12, 8]]
+20
+#+end_example
+
+Using quadratic residues. For every x from the underlying field we check if $x^3 + ax + b$ is quadratic residue mod q.
+If it is we can find two points that are the solutions to:
+
+$y^2 = x^3 + ax + b \text{ mod } q$
+
+Points where y == 0 have only one solution (since they have no negative over the y axis).
+
+#+BEGIN_SRC sage :session . :exports both
+from sage.rings.finite_rings.integer_mod import square_root_mod_prime
+
+q = 13
+a = 8
+b = 8
+
+points = [[0,1]]
+for x in range(q):
+  rhs = Mod(x^3 + a*x + b,q)
+  # is rhs is a quadratic residue mod q
+  if rhs.is_square():
+    y1 = square_root_mod_prime(rhs, q)
+    y2 = q - y1
+    print(f"x: {x} rhs: {rhs} lhs: [{y1},{y2}]  y1^2 = rhs: {y1^2 == rhs} and y2^2 = rhs: {y2^2 == rhs}")
+    points.append([x, y1])
+    if y1 != y2:
+      points.append([x, y2])
+
+points
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+x: 1 rhs: 4 lhs: [11,2]  y1^2 = rhs: True and y2^2 = rhs: True
+x: 4 rhs: 0 lhs: [0,0]  y1^2 = rhs: True and y2^2 = rhs: True
+x: 5 rhs: 4 lhs: [11,2]  y1^2 = rhs: True and y2^2 = rhs: True
+x: 6 rhs: 12 lhs: [8,5]  y1^2 = rhs: True and y2^2 = rhs: True
+x: 7 rhs: 4 lhs: [11,2]  y1^2 = rhs: True and y2^2 = rhs: True
+x: 8 rhs: 12 lhs: [8,5]  y1^2 = rhs: True and y2^2 = rhs: True
+x: 9 rhs: 3 lhs: [9,4]  y1^2 = rhs: True and y2^2 = rhs: True
+x: 10 rhs: 9 lhs: [3,10]  y1^2 = rhs: True and y2^2 = rhs: True
+x: 11 rhs: 10 lhs: [7,6]  y1^2 = rhs: True and y2^2 = rhs: True
+x: 12 rhs: 12 lhs: [8,5]  y1^2 = rhs: True and y2^2 = rhs: True
+[[0, 1],
+ [1, 11],
+ [1, 2],
+ [4, 0],
+ [5, 11],
+ [5, 2],
+ [6, 8],
+ [6, 5],
+ [7, 11],
+ [7, 2],
+ [8, 8],
+ [8, 5],
+ [9, 9],
+ [9, 4],
+ [10, 3],
+ [10, 10],
+ [11, 7],
+ [11, 6],
+ [12, 8],
+ [12, 5]]
+#+end_example
+
 ** Elliptic Curve: Discriminant $\Delta$
 :PROPERTIES:
 :ID:       14c68250-d016-4ee3-89c3-6cba7e34aa13
@@ -350,4 +459,3 @@ For $\mathcal{O}$ the inverse is $\mathcal{O}$.
 
 * TODO Elliptic Curves form an abelian group under point addition
 - [ ] check all group axioms
-* TODO [#A] ECDSA
