@@ -1,0 +1,78 @@
+#+STARTUP: overview
+#+latex_class_options: [14pt]
+
+* IN-PROGRESS [#A] NOTES
+- number of groups generators (euler totient function)
+- cyclic group, example
+- group order (vs characeristic)
+- there is (always ?) a cyclic subgroup even if the group is not cyclic
+- reducing group operations to mod p-1 additon using generator
+  - exponential map
+  - map numbers (labels) with points in the group
+  - homomorphism
+- bn128
+
+#+BEGIN_SRC sage :session . :exports both
+  q=5
+  Z = Zmod(q)
+  G = Z.unit_group() # multiplicative group mod 7
+  G
+  G.inject_variables()
+
+  [x for x in G]
+
+  for x in G:
+    elem = Z(x)
+    generates = set()
+    for i in range(1,q):
+      generates.add(elem^i)
+    print(f"element {elem} generates {generates}")
+    # if len(generates) == G.order():
+    #   primitive_roots.append(elem)
+#+END_SRC
+
+#+RESULTS:
+: Multiplicative Abelian group isomorphic to C4
+: Defining f
+: [1, f, f^2, f^3]
+: element 1 generates {1}
+: element 2 generates {1, 2, 3, 4}
+: element 4 generates {1, 4}
+: element 3 generates {1, 2, 3, 4}
+
+#+BEGIN_SRC sage :session . :exports both
+  F = GF(21888242871839275222246405745257275088696311157297823662689037894645226208583)
+  E = EllipticCurve(F,[0,3])
+
+  G = E(1,2)
+
+  P2 = G+G
+  P2
+
+  P3 = P2+G
+
+  3*G == P3
+
+  5*G == G+G+G+G+G
+    
+  min_G = G * ( E.order() - 1)
+  min_G == -1*G
+  
+  # x - y = 3
+  # e.g. x = 7 y = 4
+
+  F.order()
+  E.order()
+
+  # 1/2G + 1/2G
+
+
+#+END_SRC
+
+#+RESULTS:
+: (1368015179489954701390400359078579693043519447331113978918064868415326638035 : 9918110051302171585080402603319702774565515993150576347155970296011118125764 : 1)
+: True
+: True
+: True
+: 21888242871839275222246405745257275088696311157297823662689037894645226208583
+: 21888242871839275222246405745257275088548364400416034343698204186575808495617

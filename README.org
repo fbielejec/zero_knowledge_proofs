@@ -5,12 +5,14 @@
 #+INCLUDE: pre_course.org
 
 * Table of Contents
-| file       | Description      |
-|------------+------------------|
-| [[file:pre_course.org][Pre-Course]] | Course Prep      |
-| [[file:lecture_1.org][Lecture 1]]  | Notes: lecture 1 |
-| [[file:homework_1.org][Homework 1]] | Homework 1       |
-| [[file:lecture_2.org][Lecture 2]]  | Notes: lecture 2 |
-| [[file:homework_2.org][Homework 2]] | Homework 2       |
-| [[file:lecture_3.org][Lecture 3]]  | Notes: lecture 3 |
-| [[file:homework_3.org][Homework 3]] | Homework 3       |
+| file       | Description                                 |
+|------------+---------------------------------------------|
+| [[file:pre_course.org][Pre-Course]] | Course Prep                                 |
+| [[file:lecture_1.org][Lecture 1]]  | Notes: lecture 1                            |
+| [[file:homework_1.org][Homework 1]] | Homework 1                                  |
+| [[file:lecture_2.org][Lecture 2]]  | Notes: lecture 2                            |
+| [[file:homework_2.org][Homework 2]] | Homework 2 (group theory, binary operators) |
+| [[file:lecture_3.org][Lecture 3]]  | Notes: lecture 3                            |
+| [[file:homework_3.org][Homework 3]] | Homework 3 (EC point addition)              |
+| [[file:lecture_4.org][Lecture 4]]  |                                             |
+| [[file:homework_4.org][Homework 4]] | Homework 4 (ECDSA)                          |
