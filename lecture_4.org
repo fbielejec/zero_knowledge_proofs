@@ -39,12 +39,10 @@ print(f"Order of {Z6} {elems}: {Z6.order()}")
 : (2) + (5) = (1)
 : Order of Ring of integers modulo 6 [0, 1, 2, 3, 4, 5]: 6
 
-** DONE Example: $\mathbb{Z}_{5},*$
+** DONE Example: $(\mathbb{Z}_{5},*)$
 
 #+BEGIN_SRC sage :session . :exports both
 q=5
-#G1 = AdditiveAbelianGroup([q])
-
 Z5 = Zmod(q)
 G5 = Z5.unit_group() # multiplicative group mod 7
 G5
@@ -64,15 +62,14 @@ print(f"Order of {G5}: {G5.order()}")
 See [[id:f5f80632-6c31-4065-9470-33d7ea93c025][Cyclic groups]]
 * TODO Euler's totient function $\phi$
 - Number of groups generators
-* IN-PROGRESS Exponential map
+* IN-PROGRESS Exponential Map
 :PROPERTIES:
 :ID:       2a16eb2e-807a-4834-a83d-b1e15669f92f
 :END:
-- [ ] connection to the scalar field and scalar multiplication of EC (p82 MM)
 
 =Definition=
 
-When $\mathbb{G}$ is a [[id:f5f80632-6c31-4065-9470-33d7ea93c025][Cyclic group]] of [[id:97c172ec-93ae-487c-902c-32491b36a6f0][order]] $n$ and $g \in \mathbb{G}$ is a [[id:4169039c-64bf-435f-afd4-bd8b7c7a0e9b][Generator]] of $\mathbb{G}$, then there exists the so called *exponential map* which maps the group law of the additive group of integers mod $n$ $(\mathbb{Z}_n,+)$ (the [[id:770696d2-1294-4e86-ac3c-6803f9053537][Remainder Class]] group) ) onto the group law of $\mathbb{G}$ in a *one-to-one* correspondence.
+When $\mathbb{G}$ is a [[id:f5f80632-6c31-4065-9470-33d7ea93c025][Cyclic group]] of [[id:97c172ec-93ae-487c-902c-32491b36a6f0][order]] $n$ and $g \in \mathbb{G}$ is a [[id:4169039c-64bf-435f-afd4-bd8b7c7a0e9b][Generator]] of $\mathbb{G}$, then there exists the so called *exponential map* which maps the group law of the additive group of integers mod $n$ $(\mathbb{Z}_n,+)$ (the [[id:770696d2-1294-4e86-ac3c-6803f9053537][Remainder Class]] group) onto the group law of $\mathbb{G}$ in a *one-to-one* correspondence.
 
 $g^{(\cdot)}: \med \mathbb{Z}_{n} \rightarrow \mathbb{G}; \med x \mapsto g^{x}$
 
@@ -100,7 +97,9 @@ Since the exponential map respects the group law, we can:
 
 ---
 
-See also [[id:3c27760c-b520-472e-a56e-4e6faf54b5eb][Logarithm map]].
+
+If the underlying group \mathbb{G} is additive we define an equivalent map called [[id:4b1d82b5-2cfd-4bd1-9c12-ab2fc7cef8ae][Scalar multiplication]].
+For an inverse mapping see the [[id:3c27760c-b520-472e-a56e-4e6faf54b5eb][Logarithm map]].
 
 *** DONE Example: exponential map $Z_{4} \mapsto Z_{5}^{*}$
 
@@ -108,8 +107,7 @@ See also [[id:3c27760c-b520-472e-a56e-4e6faf54b5eb][Logarithm map]].
 q=5
 G5 = Integers(q).unit_group()
 n = G5.order()
-#G5.inject_variables()
-g=G5.gen()
+g=2
 
 print(f"G5={[x for x in G5]} is cyclic: {G5.is_cyclic()} of order {n} and with a generator g={g}")
 
@@ -117,17 +115,20 @@ Z4=Integers(n)
 
 print(f"Exponential map that maps from Z_{n}=({[x for x in Z4]},+) to Z_5=({[x for x in G5]},*):")
 
-for k in range(n):
-  print(f"exp({k}) = {g}^{k} = {g^k}")
+def exp_map(q, g, x):
+  return g^x % q
+
+for x in Z4:
+  print(f"exp({x}) = {g}^{x} = {exp_map(q,g,x)}")
 #+END_SRC
 
 #+RESULTS:
-: G5=[1, f, f^2, f^3] is cyclic: True of order 4 and with a generator g=f
+: G5=[1, f, f^2, f^3] is cyclic: True of order 4 and with a generator g=2
 : Exponential map that maps from Z_4=([0, 1, 2, 3],+) to Z_5=([1, f, f^2, f^3],*):
-: exp(0) = f^0 = 1
-: exp(1) = f^1 = f
-: exp(2) = f^2 = f^2
-: exp(3) = f^3 = f^3
+: exp(0) = 2^0 = 1
+: exp(1) = 2^1 = 2
+: exp(2) = 2^2 = 4
+: exp(3) = 2^3 = 3
 
 *** DONE Example: Computations in the exponent
 :PROPERTIES:
@@ -162,7 +163,7 @@ lhs == rhs
 : 3^(1) * 3^(2) * 3^(3)=f^2
 : True
 
-** DONE Scalar multiplication
+** IN-PROGRESS Scalar multiplication
 :PROPERTIES:
 :ID:       4b1d82b5-2cfd-4bd1-9c12-ab2fc7cef8ae
 :END:
@@ -178,6 +179,33 @@ where:
 In the alternative notation:
 
 $g(x)=x \cdot g= \underbrace{g + g + \dots + g}_{x \text{ times}}$
+
+*** IN-PROGRESS Example: Scalar multiplication for $(\mathbb{Z}_4, +)$
+For a fixed generator $g \in \mathbb{Z}_4$ (e.g., $g = 1$), the exponential map is:
+
+$\exp_g \colon \mathbb{Z} \to \mathbb{Z}_4, \quad \exp_g(k) = k \cdot g = \underbrace{g + g + \dots + g}_{k \text{ times}}$
+where:
+- *Input*: An integer $k \in \mathbb{Z}$.
+- *Output*: An element $k \cdot g \in \mathbb{Z}_4$.
+
+#+BEGIN_SRC sage :session . :exports both
+q=4
+Z4=AdditiveAbelianGroup([q])  # (Z4, +)
+g=Z4.gen(0)
+n=Z4.order()
+
+def scalar_mult(q,g,x):
+  return (x % q) * g;
+
+for x in range(n):
+  print(f"exp({x}) = {x}*{g} = {scalar_mult(q,g,x)}")
+#+END_SRC
+
+#+RESULTS:
+: exp(0) = 0*(1) = (0)
+: exp(1) = 1*(1) = (1)
+: exp(2) = 2*(1) = (2)
+: exp(3) = 3*(1) = (3)
 
 ** IN-PROGRESS Logarithm map
 :PROPERTIES:
@@ -227,41 +255,66 @@ for x in Z4:
 #+RESULTS:
 : log_3(f^2) = 2
 
-** TODO Exponential map for Elliptic Curves
+** IN-PROGRESS Elliptic Curve Scalar Multiplication
 :PROPERTIES:
 :ID:       77d52c07-a41e-42c5-8069-2be5eaf576b2
 :END:
-- p40 MM
+- p82 MM
+
+Whenever the underlying [[id:129fd124-8c31-4023-b569-752acac1cf1c][Field]] is [[id:d90a640f-3419-4b13-a272-919d6e03dd57][Finite]], [[id:a3efc03a-126b-4311-920e-806aad2180d1][Elliptic Curves]] are finite [[id:f5f80632-6c31-4065-9470-33d7ea93c025][Cyclic groups]].
+This means they come equipped with an [[id:2a16eb2e-807a-4834-a83d-b1e15669f92f][Exponential map]]:
+
+$[\cdot]G: \med Z_{n} \rightarrow E(\mathbb{F}); \med x \mapsto [x]G$
+
+where:
+- $\mathbb{F}$ is a finite field
+- $E(\mathbb{F})$ is an elliptic curve of [[id:97c172ec-93ae-487c-902c-32491b36a6f0][Order]] $n$
+- $G$ is a [[id:4169039c-64bf-435f-afd4-bd8b7c7a0e9b][Generator]] of $E(\mathbb{F})$
+- $[x]G=\underbrace{G + G \cdot \dots \cdot G}_{x \text{ times}}$
+- $[0]G=\mathcal{O}$
+
+Therefore, elliptic curve scalar multiplication is an instantiation of the general [[id:2a16eb2e-807a-4834-a83d-b1e15669f92f][Exponential map]] using [[id:4b1d82b5-2cfd-4bd1-9c12-ab2fc7cef8ae][additive]] instead of multiplicative notation.
+
+Since the exponential map respects the [[id:bc0f711d-4c34-4b54-b93d-00cd9acc9479][Elliptic Curve Group Law]], we can use:
+
+$[x+y]G=[x]G {\footnotesize \textcircled{+}} [y]G$
+
+to do the computations "in the exponent".
+
 *** IN-PROGRESS Example: Exponential map for bn128
 
 #+BEGIN_SRC sage :session . :exports both
-F = GF(21888242871839275222246405745257275088696311157297823662689037894645226208583)
-E = EllipticCurve(F,[0,3])
+F = GF(21888242871839275222246405745257275088696311157297823662689037894645226208583) # underlying field
+E = EllipticCurve(F,[0,3]) # bn128
+n=E.order()
+G = E(1,2)#E.gen(0)
 
-G = E(1,2)
+Zn=Integers(n)
 
-P2 = G+G
-P2
+# computing 5G = 3G + 2G
+Zn(3) * G + Zn(2) * G == Zn(3+2)*G
 
-P3 = P2+G
+# what is [n-1]G + G?
+print(f"Zn(n-1)G + G = Zn(n)*G = {(n-1)*G + G} because Zn(n) = {Zn(n)}")
 
-3*G == P3
+# computing [1/2]G + [1/2]G
+# first we find the multiplicative inverse of 2 in Zn, for example using the Fermats Little Theorem:
+two_inv=pow(2,n-2,n)
+two_inv == Zn(2)^-1
+print(f"1/2 = 2^(-1)={two_inv}")
 
-5*G == G+G+G+G+G
-
-min_G = G * ( E.order() - 1)
-min_G == -1*G
-
-# x - y = 3
-# e.g. x = 7 y = 4
-
-F.order()
-E.order()
-
-# 1/2G + 1/2G
+half_G = two_inv * G
+print(f"[1/2]G + [1/2]G = {G}: {half_G+half_G == G}")
 #+END_SRC
 
-* IN-PROGRESS [#A] NOTES
+#+RESULTS:
+: True
+: Zn(n-1)G + G = Zn(n)*G = (0 : 1 : 0) because Zn(n) = 0
+: True
+: 1/2 = 2^(-1)=10944121435919637611123202872628637544274182200208017171849102093287904247809
+: [1/2]G + [1/2]G = (1 : 2 : 1): True
+
+* IN-PROGRESS NOTES
 - map numbers (labels) with points in the group
 - homomorphism
 

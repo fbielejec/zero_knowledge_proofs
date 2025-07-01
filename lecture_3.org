@@ -27,6 +27,9 @@ E_F.order()
 : Elliptic Curve defined by y^2 = x^3 + 8*x + 8 over Finite Field of size 13
 : 20
 * IN-PROGRESS Elliptic Curves
+:PROPERTIES:
+:ID:       a3efc03a-126b-4311-920e-806aad2180d1
+:END:
 - https://www.rareskills.io/post/elliptic-curve-addition
 ** DONE Elliptic Curves: General Weierstrass Form
 :PROPERTIES:
@@ -71,6 +74,8 @@ The [[id:042006cc-2a76-438e-9aff-350b8ac6c762][General Weierstrass Form]] includ
 - The Short Weierstrass form is the *standard* for elliptic curves in cryptography.
 - Most standardized curves (e.g. Bitcoin's secp256k1) use this form.
 - It simplifies computations in cryptography (e.g., ECDSA, ECDH).
+
+See also [[id:b16e1eda-0749-48cf-b621-59376de04f9d][Affine Short Weierstrass form]]
 
 *** Isomorphism of the [[id:042006cc-2a76-438e-9aff-350b8ac6c762][General Weierstrass Form]] and [[id:37c60c61-c719-466a-a6a8-5677303a74ce][Short Weierstrass Form]]
 :PROPERTIES:
@@ -330,7 +335,10 @@ print(solve([eq4], [x,y]));
 
 Therefore singularity occurs if and only if $4a^3 + 27b^2 = 0$.
 
-** DONE Elliptic Curves: Group Law
+** DONE Elliptic Curve Group Law
+:PROPERTIES:
+:ID:       bc0f711d-4c34-4b54-b93d-00cd9acc9479
+:END:
 One of the key properties of an elliptic curve is that it is possible to define a [[id:4c9d3fac-53fc-40a3-9dfd-1014ffb633a2][Group]] law on the set of its points such that [[id:e7c740fb-6ec2-428b-9e47-2fa8ddd3a643][Point at infinity]] serves as the neutral element, and inverses are reflections on the x-axis.
 
 Group law is a [[id:d17ab6af-78f3-4b78-a3ec-0f1ba7c1dbf0][Binary operator]] that takes any two points on the curve (together with the $\mathcal{O}$) and returns another point on the curve:
