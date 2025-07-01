@@ -1,12 +1,17 @@
 #+STARTUP: overview
 #+latex_class_options: [14pt]
 
-* IN-PROGRESS Group Order (vs characteristic)
+* DONE Group Order
+:PROPERTIES:
+:ID:       97c172ec-93ae-487c-902c-32491b36a6f0
+:END:
 
 A group is called a *finite group* if the underlying set of elements is finite. 
 In that case, the number of elements of that group is called its order:
 
 Let $\mathbb{G}$ be a finite group. We write $ord(\mathbb{G})$ or $|\mathbb{G}|$ for the order of $\mathbb{G}$.
+
+See also [[id:c57bb4a8-fba2-4d46-8e8c-6438438ca1eb][Field Characteristic]]
 
 ** DONE Example: $\mathbb{Z}_{6},+$
 
@@ -34,7 +39,7 @@ print(f"Order of {Z6} {elems}: {Z6.order()}")
 : (2) + (5) = (1)
 : Order of Ring of integers modulo 6 [0, 1, 2, 3, 4, 5]: 6
 
-** IN-PROGRESS Example: $\mathbb{Z}_{5},*$
+** DONE Example: $\mathbb{Z}_{5},*$
 
 #+BEGIN_SRC sage :session . :exports both
 q=5
@@ -54,7 +59,6 @@ print(f"Order of {G5}: {G5.order()}")
 : Elements of Multiplicative Abelian group isomorphic to C4:
 : [1, f, f^2, f^3]
 : Order of Multiplicative Abelian group isomorphic to C4: 4
-
 
 * TODO cyclic groups
 * IN-PROGRESS [#A] NOTES

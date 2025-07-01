@@ -852,6 +852,71 @@ Ring satisfies the following axioms:
   - *No Zero Divisors*:
     - If $a \cdot b = 0$, then $a = 0$ or $b = 0$.
 
+** IN-PROGRESS Field Characteristic
+:PROPERTIES:
+:ID:       c57bb4a8-fba2-4d46-8e8c-6438438ca1eb
+:END:
+
+=Definition=
+
+*Characteristic* of a [[id:129fd124-8c31-4023-b569-752acac1cf1c][Field]] (or a [[id:df288eea-70b8-46b7-b31e-4d2545f25c89][Ring]]) is the smallest positive integer $p$ such that:
+
+$\underbrace {1+\cdots +1} _{p{\text{ summands}}}=0$
+
+In other words it is defined to be the smallest positive number of copies of the fields (or rings) multiplicative identity (1) that will sum to it's additive identity (0).
+
+If no such $p$ exists, the characteristic is 0.
+
+---
+
+*NOTES*
+
+- Alternative definition: The smallest positive integer $p$ such that $p \cdot 1 = 0$ in $\mathbb{F}_q$.
+
+---
+
+=Properties=
+
+- For a [[id:d90a640f-3419-4b13-a272-919d6e03dd57][Finite Field (Galois Field)]] $\text{char}(\mathbb{F}_q)$ is always a prime $p$, and $q = p^n$ for some $n$.
+
+See also [[id:97c172ec-93ae-487c-902c-32491b36a6f0][Group Order]]
+
+*** IN-PROGRESS Examples
+
+$\mathbb{F}_4$ has characteristic 2 ($1 + 1 = 0$):
+
+#+BEGIN_SRC sage :session . :exports both
+q=4
+F4=GF(q)
+
+F4(1)
+F4(1)+F4(1)
+#+END_SRC
+
+#+RESULTS:
+: 1
+: 0
+
+$\mathbb{F}_7$ has characteristic 7:
+
+#+BEGIN_SRC sage :session . :exports both
+q=7
+F7=GF(q)
+
+7*F7(1)
+
+char = F7.characteristic()
+
+print(f"Characteristic of {F7}: {char}")
+
+q == char^1
+#+END_SRC
+
+#+RESULTS:
+: 0
+: Characteristic of Finite Field of size 7: 7
+: True
+
 ** DONE Difference Between a Ring and a Field
 
 A *field* is a *special case of a ring* with stricter requirements:
