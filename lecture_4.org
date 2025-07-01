@@ -103,6 +103,7 @@ Since the exponential map respects the group law, we can:
 See also [[id:3c27760c-b520-472e-a56e-4e6faf54b5eb][Logarithm map]].
 
 *** DONE Example: exponential map $Z_{4} \mapsto Z_{5}^{*}$
+
 #+BEGIN_SRC sage :session . :exports both
 q=5
 G5 = Integers(q).unit_group()
@@ -199,33 +200,70 @@ Discrete logarithms are of high importance in cryptography, because there are fi
 
 ---
 
-*** TODO Example: base g discrete logarithm map
+*** DONE Example: base g discrete logarithm map
+
+Let's consider the following logarithm map:
+
+$log_3(\cdot): \mathbb{Z}_{5}^{*} \rightarrow \mathbb{Z}_{4}; \med x \mapsto log_3(x)$
+
+Suppose we want to compute $log_3{4}$.
+That means we need to find an $x$ s.t $3^x=4$, and all we can do is a brute-force method of inserting elements $x$ from \mathbb{Z}_{4} into the exponent of $g=3$ until the result is $4$:
+
 #+BEGIN_SRC sage :session . :exports both
-  q=5
-  Z = Zmod(q)
-  G = Z.unit_group() # multiplicative group mod 7
-  G
-  G.inject_variables()
+q = 5
+Z5 = Zmod(q).unit_group()
+g = Z5[3] # f^2 is isomorphic to 3
+n=Z5.order()
 
-  [x for x in G]
+y=Z5[2] # this is 4
 
-  for x in G:
-    elem = Z(x)
-    generates = set()
-    for i in range(1,q):
-      generates.add(elem^i)
-    print(f"element {elem} generates {generates}")
-    # if len(generates) == G.order():
-    #   primitive_roots.append(elem)
+Z4=Zmod(n)
+
+for x in Z4:
+  if g^x == y:
+    print(f"log_3({y}) = {x}")
 #+END_SRC
 
+#+RESULTS:
+: log_3(f^2) = 2
 
+** TODO Exponential map for Elliptic Curves
+:PROPERTIES:
+:ID:       77d52c07-a41e-42c5-8069-2be5eaf576b2
+:END:
+- p40 MM
+*** IN-PROGRESS Example: Exponential map for bn128
 
-** TODO Exponential map for EC
+#+BEGIN_SRC sage :session . :exports both
+F = GF(21888242871839275222246405745257275088696311157297823662689037894645226208583)
+E = EllipticCurve(F,[0,3])
+
+G = E(1,2)
+
+P2 = G+G
+P2
+
+P3 = P2+G
+
+3*G == P3
+
+5*G == G+G+G+G+G
+
+min_G = G * ( E.order() - 1)
+min_G == -1*G
+
+# x - y = 3
+# e.g. x = 7 y = 4
+
+F.order()
+E.order()
+
+# 1/2G + 1/2G
+#+END_SRC
+
 * IN-PROGRESS [#A] NOTES
 - map numbers (labels) with points in the group
 - homomorphism
-- bn128
 
 #+BEGIN_SRC sage :session . :exports both
   F = GF(21888242871839275222246405745257275088696311157297823662689037894645226208583)
@@ -252,8 +290,6 @@ Discrete logarithms are of high importance in cryptography, because there are fi
   E.order()
 
   # 1/2G + 1/2G
-
-
 #+END_SRC
 
 #+RESULTS:

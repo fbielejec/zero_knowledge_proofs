@@ -1510,6 +1510,10 @@ We know from the [[id:6402bede-282d-4b6a-a4f9-31092fc00739][Fundamental Theorem 
 
 It then follows from the fundamental theorem of finite cyclic groups that those groups have no subgroups other than the trivial group and the group itself.
 
+Cryptographic protocols often assume the existence of finite cyclic groups of prime order.
+However real-world implementations of those protocols are not defined on prime order groups, but on groups where the order consist of a (usually large) prime number that has small [[id:5cf1c4ca-35a9-425c-8fe9-ccdbd78d7d4d][Cofactors]]. 
+In this case, a method called [[id:717783f4-2954-4d7b-8d44-8fcb8f877834][Cofactor Clearing]] has to be applied to ensure that the computations are not done in the group itself but in its (large) prime order subgroup.
+
 ---
 
 *** Example: Generators of $(Z_5,*)$
