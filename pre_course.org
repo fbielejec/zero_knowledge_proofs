@@ -1412,6 +1412,11 @@ Subset which defines $a \times b \hspace{.5em} (\text{mod } 3)$ is in *bold*
 *** TODO Define our set $A$ to be the numbers ${0,1,2,3,4}$ and our binary operator to be subtraction modulo 5. Define all the ordered pairs of $A \times A$ in a table, then map that set of ordered pairs to $A$.
 * DONE Elementary Group Theory
 - https://www.rareskills.io/post/group-theory
+** Group Generator
+:PROPERTIES:
+:ID:       4169039c-64bf-435f-afd4-bd8b7c7a0e9b
+:END:
+See [[id:f5f80632-6c31-4065-9470-33d7ea93c025][Cyclic groups]]
 ** DONE Cyclic groups
 :PROPERTIES:
 :ID:       f5f80632-6c31-4065-9470-33d7ea93c025

@@ -65,11 +65,60 @@ See [[id:f5f80632-6c31-4065-9470-33d7ea93c025][Cyclic groups]]
 * TODO Euler's totient function
 - Number of groups generators
 * IN-PROGRESS Exponential map
-- scalar field
+:PROPERTIES:
+:ID:       2a16eb2e-807a-4834-a83d-b1e15669f92f
+:END:
+- [ ] connection to the scalar field and scalar multiplication of EC (p82 MM)
 
 =Definition=
 
-When $\mathbb{G}$ is a [[id:f5f80632-6c31-4065-9470-33d7ea93c025][Cyclic group]] of [[id:97c172ec-93ae-487c-902c-32491b36a6f0][order]] $n$
+When $\mathbb{G}$ is a [[id:f5f80632-6c31-4065-9470-33d7ea93c025][Cyclic group]] of [[id:97c172ec-93ae-487c-902c-32491b36a6f0][order]] $n$ and $g \in \mathbb{G}$ is a [[id:4169039c-64bf-435f-afd4-bd8b7c7a0e9b][Generator]] of $\mathbb{G}$, then there exists the so called *exponential map* which maps the group law of the additive group of integers mod $n$ $(\mathbb{Z}_n,+)$ (the [[id:770696d2-1294-4e86-ac3c-6803f9053537][Remainder Class]] group) in a *one-to-one* correspondence.
+
+$g^{(\cdot)}: \med \mathbb{Z}_{n} \rightarrow \mathbb{G}; \med x \mapsto g^{x}$
+
+where:
+- $g^{x}$ is defined as multiplying $g$ by itself $x$ times.
+- $g^{0} = e_\mathbb{G}$.
+
+=Properties=
+
+1. Since  $g^{0}=e_{\mathbb{G}}$ the neutral element of $\mathbb{Z}_{n}$ is mapped to the neutral element of $\mathbb{G}$.
+2. $g^{x+y}=g(x)\cdot g^{y}$.
+3. From 1) and 2) above the map respects the group law.
+
+See also [[id:3c27760c-b520-472e-a56e-4e6faf54b5eb][Logarithm map]].
+
+** IN-PROGRESS Scalar multiplication
+:PROPERTIES:
+:ID:       4b1d82b5-2cfd-4bd1-9c12-ab2fc7cef8ae
+:END:
+
+When $\mathbb{G}=(\mathbb{G},+)$, that is it is an [[id:191caddb-b1ac-43c9-91b5-90aff10a58b7][Additive]] [[id:f5f80632-6c31-4065-9470-33d7ea93c025][Cyclic group]] then the [[id:2a16eb2e-807a-4834-a83d-b1e15669f92f][Exponential map]] is written in the following form:
+
+$(\cdot) \cdot g: \med \mathbb{Z}_{n} \rightarrow \mathbb{G}; \med x \mapsto x \cdot x$
+
+where:
+- $x \cdot g$ is defined as adding the generator $g$ to itself $x$ times.
+- symbol $0 \cdot g$ is defined to be the neutral element in G ($e_{\mathbb{G}}$).
+
+** TODO Logarithm map
+:PROPERTIES:
+:ID:       3c27760c-b520-472e-a56e-4e6faf54b5eb
+:END:
+
+
+
+** TODO Exponential map for EC
+
+** TODO Example $Z_{4} \mapsto Z_{5}^{*}$
+#+BEGIN_SRC sage :session . :exports both
+q=5
+Z5 = Zmod(q)
+Z5
+#+END_SRC
+
+#+RESULTS:
+: Ring of integers modulo 5
 
 * IN-PROGRESS [#A] NOTES
 - reducing group operations to mod p-1 additon using generator
