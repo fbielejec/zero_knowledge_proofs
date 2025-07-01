@@ -1,15 +1,70 @@
 #+STARTUP: overview
 #+latex_class_options: [14pt]
 
+* IN-PROGRESS Group Order (vs characteristic)
+
+A group is called a *finite group* if the underlying set of elements is finite. 
+In that case, the number of elements of that group is called its order:
+
+Let $\mathbb{G}$ be a finite group. We write $ord(\mathbb{G})$ or $|\mathbb{G}|$ for the order of $\mathbb{G}$.
+
+** DONE Example: $\mathbb{Z}_{6},+$
+
+This is the [[id:770696d2-1294-4e86-ac3c-6803f9053537][Remainder Class]] group, also called the *additive group of integers modulo 6*.
+
+#+BEGIN_SRC sage :session . :exports both
+q=6
+G6 = AdditiveAbelianGroup([q])
+
+print(f"Elements of {G6}:")
+[x for x in G6]
+print(f"Order of {G6}: {G6.order()}")
+print(f"{G6([2])} + {G6([5])} = {G6([2]) + G6([5])}")
+
+# same as 
+Z6 = Zmod(q)
+elems = [x for x in Z6]
+print(f"Order of {Z6} {elems}: {Z6.order()}")
+#+END_SRC
+
+#+RESULTS:
+: Elements of Additive abelian group isomorphic to Z/6:
+: [(0), (1), (2), (3), (4), (5)]
+: Order of Additive abelian group isomorphic to Z/6: 6
+: (2) + (5) = (1)
+: Order of Ring of integers modulo 6 [0, 1, 2, 3, 4, 5]: 6
+
+** IN-PROGRESS Example: $\mathbb{Z}_{5},*$
+
+#+BEGIN_SRC sage :session . :exports both
+q=5
+#G1 = AdditiveAbelianGroup([q])
+
+Z5 = Zmod(q)
+G5 = Z5.unit_group() # multiplicative group mod 7
+G5
+
+print(f"Elements of {G5}:")
+[x for x in G5]
+print(f"Order of {G5}: {G5.order()}")
+#+END_SRC
+
+#+RESULTS:
+: Multiplicative Abelian group isomorphic to C4
+: Elements of Multiplicative Abelian group isomorphic to C4:
+: [1, f, f^2, f^3]
+: Order of Multiplicative Abelian group isomorphic to C4: 4
+
+
+* TODO cyclic groups
 * IN-PROGRESS [#A] NOTES
 - number of groups generators (euler totient function)
-- cyclic group, example
-- group order (vs characeristic)
+
 - there is (always ?) a cyclic subgroup even if the group is not cyclic
 - reducing group operations to mod p-1 additon using generator
   - exponential map
   - map numbers (labels) with points in the group
-  - homomorphism
+- homomorphism
 - bn128
 
 #+BEGIN_SRC sage :session . :exports both
@@ -54,10 +109,10 @@
   3*G == P3
 
   5*G == G+G+G+G+G
-    
+
   min_G = G * ( E.order() - 1)
   min_G == -1*G
-  
+
   # x - y = 3
   # e.g. x = 7 y = 4
 
