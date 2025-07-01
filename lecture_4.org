@@ -62,7 +62,7 @@ print(f"Order of {G5}: {G5.order()}")
 
 * DONE Cyclic Groups
 See [[id:f5f80632-6c31-4065-9470-33d7ea93c025][Cyclic groups]]
-* TODO Euler's totient function
+* TODO Euler's totient function $\phi$
 - Number of groups generators
 * IN-PROGRESS Exponential map
 :PROPERTIES:
@@ -107,8 +107,8 @@ See also [[id:3c27760c-b520-472e-a56e-4e6faf54b5eb][Logarithm map]].
 q=5
 G5 = Integers(q).unit_group()
 n = G5.order()
-G5.inject_variables()
-g=G5.gen(0)
+#G5.inject_variables()
+g=G5.gen()
 
 print(f"G5={[x for x in G5]} is cyclic: {G5.is_cyclic()} of order {n} and with a generator g={g}")
 
@@ -121,19 +121,46 @@ for k in range(n):
 #+END_SRC
 
 #+RESULTS:
-: Defining f
 : G5=[1, f, f^2, f^3] is cyclic: True of order 4 and with a generator g=f
-: f
 : Exponential map that maps from Z_4=([0, 1, 2, 3],+) to Z_5=([1, f, f^2, f^3],*):
 : exp(0) = f^0 = 1
 : exp(1) = f^1 = f
 : exp(2) = f^2 = f^2
 : exp(3) = f^3 = f^3
 
-*** TODO Example: Computations in the exponent
+*** DONE Example: Computations in the exponent
 :PROPERTIES:
 :ID:       15f34c88-8220-4fb3-82bb-cd890ecd85a4
 :END:
+
+For a prerequisite definitions see [[id:2a16eb2e-807a-4834-a83d-b1e15669f92f][Exponential map]]
+
+Let's consider the multiplicative group ($\mathbb{Z}_5, \cdot$). It is cyclic of order 4, and has two generators : 2 and 3
+Let's perform a computation 1 + 3 + 2 in (one of) the exponent of the generator of $\mathbb{Z}_5^{\cdot}$: $3$.
+
+#+BEGIN_SRC sage :session . :exports both
+q=5
+F5 = GF(q)
+Z5 = F5.unit_group() # (Z5,*)
+n = Z5.order()
+g = Z5[3] # f^2 is isomorphic to 3
+
+Z4=Integers(n) # (Z4,+)
+
+lhs = g^(Z4(1)+Z4(2)+Z4(3))
+print(f"3^(1+2+3)={lhs}")
+
+rhs = g^Z4(1) * g^Z4(2) * g^Z4(3)
+print(f"3^(1) * 3^(2) * 3^(3)={rhs}")
+
+lhs == rhs
+#+END_SRC
+
+#+RESULTS:
+: 3^(1+2+3)=f^2
+: 3^(1) * 3^(2) * 3^(3)=f^2
+: True
+
 ** DONE Scalar multiplication
 :PROPERTIES:
 :ID:       4b1d82b5-2cfd-4bd1-9c12-ab2fc7cef8ae
@@ -151,18 +178,28 @@ In the alternative notation:
 
 $g(x)=x \cdot g= \underbrace{g + g + \dots + g}_{x \text{ times}}$
 
-** TODO Logarithm map
+** IN-PROGRESS Logarithm map
 :PROPERTIES:
 :ID:       3c27760c-b520-472e-a56e-4e6faf54b5eb
 :END:
-*** TODO Example: base g discrete logarithm map
-** TODO Exponential map for EC
-* IN-PROGRESS [#A] NOTES
-- reducing group operations to mod p-1 additon using generator
-  - map numbers (labels) with points in the group
-- homomorphism
-- bn128
 
+=Definition=
+
+We can define an inverse of the [[id:2a16eb2e-807a-4834-a83d-b1e15669f92f][Exponential map]] as:
+
+$log_{g}(\cdot): \med \mathbb{G} \rightarrow Z_{n}; \med x \mapsto log_{g}(x)$
+
+It is called *base $g$ discrete logarithm map*.
+
+---
+
+*NOTE*
+
+Discrete logarithms are of high importance in cryptography, because there are finite cyclic groups (like [[id:042006cc-2a76-438e-9aff-350b8ac6c762][Elliptic Curves]]) where the exponential map is believed to be a one-way function, which (informally) means that computing the exponential map is fast, while computing the logarithm map is slow (it's a trapdoor).
+
+---
+
+*** TODO Example: base g discrete logarithm map
 #+BEGIN_SRC sage :session . :exports both
   q=5
   Z = Zmod(q)
@@ -182,14 +219,13 @@ $g(x)=x \cdot g= \underbrace{g + g + \dots + g}_{x \text{ times}}$
     #   primitive_roots.append(elem)
 #+END_SRC
 
-#+RESULTS:
-: Multiplicative Abelian group isomorphic to C4
-: Defining f
-: [1, f, f^2, f^3]
-: element 1 generates {1}
-: element 2 generates {1, 2, 3, 4}
-: element 4 generates {1, 4}
-: element 3 generates {1, 2, 3, 4}
+
+
+** TODO Exponential map for EC
+* IN-PROGRESS [#A] NOTES
+- map numbers (labels) with points in the group
+- homomorphism
+- bn128
 
 #+BEGIN_SRC sage :session . :exports both
   F = GF(21888242871839275222246405745257275088696311157297823662689037894645226208583)
