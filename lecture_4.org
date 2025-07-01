@@ -281,7 +281,7 @@ $[x+y]G=[x]G {\footnotesize \textcircled{+}} [y]G$
 
 to do the computations "in the exponent".
 
-*** IN-PROGRESS Example: Exponential map for bn128
+*** DONE Example: Exponential map for bn128
 
 #+BEGIN_SRC sage :session . :exports both
 F = GF(21888242871839275222246405745257275088696311157297823662689037894645226208583) # underlying field
@@ -305,6 +305,10 @@ print(f"1/2 = 2^(-1)={two_inv}")
 
 half_G = two_inv * G
 print(f"[1/2]G + [1/2]G = {G}: {half_G+half_G == G}")
+
+# computing [1/3]G + [2/3]G
+three_inv = Zn(3)^-1
+print(f"[1/3]G + [2/3]G = {G}: {three_inv*G + 2*three_inv*G == G}")
 #+END_SRC
 
 #+RESULTS:
@@ -313,42 +317,7 @@ print(f"[1/2]G + [1/2]G = {G}: {half_G+half_G == G}")
 : True
 : 1/2 = 2^(-1)=10944121435919637611123202872628637544274182200208017171849102093287904247809
 : [1/2]G + [1/2]G = (1 : 2 : 1): True
+: [1/3]G + [2/3]G = (1 : 2 : 1): True
 
 * IN-PROGRESS NOTES
-- map numbers (labels) with points in the group
 - homomorphism
-
-#+BEGIN_SRC sage :session . :exports both
-  F = GF(21888242871839275222246405745257275088696311157297823662689037894645226208583)
-  E = EllipticCurve(F,[0,3])
-
-  G = E(1,2)
-
-  P2 = G+G
-  P2
-
-  P3 = P2+G
-
-  3*G == P3
-
-  5*G == G+G+G+G+G
-
-  min_G = G * ( E.order() - 1)
-  min_G == -1*G
-
-  # x - y = 3
-  # e.g. x = 7 y = 4
-
-  F.order()
-  E.order()
-
-  # 1/2G + 1/2G
-#+END_SRC
-
-#+RESULTS:
-: (1368015179489954701390400359078579693043519447331113978918064868415326638035 : 9918110051302171585080402603319702774565515993150576347155970296011118125764 : 1)
-: True
-: True
-: True
-: 21888242871839275222246405745257275088696311157297823662689037894645226208583
-: 21888242871839275222246405745257275088548364400416034343698204186575808495617
