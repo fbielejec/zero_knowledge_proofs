@@ -1,4 +1,4 @@
-* IN-PROGRESS ECDSA from scratch
+* DONE ECDSA from scratch
 - https://almondine-song-c43.notion.site/Homework-4-ec8534279e2045479353509d5c3c73a1
 
 Implement ECDSA from scratch.
@@ -19,8 +19,8 @@ Pay close attention to the distinction between the curve order and the prime num
 - $q$: a prime number.
 - $\mathbb{F}_q$: a [[id:d90a640f-3419-4b13-a272-919d6e03dd57][Finite Field]] with [[id:c57bb4a8-fba2-4d46-8e8c-6438438ca1eb][characteristic]] $q$.
 - $E(\mathbb{F}_q)$: an [[id:a3efc03a-126b-4311-920e-806aad2180d1][Elliptic Curve]] defined over the finite field $\mathbb{F}_q$ (a cyclic group).
-- $G \in E(\mathbb{F}_{q})$, [[id:4169039c-64bf-435f-afd4-bd8b7c7a0e9b][generator]] of a large subgroup of E(\mathbb{F}_{q} with a prime order $n$.
-  - *note*: not neccessarily the generator of $E(\mathbb{F}_q)$, this would happen only when $ord(G)=#E(\mathbb{F}_q)$ (the order of G equals the number of points on the curve $E(\mathbb{F}_q)$, aka it's order).
+- $G \in E(\mathbb{F}_{q})$, [[id:4169039c-64bf-435f-afd4-bd8b7c7a0e9b][generator]] of a large subgroup of #E(\mathbb{F}_{q}# with a prime order $n$.
+  - *note*: not neccessarily the generator of $E(\mathbb{F}_q)$, this would happen only when $ord(G)=\#E(\mathbb{F}_q)$ (the order of G equals the number of points on the curve $E(\mathbb{F}_q)$, aka it's order).
 - $n$ the order of $G$, that is the smallest integer s.t. $[n]G=\mathcal{O}$.
 - $d$: a private key randomly selected in the interval $[1,n-1]$ (a scalar).
 - $Q$: a public key, s.t. $Q=[d]G$.
@@ -41,7 +41,7 @@ Pay close attention to the distinction between the curve order and the prime num
 3. Verifier checks that $r$ and $s$ are integers in $[1,n-1]$.
 4. Verifier calculates $e=HASH(m)$, using the same hash function as the prover.
 5. Verifier computes $R^{'}=([h]G+[r]P) \cdot s^{-1}$
-6. Signature verifies if the $x$ coordinate of $R^{'}$ is congruent to r $\text{mod } n$
+6. Signature verifies if the $x$ coordinate of $R^{'}$ is congruent to $r$ $\text{ mod } n$
 
 ** DONE Implementation
 #+BEGIN_SRC sage :session . :exports both
@@ -87,8 +87,6 @@ def sign(m, Fn, PrivKey):
     r=Fn(R[0])
     s=Fn(h + r*PrivKey) * Fn(k)^-1
   return (r,s)
-
-#(r,s) = sign(m, Fn, PrivKey)
 
 def verify(m, r, s, Fn, PubKey):
   n=Fn.order()
