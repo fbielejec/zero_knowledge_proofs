@@ -1,4 +1,4 @@
-* DONE ECDSA from scratch
+* DONE ECDSA from scratch`
 - https://almondine-song-c43.notion.site/Homework-4-ec8534279e2045479353509d5c3c73a1
 
 Implement ECDSA from scratch.
@@ -150,14 +150,12 @@ message="iliketrains"
 verifies=verify(m,r,s,Fn,PubKey, E)
 
 print(f"message: {m}, message signature: {signature}, signature verifies: {verifies}")
-
-
 #+END_SRC
 
 #+RESULTS:
 : Elliptic Curve defined by y^2 = x^3 + 8*x + 8 over Finite Field of size 13
-: message: 1110010000, message signature: (2, 4), signature verifies: True
-: message: 1110010000, signed message: 1110010001, message signature: (3, 4), signature verifies: True
-: 
+: message: 1110010000, message signature: (2, 1), signature verifies: True
+: message: 1110010000, signed message: 1110010001, message signature: (2, 2), signature verifies: False
+:
 : Elliptic Curve defined by y^2 = x^3 + 3 over Finite Field of size 21888242871839275222246405745257275088696311157297823662689037894645226208583
-: message: 1110010000, message signature: (13669078870688833915010211124190440075943899116954119699792527459512133764117, 6860784283580375570156134585338624316074256604198483031707556790975050664519), signature verifies: True
+: message: 1110010000, message signature: (19731000687230526644861254293880624662333651373129294321462472467657288637668, 843271263492784098712160200663255700514776948992796058618845804383596961688), signature verifies: True
