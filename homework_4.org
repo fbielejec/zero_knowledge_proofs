@@ -47,24 +47,10 @@ Pay close attention to the distinction between the curve order and the prime num
 #+BEGIN_SRC sage :session . :exports both
 import hashlib
 
-# tiny jub-jub
-q=13
-Fq = GF(q)
-a=8;b=8
-E = EllipticCurve(Fq, [a,b])
-
-# choose the biggest prime order subgroup
-(G,n) = max([x for x in filter(lambda x: is_prime(x[1]), [(P, P.order()) for P in E])], key=lambda x: x[1])
-
-# define the scalar field for the EC point multiplication
-Fn=GF(n)
-
 def generate_keypair(G,n):
   d = randint(1, n-1);
   Q = d*G;
   return (Q,d)
-
-(PubKey,PrivKey) = generate_keypair(G,n)
 
 def hash(m,n):
   hasher = hashlib.sha256(m.encode('utf-8'))
@@ -82,13 +68,14 @@ def sign(m, Fn, PrivKey):
   h=hash(m,n)
   s = 0
   while s == 0:
+    # NOTE: in a real implementation k should *not* be reused for different signatures (could leak private key)
     k=randint(1, n-1)
     R=k*G
     r=Fn(R[0])
     s=Fn(h + r*PrivKey) * Fn(k)^-1
   return (r,s)
 
-def verify(m, r, s, Fn, PubKey):
+def verify(m, r, s, Fn, PubKey, E):
   n=Fn.order()
   # publicKey is not the identity element
   assert(PubKey != E(0))
@@ -114,19 +101,63 @@ def verify(m, r, s, Fn, PubKey):
   # the signature is valid if r = x1 mod n
   return (Fn(x1) == r)
 
+# tiny jub-jub
+q=13
+Fq = GF(q)
+a=8;b=8
+E = EllipticCurve(Fq, [a,b])
+E
+
+# choose the G that generates the biggest prime order subgroup (for TJJ_13 this is 5)
+(G,n) = max([x for x in filter(lambda x: is_prime(x[1]), [(P, P.order()) for P in E])], key=lambda x: x[1])
+
+# define the scalar field for the EC point multiplication
+Fn=GF(n)
+
+(PubKey,PrivKey) = generate_keypair(G,n)
+
 m='1110010000'
 (r,s)=signature=sign(m, Fn, PrivKey)
-verifies=verify(m,r,s,Fn,PubKey)
+verifies=verify(m,r,s,Fn,PubKey, E)
 
 print(f"message: {m}, message signature: {signature}, signature verifies: {verifies}")
 
 m_prime='1110010001'
 (r,s)=signature=sign(m_prime, Fn, PrivKey)
-verifies=verify(m,r,s,Fn,PubKey)
+verifies=verify(m,r,s,Fn,PubKey,E)
 
 print(f"message: {m}, signed message: {m_prime}, message signature: {signature}, signature verifies: {verifies}")
+
+print()
+
+# bn128
+q=21888242871839275222246405745257275088696311157297823662689037894645226208583
+Fq=GF(q)
+a=0;b=3
+E = EllipticCurve(Fq, [a,b])
+E
+n=E.order()
+assert(n.is_prime())
+G=E.gen(0)
+assert(n*G==E(0))
+
+Fn=GF(n)
+
+(PubKey,PrivKey) = generate_keypair(G,n)
+
+message="iliketrains"
+(r,s)=signature=sign(m, Fn, PrivKey)
+verifies=verify(m,r,s,Fn,PubKey, E)
+
+print(f"message: {m}, message signature: {signature}, signature verifies: {verifies}")
+
+
 #+END_SRC
 
 #+RESULTS:
-: message: 1110010000, message signature: (2, 2), signature verifies: True
-: message: 1110010000, signed message: 1110010001, message signature: (3, 2), signature verifies: False
+: Elliptic Curve defined by y^2 = x^3 + 8*x + 8 over Finite Field of size 13
+: message: 1110010000, message signature: (2, 4), signature verifies: True
+: message: 1110010000, signed message: 1110010001, message signature: (3, 4), signature verifies: True
+: 
+: Elliptic Curve defined by y^2 = x^3 + 3 over Finite Field of size 21888242871839275222246405745257275088696311157297823662689037894645226208583
+: message: 1110010000, message signature: (13669078870688833915010211124190440075943899116954119699792527459512133764117, 6860784283580375570156134585338624316074256604198483031707556790975050664519), signature verifies: True
