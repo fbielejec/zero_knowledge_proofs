@@ -1412,11 +1412,17 @@ Subset which defines $a \times b \hspace{.5em} (\text{mod } 3)$ is in *bold*
 *** TODO Define our set $A$ to be the numbers ${0,1,2,3,4}$ and our binary operator to be subtraction modulo 5. Define all the ordered pairs of $A \times A$ in a table, then map that set of ordered pairs to $A$.
 * DONE Elementary Group Theory
 - https://www.rareskills.io/post/group-theory
-** Group Generator
+** IN-PROGRESS Group Generator
 :PROPERTIES:
 :ID:       4169039c-64bf-435f-afd4-bd8b7c7a0e9b
 :END:
-See [[id:f5f80632-6c31-4065-9470-33d7ea93c025][Cyclic groups]]
+
+- in a cyclic group of order $n$ any element of order n is a generator
+- in a cyclic group, the number of generators equals the number of integers k such that gcd(k,n)=1 (That count is the [[id:108230aa-cb69-4484-8afa-92af3f6c0818][Euler's totient function]]).
+
+See also [[id:f5f80632-6c31-4065-9470-33d7ea93c025][Cyclic groups]]
+*** TODO Example: $(Z_{10},*)$
+
 ** DONE Cyclic groups
 :PROPERTIES:
 :ID:       f5f80632-6c31-4065-9470-33d7ea93c025
@@ -1429,9 +1435,9 @@ A group $(G, \cdot)$ is *cyclic* if there exists an element $g \in G$ (a *genera
 $G = \{ g^n \mid n \in \mathbb{Z} \}$
 
 where:
-- $g^0 = e $ (the identity element),
-- $ g^n = g \cdot g \cdot \dots \cdot g $ ($n$ times) for $n > 0$,
-- $ g^{-n} = (g^{-1})^n $ for $n > 0$.
+- $g^0 = e$ (the identity element),
+- $g^n = g \cdot g \cdot \dots \cdot g$ ($n$ times) for $n > 0$,
+- $g^{-n} = (g^{-1})^n$ for $n > 0$.
 
 If the group operation is addition ($+$), we write:
 
@@ -1491,7 +1497,7 @@ print("Cyclic subgroups:", [H for H in V4.subgroups() if H.is_cyclic()])
 
 --
 
-*** TODO The fundamental theorem of finite cyclic groups
+*** The fundamental theorem of finite cyclic groups
 :PROPERTIES:
 :ID:       41c52320-7946-47a8-9909-77f3e9d3f5fa
 :END:

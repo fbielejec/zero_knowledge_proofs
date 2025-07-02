@@ -1,4 +1,4 @@
-* ECDSA from scratch
+* IN-PROGRESS ECDSA from scratch
 - https://almondine-song-c43.notion.site/Homework-4-ec8534279e2045479353509d5c3c73a1
 
 Implement ECDSA from scratch.
@@ -14,3 +14,84 @@ You may use a library for point multiplication, but everything else you must do 
 Remember, when you compute the multiplicative inverse, you need to do it with respect to the curve order.
 
 Pay close attention to the distinction between the curve order and the prime number $p$ we compute the modulus of $y^2=x^3+b \pmod p$.
+
+** ECDSA Parameters
+- $p$: a prime number.
+- $\mathbb{F}_p$: a [[id:d90a640f-3419-4b13-a272-919d6e03dd57][Finite Field]] with [[id:c57bb4a8-fba2-4d46-8e8c-6438438ca1eb][characteristic]] $p$.
+- $E(\mathbb{F}_p)$: an [[id:a3efc03a-126b-4311-920e-806aad2180d1][Elliptic Curve]] defined over the finite field $\mathbb{F}_p$ (a cyclic group).
+- $G \in E(\mathbb{F}_{p})$, [[id:4169039c-64bf-435f-afd4-bd8b7c7a0e9b][generator]] of a large subgroup of E(\mathbb{F}_{p} with a prime order $n$.
+  - *note*: not neccessarily the generator of $E(\mathbb{F}_p)$, this would happen only when $ord(G)=#E(\mathbb{F}_p)$ (the order of G equals the number of points on the curve $E(\mathbb{F}_p)$, aka it's order).
+- $n$ the order of $G$, that is the smallest integer s.t. $[n]G=\mathcal{O}$.
+- $d$: a private key randomly selected in the interval $[1,n-1]$ (a scalar).
+- $Q$: a public key, s.t. $Q=[d]G$.
+- $m$: a secret message.
+
+** IN-PROGRESS sign the message
+- Prover calculates $h = HASH(m)$, with the result converted to an integer.
+  - TODO : take the n-th leftmost bit as the hash output
+- Prover picks a random scalar $k$ from $[1,n-1]$.
+- Prover computes $R=[k]G$ and takes the x-coordinate of the resulting point: $r$.
+- Prover computes $s = (h + r*d)*k^{-1}$.
+- Prover returns $(r,s)$ and sends $(r,s,h,Q)$ to the verifier.
+
+** TODO verify the signature
+- 
+
+
+** IN-PROGRESS Implementation
+#+BEGIN_SRC sage :session . :exports both
+import hashlib
+
+# tiny jub-jub
+q=13
+Fq = GF(q)
+a=8;b=8
+E = EllipticCurve(Fq, [a,b])
+
+m='1110010000'
+
+# choose the biggest prime order subgroup
+(G,n) = max([x for x in filter(lambda x: is_prime(x[1]), [(P, P.order()) for P in E])], key=lambda x: x[1])
+
+Fn=GF(n)
+
+def generate_keypair(G,n):
+  d = randint(1, n-1);
+  Q = d*G;
+  return (Q,d)
+
+(PubKey,PrivKey) = generate_keypair(G,n)
+
+def hash(m):
+  hasher = hashlib.sha256(s_1.encode('utf-8'))
+  digest = hasher.hexdigest()
+  z = ZZ(digest, 16)
+  x = 0
+  for i in range(q.bit_length()):
+    x += z_bin[i]*2^i
+  return x
+
+def sign(m, PrivKey):
+  h=hash(m)
+  k=randint(1, n-1)
+  R=k*G
+  r=R[0]
+  s = Fn(h + r*PrivKey) * Fn(k)^-1
+  return (h,r,s)
+
+(h,r,s) = sign(m, PrivKey)
+
+h;r;s
+
+assert(PubKey != E(0))
+assert(PubKey == E.point(PubKey))
+assert(E(0) == n*PubKey)
+
+#h*G + r*P
+
+#+END_SRC
+
+#+RESULTS:
+: 3
+: 8
+: 3
