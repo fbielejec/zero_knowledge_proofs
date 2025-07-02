@@ -16,30 +16,34 @@ Remember, when you compute the multiplicative inverse, you need to do it with re
 Pay close attention to the distinction between the curve order and the prime number $p$ we compute the modulus of $y^2=x^3+b \pmod p$.
 
 ** ECDSA Parameters
-- $p$: a prime number.
-- $\mathbb{F}_p$: a [[id:d90a640f-3419-4b13-a272-919d6e03dd57][Finite Field]] with [[id:c57bb4a8-fba2-4d46-8e8c-6438438ca1eb][characteristic]] $p$.
-- $E(\mathbb{F}_p)$: an [[id:a3efc03a-126b-4311-920e-806aad2180d1][Elliptic Curve]] defined over the finite field $\mathbb{F}_p$ (a cyclic group).
-- $G \in E(\mathbb{F}_{p})$, [[id:4169039c-64bf-435f-afd4-bd8b7c7a0e9b][generator]] of a large subgroup of E(\mathbb{F}_{p} with a prime order $n$.
-  - *note*: not neccessarily the generator of $E(\mathbb{F}_p)$, this would happen only when $ord(G)=#E(\mathbb{F}_p)$ (the order of G equals the number of points on the curve $E(\mathbb{F}_p)$, aka it's order).
+- $q$: a prime number.
+- $\mathbb{F}_q$: a [[id:d90a640f-3419-4b13-a272-919d6e03dd57][Finite Field]] with [[id:c57bb4a8-fba2-4d46-8e8c-6438438ca1eb][characteristic]] $q$.
+- $E(\mathbb{F}_q)$: an [[id:a3efc03a-126b-4311-920e-806aad2180d1][Elliptic Curve]] defined over the finite field $\mathbb{F}_q$ (a cyclic group).
+- $G \in E(\mathbb{F}_{q})$, [[id:4169039c-64bf-435f-afd4-bd8b7c7a0e9b][generator]] of a large subgroup of E(\mathbb{F}_{q} with a prime order $n$.
+  - *note*: not neccessarily the generator of $E(\mathbb{F}_q)$, this would happen only when $ord(G)=#E(\mathbb{F}_q)$ (the order of G equals the number of points on the curve $E(\mathbb{F}_q)$, aka it's order).
 - $n$ the order of $G$, that is the smallest integer s.t. $[n]G=\mathcal{O}$.
 - $d$: a private key randomly selected in the interval $[1,n-1]$ (a scalar).
 - $Q$: a public key, s.t. $Q=[d]G$.
 - $m$: a secret message.
 
-** IN-PROGRESS sign the message
+** DONE sign the message
 1. Prover calculates $h = HASH(m)$, with the result converted to an integer.
-   - TODO : take the n-th leftmost bit as the hash output
+   - Hashing should return $n$ leftmost bits as the output. This can result in an integer *greater* then $n$ but not longer (in bit length)!
 2. Prover picks a random scalar $k$ from $[1,n-1]$.
 3. Prover computes $R=[k]G$ and takes the x-coordinate of the resulting point: $r$.
-4. Prover computes $s = (h + r*d)*k^{-1}$. If $s$ is 0 return to step 2).
+4. Prover computes $s = (h + r \cdot d) \cdot k^{-1}$. If $s$ is 0 return to step 2).
 5. Prover returns the signature $(r,s)$ and sends $(r,s,h,Q)$ to the verifier.
-6. NOTE: All computations are done $mod n$ (in the scalar field).
+6. NOTE: All computations are done $\text{mod } n$ (in the scalar field of order $n$).
 
-** TODO verify the signature
--
+** DONE verify the signature
+1. Verifier checks that $Q$ is not equal to $\mathcal{O}$,
+2. Verifier checks that $Q$ lies on the curve $E(\mathbb{F}_q)$
+3. Verifier checks that $r$ and $s$ are integers in $[1,n-1]$.
+4. Verifier calculates $e=HASH(m)$, using the same hash function as the prover.
+5. Verifier computes $R^{'}=([h]G+[r]P) \cdot s^{-1}$
+6. Signature verifies if the $x$ coordinate of $R^{'}$ is congruent to r $\text{mod } n$
 
-
-** IN-PROGRESS Implementation
+** DONE Implementation
 #+BEGIN_SRC sage :session . :exports both
 import hashlib
 
@@ -49,12 +53,10 @@ Fq = GF(q)
 a=8;b=8
 E = EllipticCurve(Fq, [a,b])
 
-m='1110010000'
-
 # choose the biggest prime order subgroup
 (G,n) = max([x for x in filter(lambda x: is_prime(x[1]), [(P, P.order()) for P in E])], key=lambda x: x[1])
 
-# define the scalar field
+# define the scalar field for the EC point multiplication
 Fn=GF(n)
 
 def generate_keypair(G,n):
@@ -64,46 +66,69 @@ def generate_keypair(G,n):
 
 (PubKey,PrivKey) = generate_keypair(G,n)
 
-def hash(m):
-  hasher = hashlib.sha256(s_1.encode('utf-8'))
+def hash(m,n):
+  hasher = hashlib.sha256(m.encode('utf-8'))
   digest = hasher.hexdigest()
   z = ZZ(digest, 16)
+  z_bin = z.digits(base=2, padto=256)
+  # take the n leftmost (most significant) bits
   x = 0
-  for i in range(q.bit_length()):
+  for i in range(n.bit_length()):
     x += z_bin[i]*2^i
   return x
 
-def sign(m, n, PrivKey):
-  h=hash(m)
+def sign(m, Fn, PrivKey):
+  n=Fn.order()
+  h=hash(m,n)
   s = 0
   while s == 0:
     k=randint(1, n-1)
     R=k*G
-    r=mod(R[0],n)
-    s=mod(h + r*PrivKey,n) * pow(k,n-2,n) # or Fn(k)^-1
-  return (h,r,s)
+    r=Fn(R[0])
+    s=Fn(h + r*PrivKey) * Fn(k)^-1
+  return (r,s)
 
-(h,r,s) = sign(m, n, PrivKey)
+#(r,s) = sign(m, Fn, PrivKey)
 
-print(f"h: {h}")
-print(f"r: {r}")
-print(f"s: {s}")
+def verify(m, r, s, Fn, PubKey):
+  n=Fn.order()
+  # publicKey is not the identity element
+  assert(PubKey != E(0))
+  # publicKey belongs to the EC
+  assert(PubKey == E.point(PubKey))
+  # publicKey is of order n
+  assert(E(0) == n*PubKey)
 
-assert(PubKey != E(0))
-assert(PubKey == E.point(PubKey))
-assert(E(0) == n*PubKey)
+  #  r and s belong to the scalar field
+  assert(r == mod(r,n))
+  assert(s == mod(s,n))
 
-assert(r == mod(r,n))
-assert(s == mod(s,n))
+  # compute the message hash
+  e=hash(m,n)
+  # assert that the hash bit length is not longer than the scalar field order's bit length
+  assert(e.bit_length() <= n.bit_length())
 
-#(h*G + r*PubKey) 
+  # retrieve R as (e*G + r*PubKey) * s^-1
+  #u1=Fn(e) * Fn(s)^-1
+  #u2=Fn(r) * Fn(s)^-1
+  R_prime=(Fn(e) * G + Fn(r)*PubKey)*Fn(s)^-1  #u1*G+u2*PubKey
+  x1=R_prime[0]
+  # the signature is valid if r = x1 mod n
+  return (Fn(x1) == r)
 
+m='1110010000'
+(r,s)=signature=sign(m, Fn, PrivKey)
+verifies=verify(m,r,s,Fn,PubKey)
 
-#Fn(s)^-1
+print(f"message: {m}, message signature: {signature}, signature verifies: {verifies}")
 
+m_prime='1110010001'
+(r,s)=signature=sign(m_prime, Fn, PrivKey)
+verifies=verify(m,r,s,Fn,PubKey)
+
+print(f"message: {m}, signed message: {m_prime}, message signature: {signature}, signature verifies: {verifies}")
 #+END_SRC
 
 #+RESULTS:
-: h: 3
-: r: 3
-: s: 3
+: message: 1110010000, message signature: (2, 2), signature verifies: True
+: message: 1110010000, signed message: 1110010001, message signature: (3, 2), signature verifies: False
