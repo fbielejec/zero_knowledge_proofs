@@ -12,9 +12,17 @@ contract AddTest is Test {
     }
 
     function test_add() public view {
-        (uint x, uint y) = add.add(1, 2, 1, 2);
+        (uint x1, uint y1) = add.add(1, 2, 1, 2);
 
-        console.logUint(x);
-        console.logUint(y);
+        console.logUint(x1);
+        console.logUint(y1);
+
+        (uint x2, uint y2) = add.multiply(1, 2, 2);
+
+        console.logUint(x2);
+        console.logUint(y2);
+
+        assertEq(x1, x2);
+        assertEq(y1, y2);
     }
 }

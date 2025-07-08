@@ -5,12 +5,13 @@
 - homomorphic encryption
 - EC operations in Solidity
 - solidity precompiles
-** IN-PROGRESS Homomorphic encryption [0/2]
+- extension fields
+* IN-PROGRESS Homomorphic encryption [0/2]
 :PROPERTIES:
 :ID:       43067f10-f7d9-463d-833e-894da69af237
 :END:
-Alice (the prover) knows a and b such that their sum is 12. 
-To prove it she sends corresponding points on EC $aG$, $bG$ to Bob (the verifier) s.t. 
+Alice (the prover) knows a and b such that their sum is 12.
+To prove it she sends corresponding points on EC $aG$, $bG$ to Bob (the verifier) s.t.
 
 [a]G + [b]G = [a+b]G
 
@@ -20,8 +21,47 @@ Bob verifies that [a]G + [b]G = [12]G
 - [ ] We can only do this for addition (not multiplication - point multiplication is not defined for EC points)
   - fully homomorphic encryption
   - pairings
-** IN-PROGRESS Elliptic Curve operations in Solidity
+* IN-PROGRESS Elliptic Curve operations in Solidity
 - uses bn128 curve
 - eccAdd(address 6)
 - eccMul(address 7)
 - eccPairing(address 8)
+* IN-PROGRESS Extension fields
+** Example: extending $\mathbb{F}_{3}$ to $\mathbb{F}_{3^2}$
+
+#+BEGIN_SRC sage :session . :exports both
+p=3
+F3=GF(p)
+
+# ring of polynomials in F5
+R=PolynomialRing(F3, 'i')
+R
+
+m = 2
+
+# finding a polynomial irreducible in R of degree m = 2
+mod = R.random_element();
+while (not (mod.is_irreducible() and (mod.degree() == m))):
+  mod = R.random_element();
+
+print(f"{mod} is irreducible: {mod.is_irreducible()} and has a degree: {mod.degree()}")
+
+#P_MOD_2 = F5x(x^2+2)
+#P_MOD_2.is_irreducible()
+
+# define the extension field.
+# a is the root of the irreducible polynomial
+F3_2=GF(p^m, name = 'a', modulus=mod)
+
+# this is p^m
+print(f"{F3_2} (order = {(F3_2.order())})")
+
+# entire extended field (p^m points)
+[p for p in F3_2]
+#+END_SRC
+
+#+RESULTS:
+: Univariate Polynomial Ring in i over Finite Field of size 3
+: i^2 + i + 2 is irreducible: True and has a degree: 2
+: Finite Field in a of size 3^2 (order = 9)
+: [0, a, 2*a + 1, 2*a + 2, 2, 2*a, a + 2, a + 1, 1]

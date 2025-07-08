@@ -15,4 +15,17 @@ contract Add {
 
         (Cx, Cy) = abi.decode(answer, (uint, uint));
     }
+
+    function multiply(
+        uint Ax,
+        uint Ay,
+        uint scalar
+    ) public view returns (uint256 Cx, uint Cy) {
+        bytes memory payload = abi.encode(Ax, Ay, scalar);
+
+        (bool ok, bytes memory answer) = address(7).staticcall(payload);
+        require(ok, "Failed");
+
+        (Cx, Cy) = abi.decode(answer, (uint, uint));
+    }
 }
