@@ -2,11 +2,11 @@
 #+latex_class_options: [14pt]
 
 * NOTES
-- homomorphic encryption
-- EC operations in Solidity
-- solidity precompiles
-- extension fields
- - order and characteristic of the extension fields are different!
+- [ ] homomorphic encryption
+- [X] EC operations in Solidity
+- [X] solidity precompiles
+- [X] constructing extension fields
+  - order and characteristic of the extension fields are different!
 * IN-PROGRESS Homomorphic encryption [0/2]
 :PROPERTIES:
 :ID:       43067f10-f7d9-463d-833e-894da69af237
@@ -22,7 +22,7 @@ Bob verifies that [a]G + [b]G = [12]G
 - [ ] We can only do this for addition (not multiplication - point multiplication is not defined for EC points)
   - fully homomorphic encryption
   - pairings
-* IN-PROGRESS Elliptic Curve operations in Solidity
+* DONE Elliptic Curve operations in Solidity
 - uses bn128 curve
 - eccAdd(address 6)
 - eccMul(address 7)
@@ -62,7 +62,7 @@ elems
 
 #+RESULTS:
 : Univariate Polynomial Ring in i over Finite Field of size 3
-: i^2 + 1 is irreducible: True and has a degree: 2
+: 2*i^2 + i + 1 is irreducible: True and has a degree: 2
 : Finite Field in x of size 3^2 (order = 9, characteristic = 3)
 : [0, 1, 2, x, x + 1, x + 2, 2*x, 2*x + 1, 2*x + 2]
 
