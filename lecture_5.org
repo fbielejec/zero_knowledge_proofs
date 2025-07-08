@@ -1,0 +1,27 @@
+#+STARTUP: overview
+#+latex_class_options: [14pt]
+
+* NOTES
+- homomorphic encryption
+- EC operations in Solidity
+- solidity precompiles
+** IN-PROGRESS Homomorphic encryption [0/2]
+:PROPERTIES:
+:ID:       43067f10-f7d9-463d-833e-894da69af237
+:END:
+Alice (the prover) knows a and b such that their sum is 12. 
+To prove it she sends corresponding points on EC $aG$, $bG$ to Bob (the verifier) s.t. 
+
+[a]G + [b]G = [a+b]G
+
+Bob verifies that [a]G + [b]G = [12]G
+
+- [ ] This can be generalized to a set of equations
+- [ ] We can only do this for addition (not multiplication - point multiplication is not defined for EC points)
+  - fully homomorphic encryption
+  - pairings
+** IN-PROGRESS Elliptic Curve operations in Solidity
+- uses bn128 curve
+- eccAdd(address 6)
+- eccMul(address 7)
+- eccPairing(address 8)

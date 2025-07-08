@@ -1,0 +1,15 @@
+{
+    "name": "Add",
+    "version": "1.0.0",
+    "description": "ECAdd contract",
+    "author": "fbielejec",
+    "license": "MIT",
+    "devDependencies": {
+        "dotenv": "^17.1.0",
+        "forge-std": "github:foundry-rs/forge-std#v1.9.7",
+        "prettier": "^3.6.2",
+        "prettier-plugin-solidity": "^1.4.3",
+        "solhint-community": "^4.0.1",
+        "solhint-plugin-prettier": "^0.1.0"
+    }
+}
