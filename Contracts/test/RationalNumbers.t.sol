@@ -36,10 +36,21 @@ contract TestRationalNumbers is Test {
 
         assertEq(verifies, true);
 
+        (uint256 xA_prime, uint256 yA_prime) = rationalNumbers.scalarMultiply(
+            xG,
+            yG,
+            3
+        );
+        (uint256 xB_prime, uint256 yB_prime) = rationalNumbers.scalarMultiply(
+            xG,
+            yG,
+            4
+        );
+
         bool not_verifies = rationalNumbers.rationalAdd(
-            ECPoint(xA, yA),
-            ECPoint(xB, yB),
-            num + 1,
+            ECPoint(xA_prime, yA_prime),
+            ECPoint(xB_prime, yB_prime),
+            num,
             den
         );
 
