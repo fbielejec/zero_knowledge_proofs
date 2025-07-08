@@ -4,6 +4,7 @@ node_modules
 # Compiler files
 cache/
 out/
+artifacts/
 
 # Ignores development broadcast logs
 !/broadcast

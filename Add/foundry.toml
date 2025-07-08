@@ -1,19 +1,19 @@
 [profile.default]
-ast = true
+# ast = true
 auto_detect_solc = true
-block_timestamp = 1_680_220_800 # March 31, 2023 at 00:00 GMT
-build_info = true
-bytecode_hash = "none"
+# block_timestamp = 1_680_220_800 # March 31, 2023 at 00:00 GMT
+#build_info = true
+#bytecode_hash = "none"
 evm_version = "shanghai"
-extra_output = ["storageLayout"]
+#extra_output = ["storageLayout"]
 ffi = true
-fs_permissions = [{ access = "read", path = "artifacts" }]
-fuzz = { runs = 1_000 }
+#fs_permissions = [{ access = "read", path = "out" }]
+#fuzz = { runs = 1_000 }
 gas_reports = ["*"]
 optimizer = true
 via-ir = true
-out = "artifacts"
-script = "scripts"
+out = "out"
+script = "script"
 src = "src"
 test = "test"
 
