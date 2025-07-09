@@ -4,7 +4,7 @@ pragma solidity ^0.8.13;
 import { EC, ECPoint } from "../src/EC.sol";
 
 contract MatMul is EC {
-    // returns true if Ms == o element-wise.
+    // returns true if mS == oG element-wise.
     function matMul(
         uint256[] calldata matrix,
         uint256 n, // n x n for the matrix
