@@ -49,7 +49,7 @@ function modExp(uint256 base, uint256 exp, uint256 mod)
 }
 #+END_SRC
 
-*** DONE Generating test data for solidity test cases:
+*** DONE Test data
 
 #+BEGIN_SRC sage :session . :exports both
 # bn128
@@ -85,6 +85,30 @@ a*G + b*G == (Fq(num) * Fq(den)**(-1)) * G
 Your contract should implement matrix multiplication of an $n \times n$ matrix *M* of uint256 and a $n \times 1$ vector of points *s*.
 It validates the claim that matrix $Ms = o$ where $o$ is a $n \tiomes 1$ matrix of uint256.
 You will need to multiply *o* by the generator on-chain so that both sides have the same type.
+
+#+BEGIN_SRC Solidity
+struct ECPoint {
+        uint256 x;
+        uint256 y;
+}
+
+function matmul(uint256[] calldata matrix,
+                uint256 n, // n x n for the matrix
+                ECPoint[] calldata s, // n elements
+                uint256[] calldata o // n elements
+               ) public returns (bool verified) {
+
+        // revert if dimensions don't make sense or the matrices are empty
+
+        // return true if Ms == o elementwise. You need to do n equality checks. If you're lazy, you can hardcode n to 3, but it is suggested that you do this with a for loop
+}
+#+END_SRC
+
+Example
+
+$\begin{bmatrix}1 & 2 & 3\\4 & 5 & 6\\7 & 8 & 9\end{bmatrix}\begin{bmatrix}P\\Q\\R\end{bmatrix}=\begin{bmatrix}P+2Q+3R\\4P+5Q+6R\\7P + 8Q + 9R\end{bmatrix}\stackrel{?}{=}\begin{bmatrix}o_1G\\o_2G\\o_3G\end{bmatrix}#
+
+*** DONE Test data
 
 #+BEGIN_SRC sage :session . :exports both
 # bn128
