@@ -340,6 +340,33 @@ where:
 - $M=[k]G$.
 - $[\cdot]$ is [[id:77d52c07-a41e-42c5-8069-2be5eaf576b2][Elliptic Curve Scalar Multiplication]].
 
+=Properties=
+
+1. The map $\log_G$ is only defined on the subgroup $< G >$, not all of $E(\mathbb{F}_p)$.
+2. For curves used in cryptography (e.g., secp256k1), no efficient algorithm exists to compute $\log_G$ (non-quantum computers require  $\mathcal{O}(\sqrt{n})$ time via Pollard's rho).
+
+3. [[id:77d52c07-a41e-42c5-8069-2be5eaf576b2][Elliptic Curve Scalar Multiplication]] and the logarithm map are an [[id:4a93116b-94b3-4774-afdd-e7c486dd56fb][Isomorphism]], with $\log_G$ being the inverse of [[id:4b1d82b5-2cfd-4bd1-9c12-ab2fc7cef8ae][Scalar multiplication]].
+
+$\mathbb{Z}_n \overset{[k]G}{\longrightarrow} \langle G \rangle \subseteq E(\mathbb{F}_p)$
+$\langle G \rangle \overset{\log_G}{\longrightarrow} \mathbb{Z}_n$
+
+*** Example
+Let’s compute $\log_G(M)$ for $E: y^2 = x^3 + 2x + 3$ over $\mathbb{F}_{101}$:
+
+#+BEGIN_SRC sage :session . :exports both
+p = 101
+E = EllipticCurve(GF(p), [2, 3])
+G = E.gens()[0]  # Assume G is a generator
+n = G.order()    # Order of G
+
+M = 17 * G       # Scalar multiplication
+k = discrete_log(M, G, operation='+')  # Solve [k]G = M
+print(f"log_G(M) = {k}")  # Output: 17
+#+END_SRC
+
+#+RESULTS:
+: log_G(M) = 17
+
 * IN-PROGRESS NOTES
 - homomorphism
 
