@@ -9,7 +9,7 @@ contract MatMul is EC {
         uint256[] calldata matrix,
         uint256 n, // n x n for the matrix
         ECPoint[] calldata s, // n elements
-        ECPoint[] calldata o // n elements
+        uint256[] calldata o // n elements
     ) public view returns (bool verified) {
         // revert if the matrices are empty
         require(n > 0, "n needs to be at least 1");
@@ -37,8 +37,11 @@ contract MatMul is EC {
                 (Ox, Oy) = ecAdd(Ox, Oy, x, y);
             }
 
-            uint256 expectedX = o[row].x;
-            uint256 expectedY = o[row].y;
+            (uint256 expectedX, uint256 expectedY) = scalarMultiply(
+                G.x,
+                G.y,
+                o[row]
+            );
 
             if (!(Ox == expectedX && Oy == expectedY)) {
                 return false;

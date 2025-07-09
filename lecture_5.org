@@ -28,7 +28,7 @@ Bob verifies that [a]G + [b]G = [12]G
 - eccMul(address 7)
 - eccPairing(address 8)
 * IN-PROGRESS Extension fields
-** IN-PROGRESS Example: extending $\mathbb{F}_{3}$ to $\mathbb{F}_{3^2}$ ($m = 2$)
+** DONE Example: extending $\mathbb{F}_{3}$ to $\mathbb{F}_{3^2}$ ($m = 2$)
 
 #+BEGIN_SRC sage :session . :exports both
 p=3
@@ -79,25 +79,25 @@ F3i.<i> = PolynomialRing(F3) #F3[]
 #ring = set()
 #while not (len(ring) == 27):
 #  ring.add(F3i.random_element())
-
-ring = {F3i(0), F3i(1), F3i(i), F3i(i**2), F3i(i**3), F3i(i**4)}
-r = [p for p in ring]
-
-print(f"some elements of the polynomial ring in F3:")
-r
-print()
-
-P = F3i(i**2 + 1)
-print(f"{P} is irreducible: {P.is_irreducible()}")
-print()
-
-p=F3i(i^3+1)
-
-print(f"{p} mod {P} = {p.mod(P)}")
-print()
-
-F_ext = set([p.mod(P) for p in ring])
-print(f"Taking the elements in the ring modulo the irreducible polynomial {P} we get the set {F_ext} ({len(F_ext)} elements)")
+#
+#ring = {F3i(0), F3i(1), F3i(i), F3i(i**2), F3i(i**3), F3i(i**4)}
+#r = [p for p in ring]
+#
+#print(f"some elements of the polynomial ring in F3:")
+#r
+#print()
+#
+#P = F3i(i**2 + 1)
+#print(f"{P} is irreducible: {P.is_irreducible()}")
+#print()
+#
+#p=F3i(i^3+1)
+#
+#print(f"{p} mod {P} = {p.mod(P)}")
+#print()
+#
+#F_ext = set([p.mod(P) for p in ring])
+#print(f"Taking the elements in the ring modulo the irreducible polynomial {P} we get the set {F_ext} ({len(F_ext)} elements)")
 #+END_SRC
 
 #+RESULTS:
