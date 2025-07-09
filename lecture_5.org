@@ -66,7 +66,7 @@ elems
 : Finite Field in x of size 3^2 (order = 9, characteristic = 3)
 : [0, 1, 2, x, x + 1, x + 2, 2*x, 2*x + 1, 2*x + 2]
 
-Same construction but "by hand":
+Same construction "by hand":
 
 #+BEGIN_SRC sage :session . :exports both
 p=3
@@ -75,37 +75,17 @@ F3=GF(p)
 # ring of polynomials in F5
 F3i.<i> = PolynomialRing(F3) #F3[]
 
-# because ring object is infinite
-#ring = set()
-#while not (len(ring) == 27):
-#  ring.add(F3i.random_element())
-#
-#ring = {F3i(0), F3i(1), F3i(i), F3i(i**2), F3i(i**3), F3i(i**4)}
-#r = [p for p in ring]
-#
-#print(f"some elements of the polynomial ring in F3:")
-#r
-#print()
-#
-#P = F3i(i**2 + 1)
-#print(f"{P} is irreducible: {P.is_irreducible()}")
-#print()
-#
-#p=F3i(i^3+1)
-#
-#print(f"{p} mod {P} = {p.mod(P)}")
-#print()
-#
-#F_ext = set([p.mod(P) for p in ring])
-#print(f"Taking the elements in the ring modulo the irreducible polynomial {P} we get the set {F_ext} ({len(F_ext)} elements)")
+P = F3i(i**2 + 1)
+print(f"{P} is irreducible: {P.is_irreducible()}")
+
+F_ext = set()
+while not (len(F_ext) == 3**2):
+    p = F3i.random_element();
+    F_ext.add(p.mod(P));
+
+print(f"Taking the elements in the ring modulo the irreducible polynomial {P} we get the set {F_ext} ({len(F_ext)} elements)")
 #+END_SRC
 
 #+RESULTS:
-: some elements of the polynomial ring in F3:
-: [0, 1, i^4, i, i^3, i^2]
-: 
 : i^2 + 1 is irreducible: True
-: 
-: i^3 + 1 mod i^2 + 1 = 2*i + 1
-: 
-: Taking the elements in the ring modulo the irreducible polynomial i^2 + 1 we get the set {0, 1, 2, i, 2*i} (5 elements)
+: Taking the elements in the ring modulo the irreducible polynomial i^2 + 1 we get the set {0, 1, 2, 2*i, 2*i + 1, 2*i + 2, i, i + 1, i + 2} (9 elements)
