@@ -69,5 +69,9 @@ contract TestMatMul is Test {
 
         bool result = matMul.matMul(m, 3, S, O);
         assert(result);
+
+        m[8] = 10;
+        result = matMul.matMul(m, 3, S, O);
+        assert(!result);
     }
 }
