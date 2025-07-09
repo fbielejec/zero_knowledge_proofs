@@ -12,12 +12,12 @@ contract AddTest is Test {
     }
 
     function test_add() public view {
-        (uint x1, uint y1) = add.add(1, 2, 1, 2);
+        (uint x1, uint y1) = add.ecAdd(1, 2, 1, 2);
 
         console.logUint(x1);
         console.logUint(y1);
 
-        (uint x2, uint y2) = add.multiply(1, 2, 2);
+        (uint x2, uint y2) = add.scalarMultiply(1, 2, 2);
 
         console.logUint(x2);
         console.logUint(y2);
