@@ -7,6 +7,9 @@
 - [X] solidity precompiles
 - [X] constructing extension fields
   - order and characteristic of the extension fields are different!
+- [ ] bilinear pairings (mappings)
+ - additive groups
+ - multiplicative groups
 * IN-PROGRESS Homomorphic encryption [0/2]
 :PROPERTIES:
 :ID:       43067f10-f7d9-463d-833e-894da69af237
@@ -27,7 +30,7 @@ Bob verifies that [a]G + [b]G = [12]G
 - eccAdd(address 6)
 - eccMul(address 7)
 - eccPairing(address 8)
-* IN-PROGRESS Extension fields
+* DONE Extension fields
 ** DONE Example: extending $\mathbb{F}_{3}$ to $\mathbb{F}_{3^2}$ ($m = 2$)
 
 #+BEGIN_SRC sage :session . :exports both
@@ -40,7 +43,7 @@ R_F3
 
 m = 2
 
-# finding a polynomial irreducible in R of degree m = 2
+# finding an irreducible polynomial with coefficients in R and of degree m = 2
 P = R_F3.random_element();
 while (not (P.is_irreducible() and (P.degree() == m))):
   P = R_F3.random_element();
@@ -83,9 +86,10 @@ while not (len(F_ext) == 3**2):
     p = F3i.random_element();
     F_ext.add(p.mod(P));
 
-print(f"Taking the elements in the ring modulo the irreducible polynomial {P} we get the set {F_ext} ({len(F_ext)} elements)")
+print(f"Taking the elements in the {F3i} modulo the irreducible polynomial P(i)={P} we get the set {F_ext} ({len(F_ext)} elements)")
 #+END_SRC
 
 #+RESULTS:
 : i^2 + 1 is irreducible: True
-: Taking the elements in the ring modulo the irreducible polynomial i^2 + 1 we get the set {0, 1, 2, 2*i, 2*i + 1, 2*i + 2, i, i + 1, i + 2} (9 elements)
+: Taking the elements in the Univariate Polynomial Ring in i over Finite Field of size 3 modulo the irreducible polynomial P(i)=i^2 + 1 we get the set {0, 1, 2, 2*i, 2*i + 1, 2*i + 2, i, i + 1, i + 2} (9 elements)
+: 2
