@@ -1,7 +1,55 @@
 * IN-PROGRESS hw5
 - https://almondine-song-c43.notion.site/Homework-5-961b5df93d0a4698963b88bf7ff94f84
 
-** IN-PROGRESS Generating test data for solidity test cases:
+** DONE Problem 1: Rational numbers
+
+We’re going to do zero knowledge addition again.
+
+Claim: "I know two rational numbers that add up to num/den"
+
+Proof: ([A], [B], num, den)
+
+Here, num is the numerator of the rational number and den is the denominator.
+
+#+BEGIN_SRC Solidity
+struct ECPoint {
+        uint256 x;
+        uint256 y;
+}
+
+function rationalAdd(ECPoint calldata A, ECPoint calldata B, uint256 num, uint256 den) public view returns (bool verified) {
+// return true if the prover knows two numbers that add up to num/den
+}
+#+END_SRC
+
+Solidity/EVM has two functions you may find handy: 'mulmod' (which does multiplication modulo p) and the precompile 'modExp' which does modular exponentiation.
+
+Although 'modExp' does not let you raise to the power of -1, you can accomplish the same thing by raising a number to 'curve_order - 2'.
+
+The following identity will be handy:
+
+#+BEGIN_SRC
+pow(a, -1, curve_order) == pow(a, curve_order - 2, curve_order)
+#+END_SRC
+
+(This is [[id:bfc4c13f-a0cf-4772-bdf9-1802b3ba7080][Fermat's Little Theorem]])
+
+To accomplish 'pow' the precompile 'modExp' may be handy.
+
+#+BEGIN_SRC Solidity
+function modExp(uint256 base, uint256 exp, uint256 mod)
+                public
+                view
+                returns (uint256) {
+
+                bytes memory precompileData = abi.encode(32, 32, 32, base, exp, mod);
+    (bool ok, bytes memory data) = address(5).staticcall(precompileData);
+    require(ok, "expMod failed");
+    return abi.decode(data, (uint256));
+}
+#+END_SRC
+
+*** DONE Generating test data for solidity test cases:
 
 #+BEGIN_SRC sage :session . :exports both
 # bn128
@@ -31,3 +79,30 @@ a*G + b*G == (Fq(num) * Fq(den)**(-1)) * G
 : (3353031288059533942658390886683067124040920775575537747144343083137631628272 : 19321533766552368860946552437480515441416830039777911637913418824951667761761 : 1)
 : True
 : True
+
+** IN-PROGRESS Problem 2: Matrix Multiplication
+
+Your contract should implement matrix multiplication of an $n \times n$ matrix *M* of uint256 and a $n \times 1$ vector of points *s*.
+It validates the claim that matrix $Ms = o$ where $o$ is a $n \tiomes 1$ matrix of uint256.
+You will need to multiply *o* by the generator on-chain so that both sides have the same type.
+
+#+BEGIN_SRC sage :session . :exports both
+import numpy as np
+
+# bn128
+q=21888242871839275222246405745257275088696311157297823662689037894645226208583
+Fq=GF(q)
+E = EllipticCurve(Fq, [0,3])
+G = E(1,2)
+
+
+P=E.random_point()
+Q=E.random_point()
+R=E.random_point()
+
+1*P + 2*Q + 3*R
+
+#+END_SRC
+
+#+RESULTS:
+: (6788709346508712205957731795154170309459336075004080969931528397955064149690 : 19355483952948329641613082502328650506163519131697314273726590802238672455745 : 1)

@@ -14,7 +14,6 @@ contract TestRationalNumbers is Test {
     function test_rationalAdd() public view {
         uint256 a = 2;
         uint256 b = 3;
-
         uint256 den = 2;
         uint256 num = (a + b) * den;
 
