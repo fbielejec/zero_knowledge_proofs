@@ -33,7 +33,7 @@ contract TestRationalNumbers is Test {
             den
         );
 
-        assertEq(verifies, true);
+        assert(verifies);
 
         (uint256 xA_prime, uint256 yA_prime) = rationalNumbers.scalarMultiply(
             xG,
@@ -46,13 +46,13 @@ contract TestRationalNumbers is Test {
             4
         );
 
-        bool not_verifies = rationalNumbers.rationalAdd(
+        verifies = rationalNumbers.rationalAdd(
             ECPoint(xA_prime, yA_prime),
             ECPoint(xB_prime, yB_prime),
             num,
             den
         );
 
-        assertEq(not_verifies, false);
+        assert(!verifies);
     }
 }

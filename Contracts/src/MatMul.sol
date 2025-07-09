@@ -33,16 +33,22 @@ contract MatMul {
         (Cx, Cy) = abi.decode(answer, (uint, uint));
     }
 
+    // returns true if Ms == o element-wise.
     function matMul(
         uint256[] calldata matrix,
         uint256 n, // n x n for the matrix
         ECPoint[] calldata s, // n elements
         ECPoint[] calldata o // n elements
     ) public view returns (bool verified) {
-        // TODO revert if dimensions don't make sense or the matrices are empty
-        // return true if Ms == o element-wise.
-        // You need to do n equality checks.
+        // revert if the matrices are empty
+        require(n > 0, "n needs to be at least 1");
 
+        // reverts if dimensions don't make sense
+        require(matrix.length == n * n, "m is not an n x n matrix");
+        require(s.length == n, "a is not an n x 1 matrix");
+        require(o.length == n, "o is not an 1 x n matrix");
+
+        // performs n equality checks
         for (uint256 row = 0; row < n; row++) {
             (uint256 Ox, uint256 Oy) = scalarMultiply(
                 s[0].x,

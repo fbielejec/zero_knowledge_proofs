@@ -12,7 +12,16 @@ contract TestMatMul is Test {
     }
 
     function test_matMul() public view {
-        uint256[9] memory m = [uint256(1), 2, 3, 4, 5, 6, 7, 8, 9];
+        uint256[] memory m = new uint256[](9);
+        m[0] = uint256(1);
+        m[1] = 2;
+        m[2] = 3;
+        m[3] = 4;
+        m[4] = 5;
+        m[5] = 6;
+        m[6] = 7;
+        m[7] = 8;
+        m[8] = 9;
 
         ECPoint memory P = ECPoint(
             13453625245081473323808800353457225167565869664644760646910557039566341930214,
@@ -48,11 +57,17 @@ contract TestMatMul is Test {
         (uint256 O3x, uint256 O3y) = matMul.ecAdd(mPx, mPy, mQx, mQy);
         (O3x, O3y) = matMul.ecAdd(O3x, O3y, mRx, mRy);
 
-        ECPoint[3] memory O = [
-            ECPoint(O1x, O1y),
-            ECPoint(O2x, O2y),
-            ECPoint(O3x, O3y)
-        ];
-        ECPoint[3] memory S = [P, Q, R];
+        ECPoint[] memory O = new ECPoint[](3);
+        O[0] = ECPoint(O1x, O1y);
+        O[1] = ECPoint(O2x, O2y);
+        O[2] = ECPoint(O3x, O3y);
+
+        ECPoint[] memory S = new ECPoint[](3);
+        S[0] = P;
+        S[1] = Q;
+        S[2] = R;
+
+        bool result = matMul.matMul(m, 3, S, O);
+        assert(result);
     }
 }
