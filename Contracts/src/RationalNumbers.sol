@@ -19,7 +19,7 @@ contract RationalNumbers is EC {
         uint256 denInv = modExp(den, FIELD_MODULUS - 2, FIELD_MODULUS);
         // [num / den] * G
         uint256 scalar = (num * denInv) % FIELD_MODULUS;
-        (uint256 x2, uint y2) = scalarMultiply(1, 2, scalar);
+        (uint256 x2, uint y2) = scalarMultiply(G.x, G.y, scalar);
 
         if (x1 == x2 && y1 == y2) {
             return true;
