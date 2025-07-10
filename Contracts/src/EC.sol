@@ -38,6 +38,12 @@ contract EC {
         (Cx, Cy) = abi.decode(answer, (uint, uint));
     }
 
+    // computes multiplicative inverse x^-1 % mod
+    // uses FLT
+    function modInverse(uint256 x, uint256 mod) public view returns (uint256) {
+        return modExp(x, mod - 2, mod);
+    }
+
     // computes base^exp % mod
     function modExp(
         uint256 base,

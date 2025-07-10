@@ -17,11 +17,11 @@ contract TestRationalNumbers is Test {
         uint256 den = 2;
         uint256 num = (a + b) * den;
 
-        assertEq(a + b, 10 / 2);
+        // this should be done in the base field but the numbers are so small it doesn't matter
+        assertEq(a + b, (num / den));
 
         // bn128 curve generator
-        uint256 xG = 1;
-        uint256 yG = 2;
+        (uint256 xG, uint256 yG) = rationalNumbers.G();
 
         (uint256 xA, uint256 yA) = rationalNumbers.scalarMultiply(xG, yG, a);
         (uint256 xB, uint256 yB) = rationalNumbers.scalarMultiply(xG, yG, b);

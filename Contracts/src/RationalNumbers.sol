@@ -16,11 +16,8 @@ contract RationalNumbers is EC {
         // [a]G + [b]G = A + B = [a+b]G
         (uint256 x1, uint y1) = ecAdd(A.x, A.y, B.x, B.y);
         // den^-1
-        uint256 denInv = modExp(
-            den,
-            SCALAR_FIELD_MODULUS - 2,
-            SCALAR_FIELD_MODULUS
-        );
+        uint256 denInv = modInverse(den, SCALAR_FIELD_MODULUS);
+
         // [num / den] * G
         uint256 scalar = (num * denInv) % SCALAR_FIELD_MODULUS;
         (uint256 x2, uint y2) = scalarMultiply(G.x, G.y, scalar);
