@@ -18,3 +18,5 @@
 | [[file:homework_4.org][Homework 4]] | Homework 4 (ECDSA)                          |
 | [[file:lecture_5.org][Lecture 5]]  | Notes: lecture 5                            |
 | [[file:homework_5.org][Homework 5]] | Homework 4 (EC calculations in Solidity)    |
+| [[file:lecture_6.org][Lecture 6]]  | Notes: lecture 6                            |
+| [[file:homework_6.org][Homework 6]] | Homework 6 (Pairings in Solidity)           |

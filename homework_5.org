@@ -1,6 +1,5 @@
-* IN-PROGRESS hw5
+* DONE hw5
 - https://almondine-song-c43.notion.site/Homework-5-961b5df93d0a4698963b88bf7ff94f84
-
 ** DONE Problem 1: Rational numbers
 
 We’re going to do zero knowledge addition again.
@@ -80,7 +79,7 @@ a*G + b*G == (Fq(num) * Fq(den)**(-1)) * G
 : True
 : True
 
-** IN-PROGRESS Problem 2: Matrix Multiplication
+** DONE Problem 2: Matrix Multiplication
 
 Your contract should implement matrix multiplication of an $n \times n$ matrix *M* of uint256 and a $n \times 1$ vector of points *s*.
 It validates the claim that matrix $Ms = o$ where $o$ is a $n \tiomes 1$ matrix of uint256.

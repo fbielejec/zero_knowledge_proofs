@@ -1,0 +1,5 @@
+* NOTES
+- pairings
+- pairing groups
+- order of the pairing groups
+- pairings in Solidity (precompile)
