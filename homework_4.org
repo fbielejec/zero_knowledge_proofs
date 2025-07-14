@@ -1,4 +1,8 @@
-* DONE ECDSA from scratch`
+* DONE ECDS
+:PROPERTIES:
+:ID:       6868106e-df36-4c65-8f16-f5b42ae3db2c
+:END:
+
 - https://almondine-song-c43.notion.site/Homework-4-ec8534279e2045479353509d5c3c73a1
 
 Implement ECDSA from scratch.
@@ -14,6 +18,21 @@ You may use a library for point multiplication, but everything else you must do 
 Remember, when you compute the multiplicative inverse, you need to do it with respect to the curve order.
 
 Pay close attention to the distinction between the curve order and the prime number $p$ we compute the modulus of $y^2=x^3+b \pmod p$.
+** Materials
+- [ ] https://en.wikipedia.org/wiki/Elliptic_Curve_Digital_Signature_Algorithm
+- [ ] Digital Signatures (chap 4) from An Introduction to Mathematical Cryptography
+- [ ] Authentication and digital signatures from Cryptography Algorithms
+- [ ] https://www.rareskills.io/post/ecdsa-tutorial
+
+** IN-PROGRESS Notes
+- components
+- EC discrete log
+- two attempts at creating a scheme
+ - differrent private and public parts
+ - both lead to undersirable outcomes: one is underconstrained (Q can be picked at random, as the discrete log relation Q=qG is not veriofied)
+ - another leads to revealing the private key p
+- It turns out that proving we know the discrete log of two points without revealing them is easier than proving we know the discrete log of one point without revealing the single discrete log
+- this protocol is interactive: Fiat-Shamir Transform to make it non-interactive
 
 ** ECDSA Parameters
 - $q$: a prime number.

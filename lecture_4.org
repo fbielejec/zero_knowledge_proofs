@@ -367,6 +367,65 @@ print(f"log_G(M) = {k}")  # Output: 17
 #+RESULTS:
 : log_G(M) = 17
 
+** Double-And-Add algorithm for EC scalar multiplication
+:PROPERTIES:
+:ID:       ea70ba33-00a4-4083-aa91-41b6004dd99f
+:END:
+#+BEGIN_SRC sage :session . :exports both
+
+# TODO P+O and P+(-P)
+def add(P1,P2):
+  x1=P1[0];x2=P2[0];y1=P1[1];y2=P2[1];
+  lbda = (y2-y1) / (x2-x1);
+  x3 = lbda^2 - x1 - x2
+  return (x3, lbda*(x1 - x3) - y1);
+
+def double(P,a):
+  # doubling a point at infty = infty
+  if ((P[0] == 0) and (P[1] == 1)):
+    return (0, 1)
+  # doubling a point of order 2 (tangent is vertical)
+  if P[1] == 0:
+    return (0, 1)
+  x=P[0];y=P[1];
+  lbda = (3*x^2 + a) / (2*y);
+  x3 = lbda^2 - 2*x;
+  return (x3,lbda*(x-x3) - y);
+
+# double-and-add multiplication
+def mult(n, P, a):
+    Q = (0, 1)
+    while n > 0:
+        if n % 2 == 1:
+            if Q == (0, 1):
+                Q = P
+            else:
+                Q = add(Q, P)
+        P = double(P, a)
+        n = n // 2
+    return Q
+
+q=13
+Fq = GF(q)
+a=8;b=8
+E_Fq = EllipticCurve(Fq, [a,b])
+E_Fq
+
+P=E_Fq.random_point()
+print(f"P={P}")
+
+n = 6
+
+(n)*P
+mult(n, P, a)
+#+END_SRC
+
+#+RESULTS:
+: Elliptic Curve defined by y^2 = x^3 + 8*x + 8 over Finite Field of size 13
+: P=(10 : 3 : 1)
+: (1 : 2 : 1)
+: (1, 2)
+
 * IN-PROGRESS NOTES
 - homomorphism
 
