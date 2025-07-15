@@ -1,25 +1,28 @@
-* IN-PROGRESS Hw 6
-- https://almondine-song-c43.notion.site/Homework-6-8592a0f62a904fed996144d0e4f95e62
+* DONE Hw 6
+https://almondine-song-c43.notion.site/Homework-6-8592a0f62a904fed996144d0e4f95e62
 
 We are asked to verify the following computation in zero knowledge:
 
 $a \cdot b = \alpha \cdot \beta + (x_1 + x_2 + x_3) \cdot \gamma + c \cdot \delta$
 
-where the verifier knows only $x_1$, $x_2$ and $x_3$.
+where the verifier knows only $x_1$, $x_2$ and $x_3$ and all the other values learns are hidden "in the exponent".
 
 The prover computes:
 
-$A_1=[a] \mathbb{G}_{1}$
-$B_2=[b] \mathbb{G}_{2}$
-$\bar{\mathrm{A}}_{1}= [\alpha] \mathbb{G}_{1}$
-$\bar{\mathrm{B}}_2= [\beta] \mathbb{G}_{2}$
-$\Gamma_2= [\gamma] \mathbb{G}_{2}$
-$C_1= [c] \mathbb{G}_{1}$
-$\Delta_2= [\delta] \mathbb{G}_{2}$
+- $A_1=[a] \mathbb{G}_{1}$
+- $B_2=[b] \mathbb{G}_{2}$
+- $\bar{\mathrm{A}}_{1}= [\alpha] \mathbb{G}_{1}$
+- $\bar{\mathrm{B}}_2= [\beta] \mathbb{G}_{2}$
+- $\Gamma_2= [\gamma] \mathbb{G}_{2}$
+- $C_1= [c] \mathbb{G}_{1}$
+- $\Delta_2= [\delta] \mathbb{G}_{2}$
 
 where:
-- $[\cdot]$ denotes elliptic curve point scalar multiplications
+
+- $[\cdot]$ denotes elliptic curve point scalar multiplication
 - $\mathbb{G}_1,\mathbb{G}_2$ are the generators of the $E(\mathbb{F}_p)$ and $E(\mathbb{F}_p^2)$ respectively
+- he/she immediately forgets $\alpha,\beta,\gamma,\delta$ (toxic waste)
+
 
 Verifier then checks if:
 
@@ -29,8 +32,8 @@ where:
 - $e: \med \langle \mathbb{G}_1 \rangle \times \langle \mathbb{G}_2 \rangle \rightarrow \mathbb{F}_{p^{12}}$ is the Ate pairing (a billinear map)
 - $g^{0}$ is the neutral element in the multiplicative group of $\mathbb{F}_{p^{12}}$
 
-Sage implementation below:
-
+** Sage POC
+#+latex: {\scriptsize
 #+BEGIN_SRC sage  :session . :exports both
 import py_ecc.bn128 as bn128
 from py_ecc.fields import (
@@ -99,9 +102,10 @@ print(f"Gamma2: {Gamma2}")
 print(f"C1: {C1}")
 print(f"Delta2: {Delta2}")
 
-assert(-Fp(a1) * Fp(b2) + Fp(alpha1)*Fp(beta2) + Fp(x1+x2+x3)*Fp(gamma2) + Fp(c1)*Fp(delta2) == Fp(0))
+assert(-Fp(a1) * Fp(b2) + Fp(alpha1)*Fp(beta2) + \
+        Fp(x1+x2+x3) * Fp(gamma2) + Fp(c1) * Fp(delta2) == Fp(0))
 
-pairing(A1,B2) * pairing(Alpha1,Beta2) * pairing((x1+x2+x3)*G1,Gamma2)*pairing(C1,Delta2) == FQ12.one()
+pairing(A1,B2) * pairing(Alpha1,Beta2) * pairing((x1+x2+x3)*G1,Gamma2) * pairing(C1,Delta2) == FQ12.one()
 #+END_SRC
 
 #+RESULTS:
@@ -113,3 +117,5 @@ pairing(A1,B2) * pairing(Alpha1,Beta2) * pairing((x1+x2+x3)*G1,Gamma2)*pairing(C
 : C1: (10415861484417082502655338383609494480414113902179649885744799961447382638712 : 10196215078179488638353184030336251401353352596818396260819493263908881608606 : 1)
 : Delta2: (1513450333913810775282357068930057790874607011341873340507105465411024430745*i + 11166086885672626473267565287145132336823242144708474818695443831501089511977 : 20245151454212206884108313452940569906396451322269011731680309881579291004202*i + 10576778712883087908382530888778326306865681986179249638025895353796469496812 : 1)
 : True
+
+#+latex: }
