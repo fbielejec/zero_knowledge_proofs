@@ -3,7 +3,7 @@ pragma solidity ^0.8.13;
 
 import { EC, ECPoint as G1Point } from "../src/EC.sol";
 
-// coefficient follow the order in the Solidity precompile
+// coefficients follow the order in the Solidity precompile
 struct G2Point {
     uint256[2] x; // [a1,a0] -> a0 + a1*i
     uint256[2] y; // [a1,a0] -> a0 + a1*i
