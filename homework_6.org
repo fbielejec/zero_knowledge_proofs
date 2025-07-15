@@ -30,7 +30,12 @@ $e(A_{1},B_{1}) \times e(\bar{\mathrm{A}}_{1},\bar{\mathrm{B}}_{2}) \times e([x_
 
 where:
 - $e: \med \langle \mathbb{G}_1 \rangle \times \langle \mathbb{G}_2 \rangle \rightarrow \mathbb{F}_{p^{12}}$ is the Ate pairing (a billinear map)
+- $g=e(\mathbb{G}_{1}, \mathbb{G}_{2})$
 - $g^{0}$ is the neutral element in the multiplicative group of $\mathbb{F}_{p^{12}}$
+
+This is possible because each pairing results in an element of $\mathbb{F}_{p^{12}}$, and the check becomes:
+
+$g^{a \cdot b} = g^{\alpha \cdot \beta} \times g^{ (x_1 + x_2 + x_3) \cdot \gamma} \times g^{ c \cdot \delta}=g^{\alpha \cdot \beta + (x_1 + x_2 + x_3) \cdot \gamma + c \cdot \delta}$
 
 ** Sage POC
 #+latex: {\scriptsize
