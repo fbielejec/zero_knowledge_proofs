@@ -1,8 +1,39 @@
 * IN-PROGRESS Hw 6
 - https://almondine-song-c43.notion.site/Homework-6-8592a0f62a904fed996144d0e4f95e62
 
+We are asked to verify the following computation in zero knowledge:
+
+$a \cdot b = \alpha \cdot \beta + (x_1 + x_2 + x_3) \cdot \gamma + c \cdot \delta$
+
+where the verifier knows only $x_1$, $x_2$ and $x_3$.
+
+The prover computes:
+
+$A_1=[a] \mathbb{G}_{1}$
+$B_2=[b] \mathbb{G}_{2}$
+$\bar{\mathrm{A}}_{1}= [\alpha] \mathbb{G}_{1}$
+$\bar{\mathrm{B}}_2= [\beta] \mathbb{G}_{2}$
+$\Gamma_2= [\gamma] \mathbb{G}_{2}$
+$C_1= [c] \mathbb{G}_{1}$
+$\Delta_2= [\delta] \mathbb{G}_{2}$
+
+where:
+- $[\cdot]$ denotes elliptic curve point scalar multiplications
+- $\mathbb{G}_1,\mathbb{G}_2$ are the generators of the $E(\mathbb{F}_p)$ and $E(\mathbb{F}_p^2)$ respectively
+
+Verifier then checks if:
+
+$e(A_{1},B_{1}) \times e(\bar{\mathrm{A}}_{1},\bar{\mathrm{B}}_{2}) \times e([x_1+x_2+x_3]\mathbb{G}_1, \Gamma_2) \times e(C_1,\Delta_2) == g^{0}$
+
+where:
+- $e: \med \langle \mathbb{G}_1 \rangle \times \langle \mathbb{G}_2 \rangle \rightarrow \mathbb{F}_{p^{12}}$ is the Ate pairing (a billinear map)
+- $g^{0}$ is the neutral element in the multiplicative group of $\mathbb{F}_{p^{12}}$
+
 #+BEGIN_SRC sage  :session . :exports both
 import py_ecc.bn128 as bn128
+from py_ecc.fields import (
+    bn128_FQ12 as FQ12
+)
 
 p=21888242871839275222246405745257275088696311157297823662689037894645226208583
 Fp=GF(p)
@@ -38,11 +69,23 @@ def pairing(P,Q):
   # returns an element in FQ12 (extension tower Fp^2 -> Fp^6 -> Fp12)
   return ePQ
 
-g=pairing(G1,G2)
-g
+#g=pairing(G1,G2)
+#g
 
+a1=10
+b2=11
+alpha1=5
+beta2=6
+x1=1;x2=2;x3=3
+gamma2=4
+c1=7
+delta2=8
+
+assert(-Fp(a1) * Fp(b2) + Fp(alpha1)*Fp(beta2) + Fp(x1+x2+x3)*Fp(gamma2) + Fp(c1)*Fp(delta2) == Fp(0))
+
+pairing(-a1*G1,b2*G2) * pairing(alpha1*G1,beta2*G2) * pairing((x1+x2+x3)*G1,gamma2*G2)*pairing(c1*G1,delta2*G2) == FQ12.one()
 
 #+END_SRC
 
 #+RESULTS:
-: (18443897754565973717256850119554731228214108935025491924036055734000366132575, 10734401203193558706037776473742910696504851986739882094082017010340198538454, 5985796159921227033560968606339653189163760772067273492369082490994528765680, 4093294155816392700623820137842432921872230622290337094591654151434545306688, 642121370160833232766181493494955044074321385528883791668868426879070103434, 4527449849947601357037044178952942489926487071653896435602814872334098625391, 3758435817766288188804561253838670030762970764366672594784247447067868088068, 18059168546148152671857026372711724379319778306792011146784665080987064164612, 14656606573936501743457633041048024656612227301473084805627390748872617280984, 17918828665069491344039743589118342552553375221610735811112289083834142789347, 19455424343576886430889849773367397946457449073528455097210946839000147698372, 7484542354754424633621663080190936924481536615300815203692506276894207018007)
+: True
