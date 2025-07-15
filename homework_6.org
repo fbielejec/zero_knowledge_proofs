@@ -29,6 +29,8 @@ where:
 - $e: \med \langle \mathbb{G}_1 \rangle \times \langle \mathbb{G}_2 \rangle \rightarrow \mathbb{F}_{p^{12}}$ is the Ate pairing (a billinear map)
 - $g^{0}$ is the neutral element in the multiplicative group of $\mathbb{F}_{p^{12}}$
 
+Sage implementation below:
+
 #+BEGIN_SRC sage  :session . :exports both
 import py_ecc.bn128 as bn128
 from py_ecc.fields import (
@@ -81,10 +83,17 @@ gamma2=4
 c1=7
 delta2=8
 
+A1=-a1*G1
+B2=b2*G2
+Alpha1=alpha1*G1
+Beta2=beta2*G2
+Gamma2=gamma2*G2
+C1=c1*G1
+Delta2=delta2*G2
+
 assert(-Fp(a1) * Fp(b2) + Fp(alpha1)*Fp(beta2) + Fp(x1+x2+x3)*Fp(gamma2) + Fp(c1)*Fp(delta2) == Fp(0))
 
-pairing(-a1*G1,b2*G2) * pairing(alpha1*G1,beta2*G2) * pairing((x1+x2+x3)*G1,gamma2*G2)*pairing(c1*G1,delta2*G2) == FQ12.one()
-
+pairing(A1,B2) * pairing(Alpha1,Beta2) * pairing((x1+x2+x3)*G1,Gamma2)*pairing(C1,Delta2) == FQ12.one()
 #+END_SRC
 
 #+RESULTS:

@@ -50,6 +50,6 @@ test-contracts:
 	forge test -vv
 
 .PHONY: deploy-contracts
-deploy-token: # Deploy contract
-deploy-token:
+deploy: # Deploy contracts
+deploy:
 	PRIVATE_KEY=$(PRIVATE_KEY) forge script script/DeployAdd.s.sol --broadcast --rpc-url anvil
