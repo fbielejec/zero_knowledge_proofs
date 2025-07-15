@@ -56,10 +56,10 @@ def pairing(P,Q):
                         bn128.FQ2([int(Q[1][0]), int(Q[1][1])])),
                        (bn128.FQ(int(P[0])), bn128.FQ(int(P[1]))) );
   coeff = ePQ.coeffs;
-  return int(coeff[0]) * x^12 + int(coeff[1]) * x^11 + int(coeff[2]) * x^10 + \
-         int(coeff[3]) * x^9 + int(coeff[4]) * x^8 + int(coeff[5]) * x^7 + \
-         int(coeff[6]) * x^6 + int(coeff[7]) * x^5 + int(coeff[8]) * x^4 + \
-         int(coeff[9]) * x^3 + int(coeff[10]) * x^2 + int(coeff[11]) * x
+  return int(coeff[0]) * x^11 + int(coeff[1]) * x^10 + int(coeff[2]) * x^9 + \
+         int(coeff[3]) * x^8 + int(coeff[4]) * x^7 + int(coeff[5]) * x^6 + \
+         int(coeff[6]) * x^5 + int(coeff[7]) * x^4 + int(coeff[8]) * x^3 + \
+         int(coeff[9]) * x^2 + int(coeff[10]) * x^1 + int(coeff[11])
 
 A = 3 * G1
 B = 4 * G2
@@ -69,23 +69,6 @@ D = 12 * G2
 lhs = pairing(A,B)
 rhs = pairing(C,D)
 lhs == rhs
-
-#
-
-#eAB=int(lhs.coeffs[0]) * x^12 + \
-#int(lhs.coeffs[1]) * x^11 + \
-#int(lhs.coeffs[2]) * x^10 + \
-#int(lhs.coeffs[3]) * x^9 + \
-#int(lhs.coeffs[4]) * x^8 + \
-#int(lhs.coeffs[5]) * x^7 + \
-#int(lhs.coeffs[6]) * x^6 +\
-#int(lhs.coeffs[7]) * x^5 + \
-#int(lhs.coeffs[8]) * x^4 + \
-#int(lhs.coeffs[9]) * x^3 + \
-#int(lhs.coeffs[10]) * x^2 + \
-#int(lhs.coeffs[11]) * x
-
-#Fp12(eAB)
 
 #+END_SRC
 
