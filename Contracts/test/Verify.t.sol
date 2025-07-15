@@ -2,7 +2,7 @@
 pragma solidity ^0.8.13;
 
 import { Test, console } from "forge-std/Test.sol";
-import { G1Point, G2Point } from "../src/Verify.sol";
+import { Verify, G1Point, G2Point } from "../src/Verify.sol";
 
 contract TestVerify is Test {
     Verify public verify;
@@ -13,12 +13,12 @@ contract TestVerify is Test {
 
     function test_verify() public view {
         // a + i*b -> [a,b]
-        G1Point A1 = G1Point(
+        G1Point memory A1 = G1Point(
             4444740815889402603535294170722302758225367627362056425101568584910268024244,
             11350979775309792057627585728092606167309854128733159954336302813744955667163
         );
 
-        G2Point B2 = G2Point(
+        G2Point memory B2 = G2Point(
             [
                 8472151341754925747860535367990505955708751825377817860727104273184244800723,
                 15624790064206502667756020446826209080711344272800176518784649088946231692936
@@ -29,12 +29,12 @@ contract TestVerify is Test {
             ]
         );
 
-        G1Point Alpha1 = G1Point(
+        G1Point memory Alpha1 = G1Point(
             10744596414106452074759370245733544594153395043370666422502510773307029471145,
             848677436511517736191562425154572367705380862894644942948681172815252343932
         );
 
-        G2Point Beta2 = G2Point(
+        G2Point memory Beta2 = G2Point(
             [
                 10191129150170504690859455063377241352678147020731325090942140630855943625622,
                 12345624066896925082600651626583520268054356403303305150512393106955803260718
@@ -45,7 +45,7 @@ contract TestVerify is Test {
             ]
         );
 
-        G2Point Gamma2 = G2Point(
+        G2Point memory Gamma2 = G2Point(
             [
                 18936818173480011669507163011118288089468827259971823710084038754632518263340,
                 18556147586753789634670778212244811446448229326945855846642767021074501673839
@@ -56,12 +56,12 @@ contract TestVerify is Test {
             ]
         );
 
-        G1Point C1 = G1Point(
+        G1Point memory C1 = G1Point(
             10415861484417082502655338383609494480414113902179649885744799961447382638712,
             10196215078179488638353184030336251401353352596818396260819493263908881608606
         );
 
-        G2Point Delta2 = G2Point(
+        G2Point memory Delta2 = G2Point(
             [
                 11166086885672626473267565287145132336823242144708474818695443831501089511977,
                 1513450333913810775282357068930057790874607011341873340507105465411024430745
@@ -71,5 +71,20 @@ contract TestVerify is Test {
                 20245151454212206884108313452940569906396451322269011731680309881579291004202
             ]
         );
+
+        bool verifies = verify.verify(
+            A1,
+            B2,
+            Alpha1,
+            Beta2,
+            Gamma2,
+            C1,
+            Delta2,
+            1,
+            2,
+            3
+        );
+
+        assert(verifies);
     }
 }

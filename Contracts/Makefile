@@ -24,32 +24,32 @@ stop-anvil: # Stop local anvil node
 stop-anvil:
 	pkill anvil
 
-.PHONY: watch-contracts
-watch-contracts: # watcher on the eth contracts. Scripts dir is watched by default
-watch-contracts:
+.PHONY: watch
+watch: # watcher on the eth contracts. Scripts dir is watched by default
+watch:
 	forge build --watch src/*.sol test/*.sol
 
-.PHONY: format-contracts
-format-contracts: # Format solidity contracts
-format-contracts:
+.PHONY: format
+format: # Format solidity contracts
+format:
 	npx prettier --write --plugin=prettier-plugin-solidity 'src/*.sol' 'script/*.sol' 'test/*.sol'
 
-.PHONY: lint-contracts
-lint-contracts: # Lint solidity contracts
-lint-contracts:
+.PHONY: lint
+lint: # Lint solidity contracts
+lint:
 	npx solhint -c .solhint.json 'src/*.sol' 'script/*.sol'
 
-.PHONY: compile-contracts
+.PHONY: compile
 compile-contracts: # Compile solidity contracts
 compile-contracts:
 	forge build
 
-.PHONY: test-contracts
-test-contracts: # Run test suite
-test-contracts:
+.PHONY: test
+test: # Run test suite
+test:
 	forge test -vv
 
-.PHONY: deploy-contracts
+.PHONY: deploy
 deploy: # Deploy contracts
 deploy:
 	PRIVATE_KEY=$(PRIVATE_KEY) forge script script/DeployAdd.s.sol --broadcast --rpc-url anvil
