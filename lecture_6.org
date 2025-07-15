@@ -17,13 +17,19 @@ n=G1.order()
 k=2
 t=E.trace_of_frobenius()
 
-Fp2 = GF((p,k), name='i', modulus=x^k + 1)
+Rx.<x> = Fp[]
+Fp2 = GF((p,k), name='i', modulus=Rx(x^k + 1))
 
+#https://github.com/ethereum/py_ecc/blob/main/py_ecc/fields/field_properties.py#L31
+#(82, 0, 0, 0, 0, 0, -18, 0, 0, 0, 0, 0) Implied + 1
+# 82*x^12 + 0*x^11 + 0*x^10 + 0*x^9 + 0*x^8 + 0*x^7 + (-18)*x^6 + 0*x^5 + 0*x^4 + 0*x^3 + 0*x^2 + 0*x + 1
+Fp12 = GF((p,12), name='i', modulus = 82*x^12-18 * x^6 + 1)
+g=Fp12.gen()
+
+# https://eips.ethereum.org/EIPS/eip-197#:~:text=q%20%3D%2021888242871839275222246405745257275088548364400416034343698204186575808495617.-,Definition%20of%20the%20groups,-The%20groups%20G_1
 a=0
 TwistB=3*Fp2([9,1])^(-1) # 3/(i+9)
-
 E2 = EllipticCurve(Fp2, [a,TwistB])
-#E2 = E.base_extend(Fp2)
 
 # [a,b] -> a + i*b
 x_G2 = Fp2([
@@ -42,24 +48,46 @@ G2 = E2(x_G2, y_G2)
 assert(n*G2 == E2(0))
 
 # Show the generators
-#G1, G2
+#G1, G2, g
 
 # computes e(Q \in G2, P \in G1)
 def pairing(P,Q):
- return bn128.pairing( (bn128.FQ2([int(Q[0][0]), int(Q[0][1])]),
+  ePQ = bn128.pairing( (bn128.FQ2([int(Q[0][0]), int(Q[0][1])]),
                         bn128.FQ2([int(Q[1][0]), int(Q[1][1])])),
-                       (bn128.FQ(int(P[0])), bn128.FQ(int(P[1]))) )
+                       (bn128.FQ(int(P[0])), bn128.FQ(int(P[1]))) );
+  coeff = ePQ.coeffs;
+  return int(coeff[0]) * x^12 + int(coeff[1]) * x^11 + int(coeff[2]) * x^10 + \
+         int(coeff[3]) * x^9 + int(coeff[4]) * x^8 + int(coeff[5]) * x^7 + \
+         int(coeff[6]) * x^6 + int(coeff[7]) * x^5 + int(coeff[8]) * x^4 + \
+         int(coeff[9]) * x^3 + int(coeff[10]) * x^2 + int(coeff[11]) * x
 
 A = 3 * G1
 B = 4 * G2
 C = 1 * G1
 D = 12 * G2
 
-pairing(A,B) == pairing(C,D)
+lhs = pairing(A,B)
+rhs = pairing(C,D)
+lhs == rhs
+
+#
+
+#eAB=int(lhs.coeffs[0]) * x^12 + \
+#int(lhs.coeffs[1]) * x^11 + \
+#int(lhs.coeffs[2]) * x^10 + \
+#int(lhs.coeffs[3]) * x^9 + \
+#int(lhs.coeffs[4]) * x^8 + \
+#int(lhs.coeffs[5]) * x^7 + \
+#int(lhs.coeffs[6]) * x^6 +\
+#int(lhs.coeffs[7]) * x^5 + \
+#int(lhs.coeffs[8]) * x^4 + \
+#int(lhs.coeffs[9]) * x^3 + \
+#int(lhs.coeffs[10]) * x^2 + \
+#int(lhs.coeffs[11]) * x
+
+#Fp12(eAB)
+
 #+END_SRC
 
 #+RESULTS:
-: (2046729899889901964437012741252570163462327955511008570480857952505584629957*i + 4351401811647638138392695977895401859084096897123577305203754529537814663109 : 14316075702276096164483565793667862351398527813470041574939773541551376891710*i + 322506915963699862059245473966830598387691259163658767351233132602858049743 : 1)
-: 2046729899889901964437012741252570163462327955511008570480857952505584629957*i + 4351401811647638138392695977895401859084096897123577305203754529537814663109
-: 14316075702276096164483565793667862351398527813470041574939773541551376891710*i + 322506915963699862059245473966830598387691259163658767351233132602858049743
 : True
