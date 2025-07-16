@@ -21,7 +21,7 @@ where:
 
 - $[\cdot]$ denotes elliptic curve point scalar multiplication
 - $\mathbb{G}_1,\mathbb{G}_2$ are the generators of the $E(\mathbb{F}_p)$ and $E(\mathbb{F}_p^2)$ respectively
-- he/she immediately forgets $\alpha,\beta,\gamma,\delta$ (toxic waste)
+# - he/she immediately forgets $\alpha,\beta,\gamma,\delta$ (toxic waste)
 
 
 Verifier then checks if:

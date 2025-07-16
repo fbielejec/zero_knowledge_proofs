@@ -17,7 +17,8 @@ p=21888242871839275222246405745257275088696311157297823662689037894645226208583
 Fp=GF(p)
 E = EllipticCurve(Fp, [0,3])
 G1 = E(1,2)
-
+k = 2
+Rx.<x>=Fp[]
 Fp2 = GF(p^k, name='i', modulus=x^k + 1)
 
 # https://eips.ethereum.org/EIPS/eip-197#:~:text=q%20%3D%2021888242871839275222246405745257275088548364400416034343698204186575808495617.-,Definition%20of%20the%20groups,-The%20groups%20G_1
@@ -55,27 +56,67 @@ def pairing(P,Q):
 
 # proof : a*b = c
 a=3; b=4; c=12;
+a*b == c
 aG1 = a * G1
 bG2 = b * G2
 cG1 = 12 * G1
 
-lhs = pairing(aG1,bG2)
-rhs = pairing(cG1, G2)
-lhs == rhs
+pairing(aG1,bG2) == pairing(cG1, G2)
 
 # proof : a*b + c*d = 24
 a=2;b=3;c=2;d=9
+a*b + c*d == 24
 
-(pairing(b*G1,a*G2)*pairing(d*G1,c*G2))==pairing(G1,24*G2)
+pairing(b*G1,a*G2)*pairing(d*G1,c*G2)==pairing(G1,24*G2)
 
 # or
 g=pairing(G1,G2)
 # this is the neutral element of target group FP12 ( G_T)
 assert(g^0==FQ12.one())
 pairing(b*G1,a*G2) * pairing(d*G1,c*G2) == g**24
+
+# proof: xyz = 24
+x=1; y=3; z=8; w=3
+x * y == w
+w * z == 24
+
+X1=x*G1
+Y2=y*G2
+W1=(x*y)*G1
+W2=(x*y)*G2
+Z2=z*G2
+
+#                                                                            to prove w is the same (on both curves)
+pairing(X1,Y2) == pairing(W1,G2) and pairing(W1,Z2) == pairing(G1,24*G2) and pairing(W1,G2) == pairing(G1,W2)
+
+# proof:
+# xy + z = 10
+# y + z =7
+x=2;y=3;z=4;
+x*y+z == 10
+y+z == 7
+
+X1=x*G1
+Y1=y*G1
+Y2=y*G2
+Z1=z*G1
+
+# no need for a pairing to prove the second equation, I can use the additive homomomorphism ([y]G1 + [z]G1 == [y+z]G1)
+pairing(X1,Y2) * pairing(Z1,G2) == pairing(G1, 10*G2) and Y1+Z1==(y+z)*G1
+
 #+END_SRC
 
 #+RESULTS:
-: True
-: True
-: True
+#+begin_example
+True
+True
+True
+True
+True
+True
+True
+True
+True
+True
+True
+#+end_example
