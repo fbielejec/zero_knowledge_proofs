@@ -86,7 +86,7 @@ W1=(x*y)*G1
 W2=(x*y)*G2
 Z2=z*G2
 
-#                                                                            to prove w is the same (on both curves)
+# -------------------------------------------------------------------------- to prove that w is the same (on both curves)
 pairing(X1,Y2) == pairing(W1,G2) and pairing(W1,Z2) == pairing(G1,24*G2) and pairing(W1,G2) == pairing(G1,W2)
 
 # proof:
