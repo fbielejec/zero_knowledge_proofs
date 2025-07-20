@@ -21,3 +21,4 @@
 | [[file:lecture_6.org][Lecture 6]]  | Notes: lecture 6                            |
 | [[file:homework_6.org][Homework 6]] | Homework 6 (Pairings in Solidity)           |
 | [[file:lecture_7.org][Lecture 7]]  | Notes: lecture 7                            |
+| [[file:homework_7.org][Homework 7]] | Hw 7 (Arithmetic Circuits)                  |

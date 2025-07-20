@@ -1,0 +1,31 @@
+* IN-PROGRESS Practice Problems
+- https://rareskills.io/post/arithmetic-circuit#:~:text=in%20that%20book.-,Practice%20Problems,-Create%20an%20arithmetic
+** DONE Create an arithmetic circuit that takes signals $x_1,x_2\ldots,x_n$ and is satisfied if at least one signal is 0.
+$(x_1 -1) \cdot (x_2 -1) \cdot \ldots \cdot (x_n-1) \equiv 0$
+** DONE Create an arithmetic circuit that takes signals  $x_1,x_2\ldots,x_n$ and is satsified if all signals are 1.
+
+$x_1  \cdot x_2 \cdot \ldots \cdot x_n \equiv 1$
+
+** DONE A bipartite graph is a graph that can be colored with two colors such that no two neighboring nodes share the same color. Devise an arithmetic circuit scheme to show you have a valid witness of a 2-coloring of a graph. 
+
+Let $n$ be the number of nodes, let's assign blue = 1, red = 2.
+
+Every node $x_1,x_2,\ldots x_n$ can be either red or blue:
+
+$\forall i \leq n : \quad (x_i-1) \cdot (x_i-2) \equiv 0$
+
+No two neighbouring nodes can have the same colour:
+
+| node_i | node_j | product |
+|      1 |      1 |       1 |
+|      2 |      1 |       2 |
+|      1 |      2 |       2 |
+|      2 |      2 |       4 |
+
+From the table above we can see that the only acceptable product of two neighbouring nodes is 2:
+
+$\forall i,j \leq n, i \neq j: \quad  (x_i\cdot x_j -2) \equiv 0$
+
+Alternatively we can model this constraint as:
+
+$\forall i,j \leq n, i \neq j: \quad  (x_i - x_j)^2 \neq 0$
