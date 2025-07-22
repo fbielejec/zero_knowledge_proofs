@@ -71,19 +71,19 @@ Let's assume n=4.
   $z_1\cdot(1-z_1) \equiv 0$
   $z_0\cdot(1-z_0) \equiv 0$
 
-3) $2^{n-1} + (k-x)$ n-bit binary decomposition constraint:
+3) $2^{n-1} + (k-x)$ n=4 bit binary decomposition constraint:
 
-   $2^3+k-x \equiv 2^4 \cdot a_{3} + 2^2 \cdot a_{2} + 2^1 \cdot a_{1} + 2^0 a_{0}$
+   $2^3+k-x \equiv 2^3 \cdot a_{3} + 2^2 \cdot a_{2} + 2^1 \cdot a_{1} + 2^0 a_{0}$
 
-4) $2^{n-1} + (k-y)$ n-bit binary decomposition constraint:
+4) $2^{n-1} + (k-y)$ n=4-bit binary decomposition constraint:
 
-   $2^3+k-y \equiv 2^4 \cdot b_{3} + 2^2 \cdot b_{2} + 2^1 \cdot b_{1} + 2^0 b_{0}$
+   $2^3+k-y \equiv 2^3 \cdot b_{3} + 2^2 \cdot b_{2} + 2^1 \cdot b_{1} + 2^0 b_{0}$
 
-5) $2^{n-1} + (k-z)$ n-bit binary decomposition constraint:
+5) $2^{n-1} + (k-z)$ n=4-bit binary decomposition constraint:
 
-   $2^3+k-z \equiv 2^4 \cdot c_{3} + 2^2 \cdot c_{2} + 2^1 \cdot c_{1} + 2^0 c_{0}$
+   $2^3+k-z \equiv 2^3 \cdot c_{3} + 2^2 \cdot c_{2} + 2^1 \cdot c_{1} + 2^0 c_{0}$
 
-6) MSB of the decompositions are 1:
+6) MSB of then=4 bit decompositions are 1:
   $a_3 \equiv 1$
   $b_3 \equiv 1$
   $c_3 \equiv 1$
@@ -94,11 +94,16 @@ The problem can be reformulated as "an arithmetic circuit that is satisfied if n
 
 "All signals are 0" can be expressed with the following circuit:
 
-$(1-x_1) \cdot \ldots \cdot (1-x_n) == 1$
+$(1-x_1) \cdot \ldots \cdot (1-x_n) \equiv 1$
 
 Negating it we get:
 
-$1-((1-x_1) \cdot \ldots \cdot (1-x_n)) == 1$
+$1-((1-x_1) \cdot \ldots \cdot (1-x_n)) \equiv 1$
+
+We also need to constrain all $x_i$ to be binary:
+
+
+$\forall i\leq n \quad x_{i} \cdot (1-x_i) \equiv 0$
 
 #+BEGIN_SRC sage :session . :exports both
 #from sympy import symbols
@@ -118,3 +123,64 @@ print(f.subs({x1: 1, x2: 1, x3: 1, x4:1}))
 : 0
 : 1
 : 1
+*** IN-PROGRESS Create an arithmetic circuit to determine if a signal v is a power of two (1, 2, 4, 8, etc).
+/Hint: create an arithmetic circuit that constrains another set of signals to encode the binary representation of v, then place additional restrictions on those signals./
+
+Assuming v is a n-bit number it's binary decomposition is expressed as:
+
+$2^{n-1} \cdot a_{n-1} + \ldots +2^0 \cdot a_0 \equiv v$
+$\forall i\leq n-1 \quad a_{i} \cdot (1-a_i) \equiv 0$
+
+In order for v to be a power of 2 it's MSB must be 1 with all the other bits set to 0:
+
+$a_{n-1} \equiv 1$
+$a_{n-2} \equiv 0$
+$\ldost$
+$a_{0} \equiv 0$
+
+#+BEGIN_SRC sage :session . :exports both
+a3 = var('a3')
+a2 = var('a2')
+a1 = var('a1')
+a0 = var('a0')
+
+c1 = 2^3*a3+2^2*a2+2^1*a1+1*a0 
+c2 = a3 == 1
+c3 = a2 == 0
+c4 = a1 == 0
+c5 = a0 == 0
+
+v=2^3-1
+bin(v)
+
+c1.subs({a3: 1, a2: 0, a1: 0, a0: 0}) == v
+c2.subs({a3: 1})
+c3.subs({a2: 0})
+c4.subs({a1: 0})
+c5.subs({a0: 0})
+
+v=2^3+1
+bin(v)
+
+c1.subs({a3: 1, a2: 0, a1: 0, a0: 1}) == v
+c2.subs({a3: 1})
+c3.subs({a2: 0})
+c4.subs({a1: 0})
+c5.subs({a0: 1})
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+'0b111'
+8 == 7
+1 == 1
+0 == 0
+0 == 0
+0 == 0
+'0b1001'
+9 == 9
+1 == 1
+0 == 0
+0 == 0
+1 == 0
+#+end_example
