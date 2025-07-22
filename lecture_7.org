@@ -1,0 +1,3 @@
+* NOTES
+- boolean ciircuits
+- arithmetic circuits

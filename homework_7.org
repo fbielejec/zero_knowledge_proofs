@@ -1,10 +1,14 @@
 * IN-PROGRESS Practice Problems
 - https://rareskills.io/post/arithmetic-circuit#:~:text=in%20that%20book.-,Practice%20Problems,-Create%20an%20arithmetic
 ** DONE Create an arithmetic circuit that takes signals $x_1,x_2\ldots,x_n$ and is satisfied if at least one signal is 0.
-$(x_1 -1) \cdot (x_2 -1) \cdot \ldots \cdot (x_n-1) \equiv 0$
-** DONE Create an arithmetic circuit that takes signals  $x_1,x_2\ldots,x_n$ and is satsified if all signals are 1.
+
+$x_1  \cdot x_2 \cdot \ldots \cdot x_n \equiv 0$
+$\forall i\leq n \quad x_{i} \cdot (1-x_i) \equiv 0$
+
+** DONE Create an arithmetic circuit that takes signals $x_1,x_2\ldots,x_n$ and is satsified if all signals are 1.
 
 $x_1  \cdot x_2 \cdot \ldots \cdot x_n \equiv 1$
+$\forall i\leq n \quad x_{i} \cdot (1-x_i) \equiv 0$
 
 ** DONE A bipartite graph is a graph that can be colored with two colors such that no two neighboring nodes share the same color. Devise an arithmetic circuit scheme to show you have a valid witness of a 2-coloring of a graph.
 
@@ -82,4 +86,35 @@ Let's assume n=4.
 6) MSB of the decompositions are 1:
   $a_3 \equiv 1$
   $b_3 \equiv 1$
-  $c_3 \equiv 1$ 
+  $c_3 \equiv 1$
+*** DONE Create an arithmetic circuit that takes signals $x_1,x_2\ldots,x_n$, constrains them to be binary, and outputs 1 if at least one of the signals is 1.
+/Hint: this is tricker than it looks. Consider combining what you learned in the first two problems and using the NOT gate./
+
+The problem can be reformulated as "an arithmetic circuit that is satisfied if not all signals are 0".
+
+"All signals are 0" can be expressed with the following circuit:
+
+$(1-x_1) \cdot \ldots \cdot (1-x_n) == 1$
+
+Negating it we get:
+
+$1-((1-x_1) \cdot \ldots \cdot (1-x_n)) == 1$
+
+#+BEGIN_SRC sage :session . :exports both
+#from sympy import symbols
+x1 = var('x1')
+x2 = var('x2')
+x3 = var('x3')
+x4 = var('x4')
+
+f = 1-((1-x1) * (1-x2) * (1-x3) * (1-x4))
+
+print(f.subs({x1: 0, x2: 0, x3: 0, x4:0}))
+print(f.subs({x1: 0, x2: 0, x3: 0, x4:1}))
+print(f.subs({x1: 1, x2: 1, x3: 1, x4:1}))
+#+END_SRC
+
+#+RESULTS:
+: 0
+: 1
+: 1
