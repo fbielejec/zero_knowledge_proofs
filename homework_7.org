@@ -83,10 +83,13 @@ Let's assume n=4.
 
    $2^3+k-z \equiv 2^3 \cdot c_{3} + 2^2 \cdot c_{2} + 2^1 \cdot c_{1} + 2^0 c_{0}$
 
-6) MSB of then=4 bit decompositions are 1:
+6) MSB of the n=4 bit decompositions are 1:
   $a_3 \equiv 1$
   $b_3 \equiv 1$
   $c_3 \equiv 1$
+
+7) We also need to make sure that one of the numbers equals k (or else k could be greater than all three):
+  $(k-x) \cdot (k-y) \cdot (k-z) == 0$
 *** DONE Create an arithmetic circuit that takes signals $x_1,x_2\ldots,x_n$, constrains them to be binary, and outputs 1 if at least one of the signals is 1.
 /Hint: this is tricker than it looks. Consider combining what you learned in the first two problems and using the NOT gate./
 
@@ -112,18 +115,18 @@ x2 = var('x2')
 x3 = var('x3')
 x4 = var('x4')
 
-f = 1-((1-x1) * (1-x2) * (1-x3) * (1-x4))
+c1 = 1-((1-x1) * (1-x2) * (1-x3) * (1-x4)) == 1
 
-print(f.subs({x1: 0, x2: 0, x3: 0, x4:0}))
-print(f.subs({x1: 0, x2: 0, x3: 0, x4:1}))
-print(f.subs({x1: 1, x2: 1, x3: 1, x4:1}))
+c1.subs({x1: 0, x2: 0, x3: 0, x4:1})
+c1.subs({x1: 1, x2: 1, x3: 1, x4:1})
+c1.subs({x1: 0, x2: 0, x3: 0, x4:0})
 #+END_SRC
 
 #+RESULTS:
-: 0
-: 1
-: 1
-*** IN-PROGRESS Create an arithmetic circuit to determine if a signal v is a power of two (1, 2, 4, 8, etc).
+: 1 == 1
+: 1 == 1
+: 0 == 1
+*** DONE Create an arithmetic circuit to determine if a signal v is a power of two (1, 2, 4, 8, etc).
 /Hint: create an arithmetic circuit that constrains another set of signals to encode the binary representation of v, then place additional restrictions on those signals./
 
 Assuming v is a n-bit number it's binary decomposition is expressed as:
@@ -144,7 +147,7 @@ a2 = var('a2')
 a1 = var('a1')
 a0 = var('a0')
 
-c1 = 2^3*a3+2^2*a2+2^1*a1+1*a0 
+c1 = 2^3*a3+2^2*a2+2^1*a1+1*a0
 c2 = a3 == 1
 c3 = a2 == 0
 c4 = a1 == 0
@@ -184,3 +187,44 @@ c5.subs({a0: 1})
 0 == 0
 1 == 0
 #+end_example
+
+*** DONE Create an arithmetic circuit that models the [[https://en.wikipedia.org/wiki/Subset_sum_problem][Subset Sum]] problem. Given a set of integers (assume they are all non-negative), determine if there is a subset that sums to a given value. For example, given the set $\{3,5,17,21\}$ and $k=22$, there is a subset $\{5,17\}$ that sums to 22. Of course, a subset sum problem does not necessarily have a solution.
+
+/Hint: Use a "switch" that is 0 or 1 if a number is part of the subset or not./
+
+Let $S=\{s_1,\ldots, s_n\}$ be the set of integers $\geq 0$.
+
+We introduce selector variables $z_i \in \{0,1\}$ s.t:
+
+z_1 \cdot s_1 + \ldost z_n\cdot s_n \equiv k$
+
+A witness is then a vector of selectors: $[z_{1}, \ldots, z_{n}]$
+
+#+BEGIN_SRC sage :session . :exports both
+k=22
+
+z1=var('z1')
+z2=var('z2')
+z3=var('z3')
+z4=var('z4')
+
+c1 = 3*z1 +5*z2 + 17*z3 + 21*z4 == k
+c2=z1*(1-z1)==0
+c3=z2*(1-z2)==0
+c4=z3*(1-z3)==0
+c5=z4*(1-z4)==0
+
+c1.subs({z1 : 0, z2 : 1, z3 : 1, z4:0})
+c2.subs({z1 : 0, z2 : 1, z3 : 1, z4:0})
+c3.subs({z1 : 0, z2 : 1, z3 : 1, z4:0})
+c4.subs({z1 : 0, z2 : 1, z3 : 1, z4:0})
+c5.subs({z1 : 0, z2 : 1, z3 : 1, z4:0})
+#+END_SRC
+
+#+RESULTS:
+: 22 == 22
+: 0 == 0
+: 0 == 0
+: 0 == 0
+: 0 == 0
+*** TODO 
