@@ -194,7 +194,7 @@ Let $S=\{s_1,\ldots, s_n\}$ be the set of integers $\geq 0$.
 
 We introduce selector variables $z_i \in \{0,1\}$ s.t:
 
-$z_1 \cdot s_1 + \ldost z_n\cdot s_n \equiv k$
+$z_1 \cdot s_1 + \ldots z_n\cdot s_n \equiv k$
 
 A witness is then a vector of selectors: $[z_{1}, \ldots, z_{n}]$
 
