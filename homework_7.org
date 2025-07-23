@@ -28,9 +28,9 @@ From the table above we can see that the only acceptable product of two neighbou
 
 $\forall i,j \leq n, i \neq j: \quad  (x_i\cdot x_j -2) \equiv 0$
 
-Alternatively we can model this constraint as:
++Alternatively we can model this constraint as:+
 
-$\forall i,j \leq n, i \neq j: \quad  x_i - x_j \neq 0$
++$\forall i,j \leq n, i \neq j: \quad  x_i - x_j \neq 0$+
 ** DONE Create an arithmetic circuit that constrains k to be the maximum of x, y, or z. That is, k should be equal to x if x is the maximum value, and same for y and z.
 
 $k=\text{max}(x,y,x) \Leftrightarrow k \geq x \land k \geq y \land k \geq z$
