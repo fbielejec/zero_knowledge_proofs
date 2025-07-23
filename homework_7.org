@@ -1,12 +1,10 @@
 * IN-PROGRESS Practice Problems
 - https://rareskills.io/post/arithmetic-circuit#:~:text=in%20that%20book.-,Practice%20Problems,-Create%20an%20arithmetic
 ** DONE Create an arithmetic circuit that takes signals $x_1,x_2\ldots,x_n$ and is satisfied if at least one signal is 0.
-
 $x_1  \cdot x_2 \cdot \ldots \cdot x_n \equiv 0$
 $\forall i\leq n \quad x_{i} \cdot (1-x_i) \equiv 0$
 
 ** DONE Create an arithmetic circuit that takes signals $x_1,x_2\ldots,x_n$ and is satsified if all signals are 1.
-
 $x_1  \cdot x_2 \cdot \ldots \cdot x_n \equiv 1$
 $\forall i\leq n \quad x_{i} \cdot (1-x_i) \equiv 0$
 
@@ -32,7 +30,7 @@ $\forall i,j \leq n, i \neq j: \quad  (x_i\cdot x_j -2) \equiv 0$
 
 Alternatively we can model this constraint as:
 
-$\forall i,j \leq n, i \neq j: \quad  (x_i - x_j)^2 \neq 0$
+$\forall i,j \leq n, i \neq j: \quad  x_i - x_j \neq 0$
 ** DONE Create an arithmetic circuit that constrains k to be the maximum of x, y, or z. That is, k should be equal to x if x is the maximum value, and same for y and z.
 
 $k=\text{max}(x,y,x) \Leftrightarrow k \geq x \land k \geq y \land k \geq z$
@@ -196,7 +194,7 @@ Let $S=\{s_1,\ldots, s_n\}$ be the set of integers $\geq 0$.
 
 We introduce selector variables $z_i \in \{0,1\}$ s.t:
 
-z_1 \cdot s_1 + \ldost z_n\cdot s_n \equiv k$
+$z_1 \cdot s_1 + \ldost z_n\cdot s_n \equiv k$
 
 A witness is then a vector of selectors: $[z_{1}, \ldots, z_{n}]$
 
@@ -227,4 +225,63 @@ c5.subs({z1 : 0, z2 : 1, z3 : 1, z4:0})
 : 0 == 0
 : 0 == 0
 : 0 == 0
-*** TODO 
+*** IN-PROGRESS The covering set problem
+/Prove for a given set $S$ and a defined list of subsets of $S$ that we can pick a set of subsets such that their union is $S$.
+Specifically, the question is if we can do it with $k$ or fewer subsets.
+We wish to prove we know which $k$ (or fewer) subsets to use by encoding the problem as an arithmetic circuit./
+
+Since the subsets are fixed in this problem we encode each subset with a vector of selector variables that are 1 if the subset element is in $S$ and 0 if not
+Let $S=\{s_0, \ldots, s_n \}$ be the set and let $a_{1}, \ldots a_{k}$ be the subsets.
+
+For each subset we introduce binary selector variables:
+$a_{i}=[z^{a_{i}}_{0}, \ldots, z^{a_{i}}_{n}]; \quad \forall j=0, \ldots,n \quad z_{j} \in \{0,1\}$
+
+The union (a logical OR) of all the subsets should be equal to all 1's (indicating the union is equal to the full set $S$):
+
+$a_{1} \cup \ldots \cup a_{k} \equiv \underbrace{[1, \ldots, 1]}_{\text{n times}}$
+
+Example: $S=\{1,2,3,4,5\}$ and $a=\{1\}$, $b=\{1,2\}$, $c=\{3,4\}$, $d=\{1,4,5\}$.
+Below we will construct a witness consisting of assignments to the binary selectors that verifies that the union of $b \cup c \cup d$ results in $S$
+
+#+BEGIN_SRC sage :session . :exports both
+# the set S
+s1=1;s2=2;s3=3;s4=4;s5=5
+
+# selectors
+a1=var('a1');a2=var('a2');a3=var('a3');a4=var('a4');a5=var('a5')
+b1=var('b1');b2=var('b2');b3=var('b3');b4=var('b4');b5=var('b5')
+c1=var('c1');c2=var('c2');c3=var('c3');c4=var('c4');c5=var('c5')
+d1=var('d1');d2=var('d2');d3=var('d3');d4=var('d4');d5=var('d5')
+
+# my subsets
+a = [a1, a2, a3, a4, a5]
+b = [b1, b2, b3, b4, b5]
+c = [c1, c2, c3, c4, c5]
+d = [d1, d2, d3, d4, d5]
+
+#a or b or c or d
+# OR: u + v - uv
+union = [None,None,None,None,None]
+for i in range(5):
+  aorb=(a[i]+b[i]-a[i]*b[i])
+  cord=(c[i]+d[i]-c[i]*d[i])
+  union[i]=aorb + cord - aorb * cord
+
+witness={a1: 0, a2: 0, a3: 0, a4: 0, a5: 0,
+         b1: 1, b2: 1, b3: 0, b4: 0, b5: 0,
+         c1: 0, c2: 0, c3: 1, c4: 1, c5: 0,
+         d1: 1, d2: 0, d3: 0, d4: 1, d5: 1}
+
+s1*union[0].subs(witness) == s1
+s2*union[1].subs(witness) == s2
+s3*union[2].subs(witness) == s3
+s4*union[3].subs(witness) == s4
+s5*union[4].subs(witness) == s5
+#+END_SRC
+
+#+RESULTS:
+: 1 == 1
+: 2 == 2
+: 3 == 3
+: 4 == 4
+: 5 == 5
