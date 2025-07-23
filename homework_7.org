@@ -136,7 +136,7 @@ In order for v to be a power of 2 it's MSB must be 1 with all the other bits set
 
 $a_{n-1} \equiv 1$
 $a_{n-2} \equiv 0$
-$\ldost$
+$\ldots$
 $a_{0} \equiv 0$
 
 #+BEGIN_SRC sage :session . :exports both
