@@ -88,7 +88,7 @@ Let's assume n=4.
 
 7) We also need to make sure that one of the numbers equals k (or else k could be greater than all three):
   $(k-x) \cdot (k-y) \cdot (k-z) == 0$
-*** DONE Create an arithmetic circuit that takes signals $x_1,x_2\ldots,x_n$, constrains them to be binary, and outputs 1 if at least one of the signals is 1.
+** DONE Create an arithmetic circuit that takes signals $x_1,x_2\ldots,x_n$, constrains them to be binary, and outputs 1 if at least one of the signals is 1.
 /Hint: this is tricker than it looks. Consider combining what you learned in the first two problems and using the NOT gate./
 
 The problem can be reformulated as "an arithmetic circuit that is satisfied if not all signals are 0".
@@ -124,7 +124,7 @@ c1.subs({x1: 0, x2: 0, x3: 0, x4:0})
 : 1 == 1
 : 1 == 1
 : 0 == 1
-*** DONE Create an arithmetic circuit to determine if a signal v is a power of two (1, 2, 4, 8, etc).
+** DONE Create an arithmetic circuit to determine if a signal v is a power of two (1, 2, 4, 8, etc).
 /Hint: create an arithmetic circuit that constrains another set of signals to encode the binary representation of v, then place additional restrictions on those signals./
 
 Assuming v is a n-bit number it's binary decomposition is expressed as:
@@ -186,7 +186,7 @@ c5.subs({a0: 1})
 1 == 0
 #+end_example
 
-*** DONE Create an arithmetic circuit that models the [[https://en.wikipedia.org/wiki/Subset_sum_problem][Subset Sum]] problem. Given a set of integers (assume they are all non-negative), determine if there is a subset that sums to a given value. For example, given the set $\{3,5,17,21\}$ and $k=22$, there is a subset $\{5,17\}$ that sums to 22. Of course, a subset sum problem does not necessarily have a solution.
+** DONE Create an arithmetic circuit that models the [[https://en.wikipedia.org/wiki/Subset_sum_problem][Subset Sum]] problem. Given a set of integers (assume they are all non-negative), determine if there is a subset that sums to a given value. For example, given the set $\{3,5,17,21\}$ and $k=22$, there is a subset $\{5,17\}$ that sums to 22. Of course, a subset sum problem does not necessarily have a solution.
 
 /Hint: Use a "switch" that is 0 or 1 if a number is part of the subset or not./
 
@@ -225,7 +225,7 @@ c5.subs({z1 : 0, z2 : 1, z3 : 1, z4:0})
 : 0 == 0
 : 0 == 0
 : 0 == 0
-*** IN-PROGRESS The covering set problem
+** IN-PROGRESS The covering set problem
 /Prove for a given set $S$ and a defined list of subsets of $S$ that we can pick a set of subsets such that their union is $S$.
 Specifically, the question is if we can do it with $k$ or fewer subsets.
 We wish to prove we know which $k$ (or fewer) subsets to use by encoding the problem as an arithmetic circuit./
