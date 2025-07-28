@@ -1,0 +1,5 @@
+* IN-PROGRESS R1CS
+- https://www.notion.so/Homework-7-R1CS-2fd956fcccf742398435ab9b2da8f934
+** TODO Problem 1
+Create a graph with 2 nodes and 1 edge and write constraints for a 3-coloring. 
+Turn the 3-coloring to a rank 1 constraint system. If you forgot how to do this, consult the chapter on arithmetic circuits.

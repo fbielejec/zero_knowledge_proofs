@@ -1,0 +1,7 @@
+* NOTES
+- R1CS
+ - # of rows = # of constraints
+ - in r1cs "addition is free" - does not create additional constraints
+- Commitment schemes
+  - Groth16: PIOP
+  - PLONK: Linear PCP
