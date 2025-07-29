@@ -1,6 +1,6 @@
 * IN-PROGRESS R1CS
 - https://www.notion.so/Homework-7-R1CS-2fd956fcccf742398435ab9b2da8f934
-** IN-REVIEW Problem 1
+** DONE Problem 1
 Create a graph with 2 nodes and 1 edge and write constraints for a 3-coloring.
 Turn the 3-coloring to a rank 1 constraint system. If you forgot how to do this, consult the chapter on arithmetic circuits.
 
@@ -45,17 +45,21 @@ From this we have:
 
 $(x_1 \cdot x_2 -2) \cdot (x_1 \cdot x_2 -3) \cdot (x_1 \cdot x_2 -6)$
 
-We can now turn these into an R1CS. For the first two color constraints:
+We can now turn these into an R1CS.
+For the first two color constraints we have:
 
 #+BEGIN_SRC maxima :exports both :results output replace
 print(expand ((x1-1)*(x1-2)*(x1-6)));
+print(expand ((x2-1)*(x2-2)*(x2-6)));
 #+END_SRC
 
 #+RESULTS:
 :   3       2
-: x1  - 6 x1  + 11 x1 - 6
+: x1  - 9 x1  + 20 x1 - 12
+:   3       2
+: x2  - 9 x2  + 20 x2 - 12
 
-And for the neigbouring constraint:
+And for the neigbouring constraint we have:
 
 #+BEGIN_SRC maxima :exports both :results output replace
 print(expand ((x1*x2-2)*(x1*x2-3)*(x1*x2-6)));
@@ -65,60 +69,22 @@ print(expand ((x1*x2-2)*(x1*x2-3)*(x1*x2-6)));
 :   3   3        2   2
 : x1  x2  - 11 x1  x2  + 36 x1 x2 - 36
 
-We can write this as:
+We can write these as:
 
 $\begin{cases}
 x_{1} \cdot x_{1}=v_{1} \\
-x_{1} \cdot x_{2}=v_{2} \\
+x_{2} \cdot x_{2}=v_{2} \\
 x_{1} \cdot x_{2}=v_{3} \\
 v_{3} \cdot v_{3}=v_{4} \\
-x_{1} \cdot v_{1} = -11x_{1} + v_{1} \\
-x_{2} \cdot v_{2} = -11x_{2} + v_{2} \\
-v_{3} \cdot v_{4} = -36v_{3} +11v_{4} + 36
+x_{1} \cdot v_{1} = 9v_{1} -20x_{1} +12 \\
+x_{2} \cdot v_{2} = 9v_{2} -20x_{2} +12 \\
+v_{3} \cdot v_{4} = 11v_{4} -36v_{3} + 36
 \end{cases}$
 
-And finally the coefficients:
+** DONE Problem 2
+Write python code that takes an R1CS matrix L, R, and O and a witness vector w and verifies.
 
-$L$ =
-
-| 1 | x_{1} | x_{2} | v_{1} | v_{2} | v_{3} | v_{4} |
-|---+-------+-------+-------+-------+-------+-------|
-| 0 |     1 |     0 |     0 |     0 |     0 |     0 |
-| 0 |     1 |     0 |     0 |     0 |     0 |     0 |
-| 0 |     1 |     0 |     0 |     0 |     0 |     0 |
-| 0 |     0 |     0 |     0 |     0 |     1 |     0 |
-| 0 |     1 |     0 |     0 |     0 |     0 |     0 |
-| 0 |     0 |     1 |     0 |     0 |     0 |     0 |
-| 0 |     0 |     0 |     0 |     0 |     1 |     0 |
-
-$R$ =
-
-| 1 | x_{1} | x_{2} | v_{1} | v_{2} | v_{3} | v_{4} |
-|---+-------+-------+-------+-------+-------+-------|
-| 0 |     1 |     0 |     0 |     0 |     0 |     0 |
-| 0 |     0 |     1 |     0 |     0 |     0 |     0 |
-| 0 |     0 |     1 |     0 |     0 |     0 |     0 |
-| 0 |     0 |     0 |     0 |     0 |     1 |     0 |
-| 0 |     0 |     0 |     1 |     0 |     0 |     0 |
-| 0 |     0 |     0 |     0 |     1 |     0 |     0 |
-| 0 |     0 |     0 |     0 |     0 |     0 |     1 |
-
-$O$ =
-
-|  1 | x_{1} | x_{2} | v_{1} | v_{2} | v_{3} | v_{4} |
-|----+-------+-------+-------+-------+-------+-------|
-|  0 |     0 |     0 |     1 |     0 |     0 |     0 |
-|  0 |     0 |     0 |     0 |     1 |     0 |     0 |
-|  0 |     0 |     0 |     0 |     0 |     1 |     0 |
-|  0 |     0 |     0 |     0 |     0 |     0 |     1 |
-|  0 |   -11 |     0 |     1 |     0 |     0 |     0 |
-|  0 |     0 |   -11 |     0 |     1 |     0 |     0 |
-| 36 |     0 |     0 |     0 |     0 |   -36 |    11 |
-
-** IN-PROGRESS Problem 2
-Write python code that takes an R1CS matrix A, B, and C and a witness vector w and verifies.
-
-$A\mathbf{w} \odot B\mathbf{w}=C\mathbf{w}$
+$L\mathbf{w} \odot R\mathbf{w}=O\mathbf{w}$
 
 Where $\odot$ is the hadamard (element-wise) product.
 
@@ -128,42 +94,42 @@ Let's assume:
 $x_{1}=1$ (BLUE) and $x_{2}=2$ (RED) - but any two colors would work as long as they are different.
 
 #+BEGIN_SRC sage :session . :exports both
-      import numpy as np
+  import numpy as np
 
-      x1=1;x2=2;
-      v1=x1*x1;v2=x2*x2;v3=x1*x2;v4=v3*v3
+  x1=1;x2=2;
+  v1=x1*x1;v2=x2*x2;v3=x1*x2;v4=v3*v3
 
-      # witness vector
-      w =  np.array([1, x1, x2, v1, v2, v3, v4])
+  # witness vector
+  w =  np.array([ 1, x1, x2, v1, v2, v3, v4])
 
-      # coefficient matrices
-      L = np.matrix([[0,      1,      0,      0,     0,      0,      0],
-                     [0,      1,      0,      0,     0,      0,      0],
-                     [0,      1,      0,      0,     0,      0,      0],
-                     [0,      0,      0,      0,     0,      1,      0],
-                     [0,      1,      0,      0,     0,      0,      0],
-                     [0,      0,      1,      0,     0,      0,      0],
-                     [0,      0,      0,      0,     0,      1,      0]])
+  # coefficient matrices
+  L = np.matrix([[0, 1,  0,  0,  0,  0,  0 ],
+                 [0, 0,  1,  0,  0,  0,  0 ],
+                 [0, 1,  0,  0,  0,  0,  0 ],
+                 [0, 0,  0,  0,  0,  1,  0 ],
+                 [0, 1,  0,  0,  0,  0,  0 ],
+                 [0, 0,  1,  0,  0,  0,  0 ],
+                 [0, 0,  0,  0,  0,  1,  0 ]])
 
-      R = np.matrix([[ 0,      1,      0,      0,      0,      0,      0],
-                     [ 0,      0,      1,      0,      0,      0,      0],
-                     [ 0,      0,      1,      0,      0,      0,      0],
-                     [ 0,      0,      0,      0,      0,      1,      0],
-                     [ 0,      0,      0,      1,      0,      0,      0],
-                     [ 0,      0,      0,      0,      1,      0,      0],
-                     [ 0,      0,      0,      0,      0,      0,      1]])
+  R = np.matrix([[0, 1,  0,  0,  0,  0,  0 ],
+                 [0, 0,  1,  0,  0,  0,  0 ],
+                 [0, 0,  1,  0,  0,  0,  0 ],
+                 [0, 0,  0,  0,  0,  1,  0 ],
+                 [0, 0,  0,  1,  0,  0,  0 ],
+                 [0, 0,  0,  0,  1,  0,  0 ],
+                 [0, 0,  0,  0,  0,  0,  1 ]])
 
-      O = np.matrix([[ 0,      0,      0,      1,      0,      0,      0],
-                     [ 0,      0,      0,      0,      1,      0,      0],
-                     [ 0,      0,      0,      0,      0,      1,      0],
-                     [ 0,      0,      0,      0,      0,      0,      1],
-                     [ 0,    -11,      0,      1,      0,      0,      0],
-                     [ 0,      0,    -11,      0,      1,      0,      0],
-                     [36,      0,      0,      0,      0,    -36,     11]]);
+  O = np.matrix([[0, 0,  0,  1,  0,  0,  0 ],
+                 [0, 0,  0,  0,  1,  0,  0 ],
+                 [0, 0,  0,  0,  0,  1,  0 ],
+                 [0, 0,  0,  0,  0,  0,  1 ],
+                 [12, -20,  0,  9,  0,  0,  0 ],
+                 [12, 0,  -20,  0,  9,  0,  0 ],
+                 [36,  0,  0,  0,  0,  -36,  11 ]])
 
-      result = np.matmul(O, w) == np.multiply(np.matmul(L, w) , np.matmul(R, w))
+  result = np.matmul(O, w) == np.multiply(np.matmul(L, w) , np.matmul(R, w))
 
-      assert result.all(), "R1CS constraints are not satisfied"
+  assert result.all(), "R1CS constraints are not satisfied"
 #+END_SRC
 
 #+RESULTS:
