@@ -8,7 +8,7 @@ $\forall i\leq n \quad x_{i} \cdot (1-x_i) \equiv 0$
 $x_1  \cdot x_2 \cdot \ldots \cdot x_n \equiv 1$
 $\forall i\leq n \quad x_{i} \cdot (1-x_i) \equiv 0$
 
-** DONE A bipartite graph is a graph that can be colored with two colors such that no two neighboring nodes share the same color. Devise an arithmetic circuit scheme to show you have a valid witness of a 2-coloring of a graph.
+** DONE A bipartite graph is a graph that can be colored with two colors such that no two neighboring nodes share the same color. Devise an arithmetic circuit scheme to show you have a valid witness of a 2-coloring of a graph. <<2coloring>>
 
 Let $n$ be the number of nodes, let's assign blue = 1, red = 2.
 
