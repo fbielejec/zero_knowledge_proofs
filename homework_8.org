@@ -1,6 +1,6 @@
 * IN-PROGRESS R1CS
 - https://www.notion.so/Homework-7-R1CS-2fd956fcccf742398435ab9b2da8f934
-** IN-PROGRESS Problem 1
+** IN-REVIEW Problem 1
 Create a graph with 2 nodes and 1 edge and write constraints for a 3-coloring.
 Turn the 3-coloring to a rank 1 constraint system. If you forgot how to do this, consult the chapter on arithmetic circuits.
 
@@ -114,3 +114,56 @@ $O$ =
 |  0 |   -11 |     0 |     1 |     0 |     0 |     0 |
 |  0 |     0 |   -11 |     0 |     1 |     0 |     0 |
 | 36 |     0 |     0 |     0 |     0 |   -36 |    11 |
+
+** IN-PROGRESS Problem 2
+Write python code that takes an R1CS matrix A, B, and C and a witness vector w and verifies.
+
+$A\mathbf{w} \odot B\mathbf{w}=C\mathbf{w}$
+
+Where $\odot$ is the hadamard (element-wise) product.
+
+Use this to code to check your answer above is correct.
+
+Let's assume:
+$x_{1}=1$ (BLUE) and $x_{2}=2$ (RED) - but any two colors would work as long as they are different.
+
+#+BEGIN_SRC sage :session . :exports both
+      import numpy as np
+
+      x1=1;x2=2;
+      v1=x1*x1;v2=x2*x2;v3=x1*x2;v4=v3*v3
+
+      # witness vector
+      w =  np.array([1, x1, x2, v1, v2, v3, v4])
+
+      # coefficient matrices
+      L = np.matrix([[0,      1,      0,      0,     0,      0,      0],
+                     [0,      1,      0,      0,     0,      0,      0],
+                     [0,      1,      0,      0,     0,      0,      0],
+                     [0,      0,      0,      0,     0,      1,      0],
+                     [0,      1,      0,      0,     0,      0,      0],
+                     [0,      0,      1,      0,     0,      0,      0],
+                     [0,      0,      0,      0,     0,      1,      0]])
+
+      R = np.matrix([[ 0,      1,      0,      0,      0,      0,      0],
+                     [ 0,      0,      1,      0,      0,      0,      0],
+                     [ 0,      0,      1,      0,      0,      0,      0],
+                     [ 0,      0,      0,      0,      0,      1,      0],
+                     [ 0,      0,      0,      1,      0,      0,      0],
+                     [ 0,      0,      0,      0,      1,      0,      0],
+                     [ 0,      0,      0,      0,      0,      0,      1]])
+
+      O = np.matrix([[ 0,      0,      0,      1,      0,      0,      0],
+                     [ 0,      0,      0,      0,      1,      0,      0],
+                     [ 0,      0,      0,      0,      0,      1,      0],
+                     [ 0,      0,      0,      0,      0,      0,      1],
+                     [ 0,    -11,      0,      1,      0,      0,      0],
+                     [ 0,      0,    -11,      0,      1,      0,      0],
+                     [36,      0,      0,      0,      0,    -36,     11]]);
+
+      result = np.matmul(O, w) == np.multiply(np.matmul(L, w) , np.matmul(R, w))
+
+      assert result.all(), "R1CS constraints are not satisfied"
+#+END_SRC
+
+#+RESULTS:
