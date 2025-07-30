@@ -134,6 +134,7 @@ $x_{1}=1$ (BLUE) and $x_{2}=2$ (RED) - but any two colors would work as long as 
 #+END_SRC
 
 #+RESULTS:
+: matrix([[ True,  True,  True,  True,  True,  True,  True]])
 : R1CS constraints are satisfied
 
 ** IN-PROGRESS Problem 3
@@ -143,7 +144,7 @@ $L \vec{\left[s\right]_{1}} \odot R \vec{\left[s\right]_{2}} = O \vec{\left[s\ri
 
 where:
 - $L$, $R$, and $O$ are $n \times m$ matrices of field elements
-- $s$ is a vector of $G_1$, $G_2$, or $G_1$ points
+- $s$ is a vector of $G_1$ or $G_2$ points
 
 Write python code that verifies the formula.
 
@@ -248,15 +249,27 @@ Figure out how to discover if $sG_{1} == sG_{2}$ if you are given the elliptic c
 
   # L * s1
   L_times_s1 = matrix_dot_vector(L, s1)
-
   # R * s2
   R_times_s2 = matrix_dot_vector(R, s2)
 
   # O * s1
   O_times_s1 = matrix_dot_vector(O, s1)
-  
-  G2_vec = [G2 for _ in range(len(w))]  
+  # G2 vector
+  G2_vec = [G2 for _ in range(len(w))]
+
+  #pairing(L_times_s1[0],R_times_s2[0]) == pairing(O_times_s1[0],G2_vec[0])
+  #pairing(L_times_s1[1],R_times_s2[1]) == pairing(O_times_s1[1],G2_vec[1])
+  #pairing(L_times_s1[2],R_times_s2[2]) == pairing(O_times_s1[2],G2_vec[2])
+  #pairing(L_times_s1[3],R_times_s2[3]) == pairing(O_times_s1[3],G2_vec[3])
+  pairing(L_times_s1[4],R_times_s2[4]) == pairing(O_times_s1[4],G2_vec[4])
+  #pairing(L_times_s1[5],R_times_s2[5]) == pairing(O_times_s1[5],G2_vec[5])
+  #pairing(L_times_s1[6],R_times_s2[6]) == pairing(O_times_s1[6],G2_vec[6])
+
+  #result = [pairing(L_times_s1[i],R_times_s2[i]) == pairing(O_times_s1[i],G2_vec[i]) for i in range(len(w))]
+
+
 
 #+END_SRC
 
 #+RESULTS:
+: False
