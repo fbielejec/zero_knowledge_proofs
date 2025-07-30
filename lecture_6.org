@@ -93,7 +93,7 @@ pairing(X1,Y2) == pairing(W1,G2) and pairing(W1,Z2) == pairing(G1,24*G2) and pai
 # xy + z = 10
 # y + z =7
 x=2;y=3;z=4;
-x*y+z == 10
+x*y + z == 10
 y+z == 7
 
 X1=x*G1
@@ -103,7 +103,6 @@ Z1=z*G1
 
 # no need for a pairing to prove the second equation, I can use the additive homomomorphism ([y]G1 + [z]G1 == [y+z]G1)
 pairing(X1,Y2) * pairing(Z1,G2) == pairing(G1, 10*G2) and Y1+Z1==(y+z)*G1
-
 #+END_SRC
 
 #+RESULTS:
