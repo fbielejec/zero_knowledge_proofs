@@ -130,6 +130,133 @@ $x_{1}=1$ (BLUE) and $x_{2}=2$ (RED) - but any two colors would work as long as 
   result = np.matmul(O, w) == np.multiply(np.matmul(L, w) , np.matmul(R, w))
 
   assert result.all(), "R1CS constraints are not satisfied"
+  print("R1CS constraints are satisfied")
+#+END_SRC
+
+#+RESULTS:
+: R1CS constraints are satisfied
+
+** IN-PROGRESS Problem 3
+Given an R1CS of the form:
+
+$L \vec{\left[s\right]_{1}} \odot R \vec{\left[s\right]_{2}} = O \vec{\left[s\right]_{1}} \odot \vec{\left[G_{2}\right]_{2}}$
+
+where:
+- $L$, $R$, and $O$ are $n \times m$ matrices of field elements
+- $s$ is a vector of $G_1$, $G_2$, or $G_1$ points
+
+Write python code that verifies the formula.
+
+*Hint 1*: Each row of the matrices is a separate pairing.
+*Hint 2*: When you get $s$ encrypted with both $G_{1}$ and $G_{2}$ generators, you don't know whether or not they have the same discrete logarithm.
+However, it is straightforward to check using another equation.
+Figure out how to discover if $sG_{1} == sG_{2}$ if you are given the elliptic curve points but not $s$.
+
+#+BEGIN_SRC sage :session . :exports both
+  #import numpy as np
+  import py_ecc.bn128 as bn128
+  from py_ecc.fields import (
+  bn128_FQ as FQ,
+  bn128_FQ2 as FQ2,
+  bn128_FQ12 as FQ12
+  )
+
+  p=21888242871839275222246405745257275088696311157297823662689037894645226208583
+  Fp=GF(p)
+  E = EllipticCurve(Fp, [0,3])
+  G1 = E(1,2)
+  k = 2
+  Rx.<x>=Fp[]
+  Fp2 = GF(p^k, name='i', modulus=x^k + 1)
+
+  # https://eips.ethereum.org/EIPS/eip-197#:~:text=q%20%3D%2021888242871839275222246405745257275088548364400416034343698204186575808495617.-,Definition%20of%20the%20groups,-The%20groups%20G_1
+  a=0
+  TwistB=3*Fp2([9,1])^(-1) # 3/(i+9)
+  E2 = EllipticCurve(Fp2, [a,TwistB])
+
+  # [a,b] -> a + i*b
+  x_G2 = Fp2([
+  10857046999023057135944570762232829481370756359578518086990519993285655852781,
+  11559732032986387107991004021392285783925812861821192530917403151452391805634
+  ])
+
+  y_G2 = Fp2([
+  8495653923123431417604973247489272438418190587263600148770280649306958101930,
+  4082367875863433681332203403145435568316851327593401208105741076214120093531
+  ])
+
+  G2 = E2(x_G2, y_G2)
+
+  # computes e(Q \in G2, P \in G1)
+  # returns an element in FQ12 (extension tower Fp^2 -> Fp^6 -> Fp12)
+  def pairing(P,Q):
+      ePQ = bn128.pairing((bn128.FQ2([int(Q[0][0]), int(Q[0][1])]),
+                           bn128.FQ2([int(Q[1][0]), int(Q[1][1])])),
+                          (bn128.FQ(int(P[0])), bn128.FQ(int(P[1]))));
+      return ePQ
+
+  # computes M*v, where M is a nxm matrix, v is a vector of length m
+  def matrix_dot_vector(matrix, vector):
+      rows_A = len(matrix)
+      cols_A = len(matrix[0])
+
+      if len(vector) != cols_A:
+          raise ValueError(f"Incompatible dimensions: matrix has {cols_A} columns but vector has {len(vector)} elements.")
+
+      result = [0 for _ in range(rows_A)]
+
+      for i in range(rows_A):
+          result[i] = sum(matrix[i][j] * vector[j] for j in range(cols_A))
+
+      return result
+
+  x1=1;x2=2;
+  v1=x1*x1;v2=x2*x2;v3=x1*x2;v4=v3*v3;
+
+  # witness vector
+  w =  [ Fp(1), Fp(x1), Fp(x2), Fp(v1), Fp(v2), Fp(v3), Fp(v4)]
+
+  # coefficient matrices
+  L = [[Fp(0), Fp(1),  Fp(0),  Fp(0),  Fp(0),  Fp(0),  Fp(0) ],
+       [Fp(0), Fp(0),  Fp(1),  Fp(0),  Fp(0),  Fp(0),  Fp(0) ],
+       [Fp(0), Fp(1),  Fp(0),  Fp(0),  Fp(0),  Fp(0),  Fp(0) ],
+       [Fp(0), Fp(0),  Fp(0),  Fp(0),  Fp(0),  Fp(1),  Fp(0) ],
+       [Fp(0), Fp(1),  Fp(0),  Fp(0),  Fp(0),  Fp(0),  Fp(0) ],
+       [Fp(0), Fp(0),  Fp(1),  Fp(0),  Fp(0),  Fp(0),  Fp(0) ],
+       [Fp(0), Fp(0),  Fp(0),  Fp(0),  Fp(0),  Fp(1),  Fp(0) ]]
+
+  R = [[Fp(0), Fp(1),  Fp(0),  Fp(0),  Fp(0),  Fp(0),  Fp(0) ],
+       [Fp(0), Fp(0),  Fp(1),  Fp(0),  Fp(0),  Fp(0),  Fp(0) ],
+       [Fp(0), Fp(0),  Fp(1),  Fp(0),  Fp(0),  Fp(0),  Fp(0) ],
+       [Fp(0), Fp(0),  Fp(0),  Fp(0),  Fp(0),  Fp(1),  Fp(0) ],
+       [Fp(0), Fp(0),  Fp(0),  Fp(1),  Fp(0),  Fp(0),  Fp(0) ],
+       [Fp(0), Fp(0),  Fp(0),  Fp(0),  Fp(1),  Fp(0),  Fp(0) ],
+       [Fp(0), Fp(0),  Fp(0),  Fp(0),  Fp(0),  Fp(0),  Fp(1) ]]
+
+  O = [[Fp(0), Fp(0), Fp(0),   Fp(1),   Fp(0), Fp(0),  Fp(0)],
+       [Fp(0), Fp(0), Fp(0),   Fp(0),   Fp(1), Fp(0),  Fp(0)],
+       [Fp(0), Fp(0), Fp(0),   Fp(0),   Fp(0), Fp(1),  Fp(0)],
+       [Fp(0), Fp(0), Fp(0),   Fp(0),   Fp(0), Fp(0),  Fp(1)],
+       [Fp(12), Fp(-20), Fp(0),   Fp(9),   Fp(0), Fp(0),  Fp(0)],
+       [Fp(12), Fp(0), Fp(-20),   Fp(0),   Fp(9), Fp(0),  Fp(0)],
+       [Fp(36), Fp(0), Fp(0),   Fp(0),   Fp(0), Fp(-36), Fp(11)]]
+
+  # s1 = w * G1
+  s1=[G1*v for v in w]
+  # s2 = w * G2
+  s2=[G2*v for v in w]
+
+  # L * s1
+  L_times_s1 = matrix_dot_vector(L, s1)
+
+  # R * s2
+  R_times_s2 = matrix_dot_vector(R, s2)
+
+  # O * s1
+  O_times_s1 = matrix_dot_vector(O, s1)
+  
+  G2_vec = [G2 for _ in range(len(w))]  
+
 #+END_SRC
 
 #+RESULTS:
