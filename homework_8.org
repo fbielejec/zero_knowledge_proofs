@@ -100,32 +100,32 @@ $x_{1}=1$ (BLUE) and $x_{2}=2$ (RED) - but any two colors would work as long as 
   v1=x1*x1;v2=x2*x2;v3=x1*x2;v4=v3*v3
 
   # witness vector
-  w =  np.array([ 1, x1, x2, v1, v2, v3, v4])
+  w =  [ 1, x1, x2, v1, v2, v3, v4]
 
   # coefficient matrices
-  L = np.matrix([[0, 1,  0,  0,  0,  0,  0 ],
-                 [0, 0,  1,  0,  0,  0,  0 ],
-                 [0, 1,  0,  0,  0,  0,  0 ],
-                 [0, 0,  0,  0,  0,  1,  0 ],
-                 [0, 1,  0,  0,  0,  0,  0 ],
-                 [0, 0,  1,  0,  0,  0,  0 ],
-                 [0, 0,  0,  0,  0,  1,  0 ]])
+  L = [[0, 1,  0,  0,  0,  0,  0 ],
+       [0, 0,  1,  0,  0,  0,  0 ],
+       [0, 1,  0,  0,  0,  0,  0 ],
+       [0, 0,  0,  0,  0,  1,  0 ],
+       [0, 1,  0,  0,  0,  0,  0 ],
+       [0, 0,  1,  0,  0,  0,  0 ],
+       [0, 0,  0,  0,  0,  1,  0 ]]
 
-  R = np.matrix([[0, 1,  0,  0,  0,  0,  0 ],
-                 [0, 0,  1,  0,  0,  0,  0 ],
-                 [0, 0,  1,  0,  0,  0,  0 ],
-                 [0, 0,  0,  0,  0,  1,  0 ],
-                 [0, 0,  0,  1,  0,  0,  0 ],
-                 [0, 0,  0,  0,  1,  0,  0 ],
-                 [0, 0,  0,  0,  0,  0,  1 ]])
+  R = [[0, 1,  0,  0,  0,  0,  0 ],
+       [0, 0,  1,  0,  0,  0,  0 ],
+       [0, 0,  1,  0,  0,  0,  0 ],
+       [0, 0,  0,  0,  0,  1,  0 ],
+       [0, 0,  0,  1,  0,  0,  0 ],
+       [0, 0,  0,  0,  1,  0,  0 ],
+       [0, 0,  0,  0,  0,  0,  1 ]]
 
-  O = np.matrix([[0, 0,  0,  1,  0,  0,  0 ],
-                 [0, 0,  0,  0,  1,  0,  0 ],
-                 [0, 0,  0,  0,  0,  1,  0 ],
-                 [0, 0,  0,  0,  0,  0,  1 ],
-                 [12, -20,  0,  9,  0,  0,  0 ],
-                 [12, 0,  -20,  0,  9,  0,  0 ],
-                 [36,  0,  0,  0,  0,  -36,  11 ]])
+  O = [[0, 0,  0,  1,  0,  0,  0 ],
+       [0, 0,  0,  0,  1,  0,  0 ],
+       [0, 0,  0,  0,  0,  1,  0 ],
+       [0, 0,  0,  0,  0,  0,  1 ],
+       [12, -20,  0,  9,  0,  0,  0 ],
+       [12, 0,  -20,  0,  9,  0,  0 ],
+       [36,  0,  0,  0,  0,  -36,  11 ]]
 
   result = np.matmul(O, w) == np.multiply(np.matmul(L, w) , np.matmul(R, w))
 
@@ -134,7 +134,6 @@ $x_{1}=1$ (BLUE) and $x_{2}=2$ (RED) - but any two colors would work as long as 
 #+END_SRC
 
 #+RESULTS:
-: matrix([[ True,  True,  True,  True,  True,  True,  True]])
 : R1CS constraints are satisfied
 
 ** IN-PROGRESS Problem 3
@@ -154,12 +153,11 @@ However, it is straightforward to check using another equation.
 Figure out how to discover if $sG_{1} == sG_{2}$ if you are given the elliptic curve points but not $s$.
 
 #+BEGIN_SRC sage :session . :exports both
-  #import numpy as np
   import py_ecc.bn128 as bn128
   from py_ecc.fields import (
-  bn128_FQ as FQ,
-  bn128_FQ2 as FQ2,
-  bn128_FQ12 as FQ12
+      bn128_FQ as FQ,
+      bn128_FQ2 as FQ2,
+      bn128_FQ12 as FQ12
   )
 
   p=21888242871839275222246405745257275088696311157297823662689037894645226208583
@@ -196,80 +194,53 @@ Figure out how to discover if $sG_{1} == sG_{2}$ if you are given the elliptic c
                           (bn128.FQ(int(P[0])), bn128.FQ(int(P[1]))));
       return ePQ
 
-  # computes M*v, where M is a nxm matrix, v is a vector of length m
-  def matrix_dot_vector(matrix, vector):
-      rows_A = len(matrix)
-      cols_A = len(matrix[0])
-
-      if len(vector) != cols_A:
-          raise ValueError(f"Incompatible dimensions: matrix has {cols_A} columns but vector has {len(vector)} elements.")
-
-      result = [0 for _ in range(rows_A)]
-
-      for i in range(rows_A):
-          result[i] = sum(matrix[i][j] * vector[j] for j in range(cols_A))
-
-      return result
-
   x1=1;x2=2;
   v1=x1*x1;v2=x2*x2;v3=x1*x2;v4=v3*v3;
 
-  # witness vector
-  w =  [ Fp(1), Fp(x1), Fp(x2), Fp(v1), Fp(v2), Fp(v3), Fp(v4)]
+  # witness
+  w =  [1, x1, x2, v1, v2, v3, v4]
 
-  # coefficient matrices
-  L = [[Fp(0), Fp(1),  Fp(0),  Fp(0),  Fp(0),  Fp(0),  Fp(0) ],
-       [Fp(0), Fp(0),  Fp(1),  Fp(0),  Fp(0),  Fp(0),  Fp(0) ],
-       [Fp(0), Fp(1),  Fp(0),  Fp(0),  Fp(0),  Fp(0),  Fp(0) ],
-       [Fp(0), Fp(0),  Fp(0),  Fp(0),  Fp(0),  Fp(1),  Fp(0) ],
-       [Fp(0), Fp(1),  Fp(0),  Fp(0),  Fp(0),  Fp(0),  Fp(0) ],
-       [Fp(0), Fp(0),  Fp(1),  Fp(0),  Fp(0),  Fp(0),  Fp(0) ],
-       [Fp(0), Fp(0),  Fp(0),  Fp(0),  Fp(0),  Fp(1),  Fp(0) ]]
+      # coefficient matrices
+  L = [[0, 1, 0, 0, 0, 0, 0],
+        [0, 0, 1, 0, 0, 0, 0],
+        [0, 1, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 1, 0],
+        [0, 1, 0, 0, 0, 0, 0],
+        [0, 0, 1, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 1, 0]]
 
-  R = [[Fp(0), Fp(1),  Fp(0),  Fp(0),  Fp(0),  Fp(0),  Fp(0) ],
-       [Fp(0), Fp(0),  Fp(1),  Fp(0),  Fp(0),  Fp(0),  Fp(0) ],
-       [Fp(0), Fp(0),  Fp(1),  Fp(0),  Fp(0),  Fp(0),  Fp(0) ],
-       [Fp(0), Fp(0),  Fp(0),  Fp(0),  Fp(0),  Fp(1),  Fp(0) ],
-       [Fp(0), Fp(0),  Fp(0),  Fp(1),  Fp(0),  Fp(0),  Fp(0) ],
-       [Fp(0), Fp(0),  Fp(0),  Fp(0),  Fp(1),  Fp(0),  Fp(0) ],
-       [Fp(0), Fp(0),  Fp(0),  Fp(0),  Fp(0),  Fp(0),  Fp(1) ]]
+  R = [[0, 1, 0, 0, 0, 0, 0],
+       [0, 0, 1, 0, 0, 0, 0],
+       [0, 0, 1, 0, 0, 0, 0],
+       [0, 0, 0, 0, 0, 1, 0],
+       [0, 0, 0, 1, 0, 0, 0],
+       [0, 0, 0, 0, 1, 0, 0],
+       [0, 0, 0, 0, 0, 0, 1]]
 
-  O = [[Fp(0), Fp(0), Fp(0),   Fp(1),   Fp(0), Fp(0),  Fp(0)],
-       [Fp(0), Fp(0), Fp(0),   Fp(0),   Fp(1), Fp(0),  Fp(0)],
-       [Fp(0), Fp(0), Fp(0),   Fp(0),   Fp(0), Fp(1),  Fp(0)],
-       [Fp(0), Fp(0), Fp(0),   Fp(0),   Fp(0), Fp(0),  Fp(1)],
-       [Fp(12), Fp(-20), Fp(0),   Fp(9),   Fp(0), Fp(0),  Fp(0)],
-       [Fp(12), Fp(0), Fp(-20),   Fp(0),   Fp(9), Fp(0),  Fp(0)],
-       [Fp(36), Fp(0), Fp(0),   Fp(0),   Fp(0), Fp(-36), Fp(11)]]
+  O = [[0, 0, 0, 1, 0, 0, 0],
+      [0, 0, 0, 0, 1, 0, 0],
+      [0, 0, 0, 0, 0, 1, 0],
+      [0, 0, 0, 0, 0, 0, 1],
+      [12, -20, 0, 9, 0, 0, 0],
+      [12, 0, -20, 0, 9, 0, 0],
+      [36, 0, 0, 0, 0, -36, 11]]
 
-  # s1 = w * G1
-  s1=[G1*v for v in w]
-  # s2 = w * G2
-  s2=[G2*v for v in w]
+  Lw = np.matmul(L, w)
+  Rw = np.matmul(R, w)
+  Ow = np.matmul(O, w)
 
-  # L * s1
-  L_times_s1 = matrix_dot_vector(L, s1)
-  # R * s2
-  R_times_s2 = matrix_dot_vector(R, s2)
-
-  # O * s1
-  O_times_s1 = matrix_dot_vector(O, s1)
-  # G2 vector
+  # encryption in G1
+  LwG1 = [G1*v for v in Lw]
+  # encryption in G2
+  RwG2 = [G2*v for v in Rw]
+  # encryption in G2
+  OwG1 = [G1*v for v in Ow]
+  # 1 * G2
   G2_vec = [G2 for _ in range(len(w))]
 
-  #pairing(L_times_s1[0],R_times_s2[0]) == pairing(O_times_s1[0],G2_vec[0])
-  #pairing(L_times_s1[1],R_times_s2[1]) == pairing(O_times_s1[1],G2_vec[1])
-  #pairing(L_times_s1[2],R_times_s2[2]) == pairing(O_times_s1[2],G2_vec[2])
-  #pairing(L_times_s1[3],R_times_s2[3]) == pairing(O_times_s1[3],G2_vec[3])
-  pairing(L_times_s1[4],R_times_s2[4]) == pairing(O_times_s1[4],G2_vec[4])
-  #pairing(L_times_s1[5],R_times_s2[5]) == pairing(O_times_s1[5],G2_vec[5])
-  #pairing(L_times_s1[6],R_times_s2[6]) == pairing(O_times_s1[6],G2_vec[6])
-
-  #result = [pairing(L_times_s1[i],R_times_s2[i]) == pairing(O_times_s1[i],G2_vec[i]) for i in range(len(w))]
-
-
-
+  # check all pairwise pairing
+  [pairing(LwG1[6],RwG2[6]) == pairing(OwG1[6],G2_vec[6]) for i in range(len(w))]
 #+END_SRC
 
 #+RESULTS:
-: False
+: [True, True, True, True, True, True, True]
