@@ -1,6 +1,31 @@
 * Notes
 - lagrange interpolation
- - is there a homomorphism up to the x points you choose for the interpolation of a vector?
 - vector adition and polynomial addition are homomorphic, up to the Lagrange interpolation
- - what follows is that vector by scalar multiplication is also homomorphic to polynomial by constant multiplication.
+ - what follows is that vector by scalar multiplication is also homomorphic to the Lagrange polynomial by scalar multiplication.
 - schwartz-zippel lemma
+- QAP: $Lv \odot Rv \equiv Ov$
+
+#+BEGIN_SRC sage :session . :exports both
+import numpy as np
+
+FR = RationalField()
+R.<x> = PolynomialRing(FR)
+
+xs = [1,2,3]
+u = [2,4,8]
+v = [4,2,8]
+
+ux = R.lagrange_polynomial(zip(xs,u))
+vx = R.lagrange_polynomial(zip(xs,v))
+
+# product of polynomials that interpolate both vectors
+ux * vx
+
+# polynomial that interpolates the hadamard vector product
+R.lagrange_polynomial(zip(xs,np.multiply(u,v)))
+
+#+END_SRC
+
+#+RESULTS:
+: 4*x^4 - 18*x^3 + 36*x^2 - 42*x + 28
+: 28*x^2 - 84*x + 64

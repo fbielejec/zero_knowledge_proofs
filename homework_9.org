@@ -88,7 +88,7 @@ import numpy as np
 
 p=103
 Fp=GF(p)
-R = Fp['x']
+R.<x> = PolynomialRing(Fp)
 
 A = Matrix([[9,4,5], [8,3,4], [7,9,11]])
 B = Matrix([[2,4,6], [1,3,5], [7,9,11]])
@@ -112,7 +112,6 @@ Bv == R.lagrange_polynomial(zip(xs,np.matmul(B,v)))
 
 # testing polynomial equality by the by Schwartz-Zippel Lemma:
 tau = Fp.random_element()
-
 Av(tau) == Bv(tau)
 
 # probability of a false positive after this single test:

@@ -34,6 +34,7 @@ def double(P,a):
 
 a=0;b=9
 
+# over real numbers
 E = EllipticCurve([AA(a),AA(b)])
 E
 

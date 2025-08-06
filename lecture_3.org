@@ -11,7 +11,7 @@
   - using curve's symmetry along the x axis
 - explicit bounds for the number of points on the EC defined on a GF
 #+BEGIN_SRC sage :session . :exports both
-# over real
+# over real numbers
 ER = EllipticCurve([AA(3),AA(16)])
 ER
 
