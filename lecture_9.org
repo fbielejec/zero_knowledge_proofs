@@ -1,0 +1,6 @@
+* Notes
+- lagrange interpolation
+ - is there a homomorphism up to the x points you choose for the interpolation of a vector?
+- vector adition and polynomial addition are homomorphic, up to the Lagrange interpolation
+ - what follows is that vector by scalar multiplication is also homomorphic to polynomial by constant multiplication.
+- schwartz-zippel lemma

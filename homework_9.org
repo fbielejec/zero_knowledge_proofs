@@ -1,0 +1,32 @@
+* DONE Problem 1
+Alice and Bob have two vectors, and they want to test if they are the same vector. Assume that they evaluate their polynomials honestly. Write the code they would use to turn their vector into a polynomial over a finite field.
+
+- TODO: description
+
+#+BEGIN_SRC sage :session . :exports both
+p=103
+Fp=GF(p)
+R = Fp['x']
+n = 3
+
+# random vectors
+alice = [Fp.random_element() for _ in range(1,n+1)];
+bob = [Fp.random_element() for _ in range(1,n+1)];
+
+# shared x coords
+xs = [i for i in range(1,n+1)];
+
+p_alice = R.lagrange_polynomial(zip(xs, alice))
+p_bob = R.lagrange_polynomial(zip(xs, bob))
+
+# by the Schwartz-Zippel Lemma
+tau = Fp.random_element();
+p_alice(tau) == p_bob(tau)
+
+# probability of a false negative after this single trial:
+numerical_approx(p_alice.degree() / p, digits = 2)
+#+END_SRC
+
+#+RESULTS:
+: False
+: 0.019
