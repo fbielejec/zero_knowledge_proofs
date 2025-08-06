@@ -23,10 +23,105 @@ p_bob = R.lagrange_polynomial(zip(xs, bob))
 tau = Fp.random_element();
 p_alice(tau) == p_bob(tau)
 
-# probability of a false negative after this single trial:
+# probability of a false positive after this single trial:
 numerical_approx(p_alice.degree() / p, digits = 2)
 #+END_SRC
 
 #+RESULTS:
 : False
+: 0.019
+
+* DONE Problem 2
+Alice and Bob have matrices $\mathbf{A}$ and $\mathbf{B}$.
+They want to know if, for some $\mathbf{v}$, if:
+
+$\mathbf{A} \mathbf{v} = \mathbf{B} \mathbf{v}$
+
+where the matrices $\mathbf{A}$ and $\mathbf{B}$ have $n$ rows and $m$ columns.
+
+For example:
+
+$\mathbf{A}=\begin{pmatrix}9&4&5\\8&3&4\\7&9&11\end{pmatrix}$
+
+$\mathbf{B}=\begin{pmatrix}2&4&6\\1&3&5\\7&9&11\end{pmatrix}$
+
+$\mathbf{v}=\begin{pmatrix}1\\3\\7\end{pmatrix}$
+
+Alice and Bob could compute and publish $\mathbf{A}\mathbf{v}$ and $\mathbf{B}\mathbf{v}$ respectively, but that would not be succinct.
+Instead, Alice and Bob do the Lagrange interpolation on the columns of $\mathbf{A}$ and $\mathbf{B}$, turning them into $m$ polynomials.
+
+That is, $\mathbf{A}$ gets turned into:
+
+$u_1(x),u_2(x),u_3(x)$
+
+
+and $\mathbf{B}$ gets turned into:
+
+$v_1(x),v_2(x),v_3(x)$
+
+Each of the $u_1...u_3$ are polynomials formed by taking a column from the matrix and running lagrange interpolation on it against xs = [1,2,3].
+
+For example, $u_1(x)$ is computed as:
+
+$u_1=\texttt{lagrange}([1,2,3],[9,8,7])$
+
+Alice can turn the three polynomials into a single polynomial by doing:
+
+$a(x)=u_1(x)v_1+u_2(x)v_2+u_3(x)v_3$
+
+In the example above, $v_1=1$, $v_2=3$, $v_3=7$.
+
+Now Alice has turned her matrix and vector into a single polynomial.
+
+Bob can compute a single polynomial in the same manner.
+
+They can then check that the polynomials created below are equal by using the Schwart-Zippel Lemma as before:
+
+$\underbrace{1\cdot u_1(x)+3\cdot u_2(x)+7\cdot u_3(x)}_\text{Alice}=\underbrace{1\cdot v_1(x)+3\cdot v_2(x)+7\cdot v_3(x)}_\text{Bob}$
+
+/Do not worry for now about whether they do their computations honestly./
+
+Write code that will accomplish this algorithm for arbitrary-sized matrices of reasonable size.
+
+#+BEGIN_SRC sage :session . :exports both
+import numpy as np
+
+p=103
+Fp=GF(p)
+R = Fp['x']
+
+A = Matrix([[9,4,5], [8,3,4], [7,9,11]])
+B = Matrix([[2,4,6], [1,3,5], [7,9,11]])
+v = [1, 3, 7]
+
+np.matmul(A,v) == np.matmul(B,v)
+
+xs = [x for x in range(1,len(w) + 1)]
+
+# column polynomials
+us = [R.lagrange_polynomial(zip(xs,col)) for col in A.columns()]
+Av = np.matmul(us,v)
+# which is the same as 
+Av == R.lagrange_polynomial(zip(xs,np.matmul(A,v)))
+
+# column polynomials
+vs = [R.lagrange_polynomial(zip(xs,col)) for col in B.columns()]
+Bv = np.matmul(vs,v)
+# which is the same as 
+Bv == R.lagrange_polynomial(zip(xs,np.matmul(B,v)))
+
+# testing polynomial equality by the by Schwartz-Zippel Lemma:
+tau = Fp.random_element()
+
+Av(tau) == Bv(tau)
+
+# probability of a false positive after this single test:
+numerical_approx(Av.degree() / p, digits = 2)
+#+END_SRC
+
+#+RESULTS:
+: array([ True,  True,  True])
+: True
+: True
+: True
 : 0.019
