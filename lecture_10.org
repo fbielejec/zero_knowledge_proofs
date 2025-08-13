@@ -6,6 +6,51 @@
 - r1cs to QAP
 - https://rareskills.io/post/r1cs-to-qap
 
+** IN-PROGRESS R1CS to QAP (by hand)
+
+I know $x,y,z$ s.t.
+
+$x \cdot y \cdot z = 10$
+
+In R1CS this becomes:
+
+$\begin{cases}
+x \cdot y = v_{1} \\
+v_{1} \cdot z = 10
+\end{cases}$
+
+We will create a system of equations
+
+where:
+- $O,L,R$ are $n \times m $ matrices
+- $w$ is the witness vector of length $m$ (here $m=4+1$)
+- $n$ is the number of constraints (here $n=2$)
+
+We define the witness:
+
+$w=[1,x,y,v_{1},z]$
+
+$L=$
+| 1 | x | y | v1 | z |
+|---+---+---+----+---|
+| 0 | 1 | 0 |  0 | 0 |
+| 0 | 0 | 0 |  1 | 0 |
+
+$R=$
+| 1 | x | y | v1 | z |
+|---+---+---+----+---|
+| 0 | 0 | 1 |  0 | 0 |
+| 0 | 0 | 0 |  0 | 1 |
+
+$O=$
+|  1 | x | y | v1 | z |
+|----+---+---+----+---|
+|  0 | 0 | 0 |  1 | 0 |
+| 10 | 0 | 0 |  0 | 0 |
+
+
+** IN-PROGRESS R1CS to QAP (Python)
+
 #+BEGIN_SRC sage :session . :exports both
 
 #+END_SRC
