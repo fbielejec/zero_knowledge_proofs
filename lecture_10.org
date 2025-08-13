@@ -75,6 +75,156 @@ $O=$
 #+RESULTS:
 : R1CS constraints are satisfied
 
+We now break the $O,L,R$ matrices into $m=5$ column vectors and interpolate them on $x=(0,1,\ldots, n-1)$  to produce $m$ polynomials each:
+
+For the $L$:
+
+| x   | u1(x) | u2(x) | u3(x) | u4(x) | u5(x) |
+|-----+-------+-------+-------+-------+-------|
+| *0* |     0 |     1 |     0 |     0 |     0 |
+| *1* |     0 |     0 |     0 |     1 |     0 |
+
+- $u_{1}(0) = 0$ and $u_{1}(1)=0$, therefore $u_{1}(x)=0$
+- $u_{2}(0) = 1$ and $u_{2}(1)=0$, therefore $u_{2}(x)=1-x$
+- $u_{3}(0) = 0$ and $u_{3}(1)=0$, therefore $u_{3}(x)=0$
+- $u_{4}(0) = 0$ and $u_{4}(1)=1$, therefore $u_{4}(x)=x$
+- $u_{5}(0) = 0$ and $u_{5}(1)=0$, therefore $u_{5}(x)=0$
+
+#+BEGIN_SRC sage :session . :exports both
+import numpy as np
+
+FR = RationalField()
+R.<x> = PolynomialRing(FR)
+
+xs = [0,1]
+
+ys = [0,0]
+u1 = R.lagrange_polynomial(zip(xs,ys))
+u1
+
+ys = [1,0]
+u2 = R.lagrange_polynomial(zip(xs,ys))
+u2
+
+ys = [0,0]
+u3 = R.lagrange_polynomial(zip(xs,ys))
+u3
+
+ys = [0,1]
+u4 = R.lagrange_polynomial(zip(xs,ys))
+u4
+
+ys = [0,0]
+u5 = R.lagrange_polynomial(zip(xs,ys))
+u5
+#+END_SRC
+
+#+RESULTS:
+: 0
+: -x + 1
+: 0
+: x
+: 0
+
+For the $R$:
+
+| x   | v1(x) | v2(x) | v3(x) | v4(x) | v5(x) |
+|-----+-------+-------+-------+-------+-------|
+| *0* |     0 |     0 |     1 |     0 |     0 |
+| *1* |     0 |     0 |     0 |     0 |     1 |
+
+- $v_{1}(0) = 0$ and $v_{1}(1)=0$, therefore $v_{1}(x)=0$
+- $v_{2}(0) = 0$ and $v_{2}(1)=0$, therefore $v_{2}(x)=0$
+- $v_{3}(0) = 1$ and $v_{3}(1)=0$, therefore $v_{3}(x)=1-x$
+- $v_{4}(0) = 0$ and $v_{4}(1)=0$, therefore $v_{4}(x)=0$
+- $v_{5}(0) = 0$ and $v_{5}(1)=1$, therefore $v_{5}(x)=x$
+
+#+BEGIN_SRC sage :session . :exports both
+import numpy as np
+
+FR = RationalField()
+R.<x> = PolynomialRing(FR)
+
+xs = [0,1]
+
+ys = [0,0]
+v1 = R.lagrange_polynomial(zip(xs,ys))
+v1
+
+ys = [0,0]
+v2 = R.lagrange_polynomial(zip(xs,ys))
+v2
+
+ys = [1,0]
+v3 = R.lagrange_polynomial(zip(xs,ys))
+v3
+
+ys = [0,0]
+v4 = R.lagrange_polynomial(zip(xs,ys))
+v4
+
+ys = [0,1]
+v5 = R.lagrange_polynomial(zip(xs,ys))
+v5
+#+END_SRC
+
+#+RESULTS:
+: 0
+: 0
+: -x + 1
+: 0
+: x
+
+For the $O$:
+
+| x   | w1(x) | w2(x) | w3(x) | w4(x) | w5(x) |
+|-----+-------+-------+-------+-------+-------|
+| *0* |     0 |     0 |     0 |     1 |     0 |
+| *1* |    10 |     0 |     0 |     0 |     0 |
+
+- $w_{1}(0) = 0$ and $w_{1}(1)=10$, therefore $w_{1}(x)=10x$
+- $w_{2}(0) = 0$ and $w_{2}(1)=0$, therefore $w_{2}(x)=0$
+- $w_{3}(0) = 0$ and $w_{3}(1)=0$, therefore $w_{3}(x)=0$
+- $w_{4}(0) = 1$ and $w_{4}(1)=0$, therefore $w_{4}(x)=1-x$
+- $w_{5}(0) = 0$ and $w_{5}(1)=0$, therefore $w_{5}(x)=0$
+
+#+BEGIN_SRC sage :session . :exports both
+import numpy as np
+
+FR = RationalField()
+R.<x> = PolynomialRing(FR)
+
+xs = [0,1]
+
+ys = [0,10]
+w1 = R.lagrange_polynomial(zip(xs,ys))
+w1
+
+ys = [0,0]
+w2 = R.lagrange_polynomial(zip(xs,ys))
+w2
+
+ys = [1,0]
+w3 = R.lagrange_polynomial(zip(xs,ys))
+w3
+
+ys = [0,0]
+w4 = R.lagrange_polynomial(zip(xs,ys))
+w4
+
+ys = [0,1]
+w5 = R.lagrange_polynomial(zip(xs,ys))
+w5
+#+END_SRC
+
+#+RESULTS:
+: 10*x
+: 0
+: -x + 1
+: 0
+: x
+
+
 ** IN-PROGRESS R1CS to QAP (Python)
 
 #+BEGIN_SRC sage :session . :exports both
