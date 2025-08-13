@@ -48,6 +48,32 @@ $O=$
 |  0 | 0 | 0 |  1 | 0 |
 | 10 | 0 | 0 |  0 | 0 |
 
+#+BEGIN_SRC sage :session . :exports both
+  import numpy as np
+
+  x=2; y=5; v1=10; z=1
+
+  # witness vector
+  w =  [ 1, x, y, v1, z]
+
+  # coefficient matrices
+  L = [[0, 1,  0,  0,  0 ],
+       [0, 0,  0,  1,  0 ]]
+
+  R = [[0, 0,  1,  0,  0 ],
+       [0, 0,  0,  0,  1 ]]
+
+  O = [[0, 0,  0,  1,  0 ],
+       [10, 0,  0,  0,  0 ]]
+
+  result = np.matmul(O, w) == np.multiply(np.matmul(L, w) , np.matmul(R, w))
+
+  assert result.all(), "R1CS constraints are not satisfied"
+  print("R1CS constraints are satisfied")
+#+END_SRC
+
+#+RESULTS:
+: R1CS constraints are satisfied
 
 ** IN-PROGRESS R1CS to QAP (Python)
 
