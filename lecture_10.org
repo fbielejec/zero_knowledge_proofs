@@ -205,18 +205,35 @@ Check whether $l(x) \cdot r(x) == o(x)$:
 #+BEGIN_SRC sage :session . :exports both
 w
 
-lx = np.dot(us, w)
-rx = np.dot(vs, w)
-ox = np.dot(ws, w)
+l = np.dot(us, w)
+r = np.dot(vs, w)
+o = np.dot(ws, w)
 
-lx(0) * rx(0)==ox(0)
-lx(1) * rx(1)==ox(1)
+l(0) * r(0) == o(0)
+l(1) * r(1) == o(1)
 #+END_SRC
 
 #+RESULTS:
 : [1, 2, 5, 10, 1]
 : True
 : True
+
+QAP: 
+
+$\forall x: \quad l(x) \cdot r(x) = o(x) + h(x)\cdot T(x)$
+
+We construct $T(x)$. Since there are 2 rows, and we interpolate in $x=0$ and $x=1$:
+
+$T(x)=(x-0) \cdot (x-1)$
+
+#+BEGIN_SRC sage :session . :exports both
+
+T=
+
+#+END_SRC
+
+
+We need to calculate h(x)
 
 ** IN-PROGRESS R1CS to QAP (Python)
 
