@@ -66,7 +66,7 @@ $O=$
   O = [[0, 0,  0,  1,  0 ],
        [10, 0,  0,  0,  0 ]]
 
-  result = np.matmul(O, w) == np.multiply(np.matmul(L, w) , np.matmul(R, w))
+  result = np.matmul(O, w) == np.matmul(L, w) * np.matmul(R, w)
 
   assert result.all(), "R1CS constraints are not satisfied"
   print("R1CS constraints are satisfied")
@@ -94,29 +94,38 @@ For the $L$:
 import numpy as np
 
 FR = RationalField()
-R.<x> = PolynomialRing(FR)
+Rx.<x> = PolynomialRing(FR)
 
 xs = [0,1]
 
 ys = [0,0]
-u1 = R.lagrange_polynomial(zip(xs,ys))
+u1 = Rx.lagrange_polynomial(zip(xs,ys))
 u1
 
 ys = [1,0]
-u2 = R.lagrange_polynomial(zip(xs,ys))
+u2 = Rx.lagrange_polynomial(zip(xs,ys))
 u2
 
 ys = [0,0]
-u3 = R.lagrange_polynomial(zip(xs,ys))
+u3 = Rx.lagrange_polynomial(zip(xs,ys))
 u3
 
 ys = [0,1]
-u4 = R.lagrange_polynomial(zip(xs,ys))
+u4 = Rx.lagrange_polynomial(zip(xs,ys))
 u4
 
 ys = [0,0]
-u5 = R.lagrange_polynomial(zip(xs,ys))
+u5 = Rx.lagrange_polynomial(zip(xs,ys))
 u5
+
+# or
+
+us = []
+for col in np.matrix.transpose(np.array(L)):
+  p = Rx.lagrange_polynomial(zip(xs,col))
+  us.append(p)
+
+us
 #+END_SRC
 
 #+RESULTS:
@@ -125,6 +134,7 @@ u5
 : 0
 : x
 : 0
+: [0, -x + 1, 0, x, 0]
 
 For the $R$:
 
@@ -143,37 +153,20 @@ For the $R$:
 import numpy as np
 
 FR = RationalField()
-R.<x> = PolynomialRing(FR)
+Rx.<x> = PolynomialRing(FR)
 
 xs = [0,1]
 
-ys = [0,0]
-v1 = R.lagrange_polynomial(zip(xs,ys))
-v1
+vs = []
+for col in np.matrix.transpose(np.array(R)):
+  p = Rx.lagrange_polynomial(zip(xs,col))
+  vs.append(p)
 
-ys = [0,0]
-v2 = R.lagrange_polynomial(zip(xs,ys))
-v2
-
-ys = [1,0]
-v3 = R.lagrange_polynomial(zip(xs,ys))
-v3
-
-ys = [0,0]
-v4 = R.lagrange_polynomial(zip(xs,ys))
-v4
-
-ys = [0,1]
-v5 = R.lagrange_polynomial(zip(xs,ys))
-v5
+vs
 #+END_SRC
 
 #+RESULTS:
-: 0
-: 0
-: -x + 1
-: 0
-: x
+: [0, 0, -x + 1, 0, x]
 
 For the $O$:
 
@@ -192,64 +185,38 @@ For the $O$:
 import numpy as np
 
 FR = RationalField()
-R.<x> = PolynomialRing(FR)
+Rx.<x> = PolynomialRing(FR)
 
 xs = [0,1]
 
-ys = [0,10]
-w1 = R.lagrange_polynomial(zip(xs,ys))
-w1
+ws = []
+for col in np.matrix.transpose(np.array(O)):
+  p = Rx.lagrange_polynomial(zip(xs,col))
+  ws.append(p)
 
-ys = [0,0]
-w2 = R.lagrange_polynomial(zip(xs,ys))
-w2
-
-ys = [1,0]
-w3 = R.lagrange_polynomial(zip(xs,ys))
-w3
-
-ys = [0,0]
-w4 = R.lagrange_polynomial(zip(xs,ys))
-w4
-
-ys = [0,0]
-w5 = R.lagrange_polynomial(zip(xs,ys))
-w5
+ws
 #+END_SRC
 
 #+RESULTS:
-: 10*x
-: 0
-: -x + 1
-: 0
-: 0
+: [10*x, 0, 0, -x + 1, 0]
 
-Checking whether $l(x) \cdot r(x)=o(x)$:
+Check whether $l(x) \cdot r(x) == o(x)$:
 
 #+BEGIN_SRC sage :session . :exports both
-lx = [u1,u2,u3,u4,u5];
-lx
+w
 
-rx = [v1,v2,v3,v4,v5];
-rx
+lx = np.dot(us, w)
+rx = np.dot(vs, w)
+ox = np.dot(ws, w)
 
-ox = [w1,w2,w3,w4,w5];
-ox
-
-lhs = np.matmul(lx, w) * np.matmul(rx, w) 
-rhs = np.matmul(ox, w)
-
-lhs(0)
-rhs(0)
-
+lx(0) * rx(0)==ox(0)
+lx(1) * rx(1)==ox(1)
 #+END_SRC
 
 #+RESULTS:
-: [0, -x + 1, 0, x, 0]
-: [0, 0, -x + 1, 0, x]
-: [10*x, 0, -x + 1, 0, 0]
-: 10
-: 5
+: [1, 2, 5, 10, 1]
+: True
+: True
 
 ** IN-PROGRESS R1CS to QAP (Python)
 
