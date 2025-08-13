@@ -62,7 +62,7 @@ for col in np.matrix.transpose(np.array(C)):
 
 ws
 
-#l(x) * r(x) = o(x) in x=[1,2,3]
+# check l(x) * r(x) = o(x) in x=[1,2,3]
 
 l = np.dot(us, w)
 r = np.dot(vs, w)
@@ -71,6 +71,17 @@ o = np.dot(ws, w)
 l(1) * r(1) == o(1)
 l(2) * r(2) == o(2)
 l(3) * r(3) == o(3)
+
+# construct QAP
+T=(x-1)*(x-2)*(x-3)
+
+h=(l*r-o)/T
+h
+
+# QAP should hold almost everywhere, especially in a random point:
+tau = random.randint(-1000,1000)
+
+l(tau) * r(tau) == o(tau) + T(tau)*h(tau)
 #+END_SRC
 
 #+RESULTS:
@@ -85,5 +96,7 @@ l(3) * r(3) == o(3)
  -3/2*x^2 + 11/2*x - 4]
 True
 True
+True
+-5960000*x + 5940000
 True
 #+end_example
