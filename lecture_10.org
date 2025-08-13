@@ -51,10 +51,10 @@ $O=$
 #+BEGIN_SRC sage :session . :exports both
   import numpy as np
 
-  x=2; y=5; v1=10; z=1
+  x=2; y=5; vv1=10; z=1
 
   # witness vector
-  w =  [ 1, x, y, v1, z]
+  w =  [ 1, x, y, vv1, z]
 
   # coefficient matrices
   L = [[0, 1,  0,  0,  0 ],
@@ -212,7 +212,7 @@ ys = [0,0]
 w4 = R.lagrange_polynomial(zip(xs,ys))
 w4
 
-ys = [0,1]
+ys = [0,0]
 w5 = R.lagrange_polynomial(zip(xs,ys))
 w5
 #+END_SRC
@@ -222,8 +222,34 @@ w5
 : 0
 : -x + 1
 : 0
-: x
+: 0
 
+Checking whether $l(x) \cdot r(x)=o(x)$:
+
+#+BEGIN_SRC sage :session . :exports both
+lx = [u1,u2,u3,u4,u5];
+lx
+
+rx = [v1,v2,v3,v4,v5];
+rx
+
+ox = [w1,w2,w3,w4,w5];
+ox
+
+lhs = np.matmul(lx, w) * np.matmul(rx, w) 
+rhs = np.matmul(ox, w)
+
+lhs(0)
+rhs(0)
+
+#+END_SRC
+
+#+RESULTS:
+: [0, -x + 1, 0, x, 0]
+: [0, 0, -x + 1, 0, x]
+: [10*x, 0, -x + 1, 0, 0]
+: 10
+: 5
 
 ** IN-PROGRESS R1CS to QAP (Python)
 
