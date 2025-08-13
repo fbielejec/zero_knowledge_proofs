@@ -218,7 +218,7 @@ l(1) * r(1) == o(1)
 : True
 : True
 
-QAP: 
+QAP:
 
 $\forall x: \quad l(x) \cdot r(x) = o(x) + h(x)\cdot T(x)$
 
@@ -226,17 +226,34 @@ We construct $T(x)$. Since there are 2 rows, and we interpolate in $x=0$ and $x=
 
 $T(x)=(x-0) \cdot (x-1)$
 
-#+BEGIN_SRC sage :session . :exports both
+The prover needs to calculate $h(x)$:
 
-T=
-
-#+END_SRC
-
-
-We need to calculate h(x)
-
-** IN-PROGRESS R1CS to QAP (Python)
+$h(x)=\frac{l(x)*r(x)-o(x)}{T(x)}$
 
 #+BEGIN_SRC sage :session . :exports both
+T=x*(x-1)
+T
 
+h=(l*r-o)/T
+h
 #+END_SRC
+
+#+RESULTS:
+: x^2 - x
+: -32
+
+Now the prover has $l(x),r(x),o(x)$ and $h(x)$.
+Verifier samples random $\tau$ and via [[id:e52ff81b-e1a8-4153-b8e7-710ab93f82d9][Schwartz-Zippel Lemma]] is convinced that the QAP holds:
+
+#+BEGIN_SRC sage :session . :exports both
+import random
+
+tau = random.randint(-1000,1000)
+
+l(tau) * r(tau) == o(tau) + T(tau)*h(tau)
+#+END_SRC
+
+#+RESULTS:
+: True
+
+
