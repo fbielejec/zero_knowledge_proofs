@@ -254,7 +254,7 @@ If we had multiple multiplications per row we would get terms like:
 
 $A_{1} \vec{w} \odot A_{2} \vec{w} \odot B \vec{w} = C \vec{w}$
 
-incomaptible with the bilinear structure of the pairing:
+incomptible with the bilinear structure of the pairing:
 
 $e(A,B)=e(C, G_{2})$
 

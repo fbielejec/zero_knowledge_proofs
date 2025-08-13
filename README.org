@@ -5,24 +5,26 @@
 #+INCLUDE: pre_course.org
 
 * Table of Contents
-| file       | Description                                         |
-|------------+-----------------------------------------------------|
-| [[file:pre_course.org][Pre-Course]] | Course Prep                                         |
-| [[file:lecture_1.org][Lecture 1]]  | Notes: lecture 1                                    |
-| [[file:homework_1.org][Homework 1]] | Homework 1                                          |
-| [[file:lecture_2.org][Lecture 2]]  | Notes: lecture 2                                    |
-| [[file:homework_2.org][Homework 2]] | Homework 2 (group theory, binary operators)         |
-| [[file:lecture_3.org][Lecture 3]]  | Notes: lecture 3                                    |
-| [[file:homework_3.org][Homework 3]] | Homework 3 (EC point addition)                      |
-| [[file:lecture_4.org][Lecture 4]]  | Notes from lecture 4                                |
-| [[file:homework_4.org][Homework 4]] | Homework 4 (ECDSA)                                  |
-| [[file:lecture_5.org][Lecture 5]]  | Notes: lecture 5                                    |
-| [[file:homework_5.org][Homework 5]] | Homework 4 (EC calculations in Solidity)            |
-| [[file:lecture_6.org][Lecture 6]]  | Notes: lecture 6                                    |
-| [[file:homework_6.org][Homework 6]] | Homework 6 (Pairings in Solidity)                   |
-| [[file:lecture_7.org][Lecture 7]]  | Notes: lecture 7                                    |
-| [[file:homework_7.org][Homework 7]] | Hw 7 (Arithmetic Circuits)                          |
-| [[file:lecture_8.org][Lecture 8]]  | Notes: lecture 8                                    |
-| [[file:homework_8.org][Homework 8]] | Homework 8 (R1CS)                                   |
-| [[file:lecture_9.org][Lecture 9]]  | Lecture 9 (QAP)                                     |
-| [[file:homework_9.org][Homework 9]] | HW9 (Lagrange interpolation, Schwartz-Zippel Lemma) |
+| file        | Description                                         |
+|-------------+-----------------------------------------------------|
+| [[file:pre_course.org][Pre-Course]]  | Course Prep                                         |
+| [[file:lecture_1.org][Lecture 1]]   | Notes: lecture 1                                    |
+| [[file:homework_1.org][Homework 1]]  | Homework 1                                          |
+| [[file:lecture_2.org][Lecture 2]]   | Notes: lecture 2                                    |
+| [[file:homework_2.org][Homework 2]]  | Homework 2 (group theory, binary operators)         |
+| [[file:lecture_3.org][Lecture 3]]   | Notes: lecture 3                                    |
+| [[file:homework_3.org][Homework 3]]  | Homework 3 (EC point addition)                      |
+| [[file:lecture_4.org][Lecture 4]]   | Notes from lecture 4                                |
+| [[file:homework_4.org][Homework 4]]  | Homework 4 (ECDSA)                                  |
+| [[file:lecture_5.org][Lecture 5]]   | Notes: lecture 5                                    |
+| [[file:homework_5.org][Homework 5]]  | Homework 4 (EC calculations in Solidity)            |
+| [[file:lecture_6.org][Lecture 6]]   | Notes: lecture 6                                    |
+| [[file:homework_6.org][Homework 6]]  | Homework 6 (Pairings in Solidity)                   |
+| [[file:lecture_7.org][Lecture 7]]   | Notes: lecture 7                                    |
+| [[file:homework_7.org][Homework 7]]  | Hw 7 (Arithmetic Circuits)                          |
+| [[file:lecture_8.org][Lecture 8]]   | Notes: lecture 8                                    |
+| [[file:homework_8.org][Homework 8]]  | Homework 8 (R1CS)                                   |
+| [[file:lecture_9.org][Lecture 9]]   | Lecture 9 (QAP)                                     |
+| [[file:homework_9.org][Homework 9]]  | HW9 (Lagrange interpolation, Schwartz-Zippel Lemma) |
+| [[file:lecture_10.org][Lecture 10]]  | Notes: lecture 10                                   |
+| [[file:homework_10.org][Homework 10]] | HW10 (R1CS to QAP)                                  |

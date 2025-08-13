@@ -1,0 +1,11 @@
+* NOTES
+- QAP
+- circuit - QAP
+- succintness via SZ lemma
+- https://rareskills.io/post/quadratic-arithmetic-program
+- r1cs to QAP
+- https://rareskills.io/post/r1cs-to-qap
+
+#+BEGIN_SRC sage :session . :exports both
+
+#+END_SRC
