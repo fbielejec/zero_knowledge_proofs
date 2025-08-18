@@ -1,6 +1,6 @@
-* TODO Homework 10
+* IN-PROGRESS Homework 10
 - https://almondine-song-c43.notion.site/Homework-9-9142687e4ff94bda967f088a36cff41d
-** IN-PROGRESS Convert the following R1CS into a QAP over real numbers field
+** DONE Convert the following R1CS into a QAP over real numbers field
 
 #+BEGIN_SRC sage :session . :exports both
 import numpy as np
@@ -100,3 +100,51 @@ True
 -5960000*x + 5940000
 True
 #+end_example
+
+** IN-PROGRESS QAP over a finite field
+
+#+BEGIN_SRC sage :session . :exports both
+import numpy as np
+import random
+
+p=79
+Fp=GF(p)
+Rx.<x> = PolynomialRing(Fp)
+
+# Define the matrices
+A = np.array([[Fp(0),Fp(0),Fp(3),Fp(0),Fp(0),Fp(0)],
+              [Fp(0),Fp(0),Fp(0),Fp(0),Fp(1),Fp(0)],
+              [Fp(0),Fp(0),Fp(1),Fp(0),Fp(0),Fp(0)]])
+
+B = np.array([[Fp(0),Fp(0),Fp(1),Fp(0),Fp(0),Fp(0)],
+              [Fp(0),Fp(0),Fp(0),Fp(1),Fp(0),Fp(0)],
+              [Fp(0),Fp(0),Fp(0),Fp(5),Fp(0),Fp(0)]])
+
+C = np.array([[Fp(0),Fp(0),Fp(0),Fp(0),Fp(1),Fp(0)],
+              [Fp(0),Fp(0),Fp(0),Fp(0),Fp(0),Fp(1)],
+              [Fp(-3),Fp(1),Fp(1),Fp(2),Fp(0),Fp(-1)]])
+
+# pick values for x and y
+x = 100
+y = 100
+
+# this is our orignal formula
+out = 3 * x * x * y + 5 * x * y - x- 2*y + 3# the witness vector with the intermediate variables inside
+v1 = 3*x*x
+v2 = v1 * y
+w = np.array([1, out, x, y, v1, v2])
+
+result = C.dot(w) == np.multiply(A.dot(w),B.dot(w))
+assert result.all(), "result contains an inequality"
+
+xs = [Fp(1),Fp(2),Fp(3)]
+
+vs = []
+for col in np.matrix.transpose(np.array(R)):
+  p = Rx.lagrange_polynomial(zip(xs,col))
+  vs.append(p)
+
+
+#+END_SRC
+
+#+RESULTS:
