@@ -109,7 +109,7 @@ import random
 
 p=79
 Fp=GF(p)
-Rx.<x> = PolynomialRing(Fp)
+Rt.<t> = PolynomialRing(Fp)
 
 # Define the matrices
 A = np.array([[Fp(0),Fp(0),Fp(3),Fp(0),Fp(0),Fp(0)],
@@ -139,12 +139,59 @@ assert result.all(), "result contains an inequality"
 
 xs = [Fp(1),Fp(2),Fp(3)]
 
+us = []
+for col in np.matrix.transpose(np.array(A)):
+  p = Rt.lagrange_polynomial(zip(xs,col))
+  us.append(p)
+
+us
+
 vs = []
-for col in np.matrix.transpose(np.array(R)):
-  p = Rx.lagrange_polynomial(zip(xs,col))
+for col in np.matrix.transpose(np.array(B)):
+  p = Rt.lagrange_polynomial(zip(xs,col))
   vs.append(p)
 
+vs
 
+ws = []
+for col in np.matrix.transpose(np.array(C)):
+  p = Rt.lagrange_polynomial(zip(xs,col))
+  ws.append(p)
+
+ws
+
+l = np.dot(us, w)
+r = np.dot(vs, w)
+o = np.dot(ws, w)
+
+l(1) * r(1) == o(1)
+l(2) * r(2) == o(2)
+l(3) * r(3) == o(3)
+
+T=(t-1)*(t-2)*(t-3)
+
+h=(l*r-o)/T
+h
+
+# QAP should hold almost everywhere, especially in a random point:
+tau = random.randint(-1000,1000)
+
+l(tau) * r(tau) == o(tau) + T(tau)*h(tau)
 #+END_SRC
 
 #+RESULTS:
+#+begin_example
+[0, 0, 2*t^2 + 70*t + 10, 0, 78*t^2 + 4*t + 76, 0]
+[0, 0, 40*t^2 + 37*t + 3, 41*t^2 + 36*t + 2, 0, 0]
+[38*t^2 + 44*t + 76,
+ 40*t^2 + 38*t + 1,
+ 40*t^2 + 38*t + 1,
+ t^2 + 76*t + 2,
+ 40*t^2 + 37*t + 3,
+ 38*t^2 + 45*t + 75]
+True
+True
+True
+76*t + 69
+True
+#+end_example
