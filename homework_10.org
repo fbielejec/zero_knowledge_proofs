@@ -101,7 +101,7 @@ True
 True
 #+end_example
 
-** IN-PROGRESS QAP over a finite field
+** DONE QAP over a finite field
 
 #+BEGIN_SRC sage :session . :exports both
 import numpy as np
