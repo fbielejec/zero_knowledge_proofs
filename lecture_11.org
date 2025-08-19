@@ -1,1 +1,7 @@
 * NOTES
+- powers of tau
+- degree of the polynomials l,r,o,h,T
+- proving QAP
+  - trusted setup
+  - proof generation
+  - proof check via pairings
