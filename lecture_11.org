@@ -5,3 +5,8 @@
   - trusted setup
   - proof generation
   - proof check via pairings
+- verifying polynomial equality in ZK (using EC)
+
+#+BEGIN_SRC sage :session . :exports both
+
+#+END_SRC
