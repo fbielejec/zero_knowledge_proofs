@@ -9,5 +9,134 @@
 - verifying polynomial equality in ZK (using EC)
 
 #+BEGIN_SRC sage :session . :exports both
+import numpy as np
+import random
+import py_ecc.bn128 as bn128
+from py_ecc.fields import (
+      bn128_FQ as FQ,
+      bn128_FQ2 as FQ2,
+      bn128_FQ12 as FQ12
+)
+
+
+p=21888242871839275222246405745257275088696311157297823662689037894645226208583
+Fp=GF(p)
+E = EllipticCurve(Fp, [0,3])
+G1 = E(1,2)
+k = 2
+Rx.<x>=Fp[]
+Fp2 = GF(p^k, name='i', modulus=x^k + 1)
+
+# https://eips.ethereum.org/EIPS/eip-197#:~:text=q%20%3D%2021888242871839275222246405745257275088548364400416034343698204186575808495617.-,Definition%20of%20the%20groups,-The%20groups%20G_1
+a=0
+TwistB=3*Fp2([9,1])^(-1) # 3/(i+9)
+E2 = EllipticCurve(Fp2, [a,TwistB])
+
+# [a,b] -> a + i*b
+x_G2 = Fp2([
+      10857046999023057135944570762232829481370756359578518086990519993285655852781,
+      11559732032986387107991004021392285783925812861821192530917403151452391805634
+])
+
+y_G2 = Fp2([
+      8495653923123431417604973247489272438418190587263600148770280649306958101930,
+      4082367875863433681332203403145435568316851327593401208105741076214120093531
+])
+
+G2 = E2(x_G2, y_G2)
+
+# computes e(Q \in G2, P \in G1)
+# returns an element in FQ12 (extension tower Fp^2 -> Fp^6 -> Fp12)
+def pairing(P,Q):
+    ePQ = bn128.pairing((bn128.FQ2([int(Q[0][0]), int(Q[0][1])]),
+                         bn128.FQ2([int(Q[1][0]), int(Q[1][1])])),
+                        (bn128.FQ(int(P[0])), bn128.FQ(int(P[1]))));
+    return ePQ
+
+# Define the matrices for R1CS
+L = np.array([[Fp(0),Fp(0),Fp(3),Fp(0),Fp(0),Fp(0)],
+              [Fp(0),Fp(0),Fp(0),Fp(0),Fp(1),Fp(0)],
+              [Fp(0),Fp(0),Fp(1),Fp(0),Fp(0),Fp(0)]])
+
+R = np.array([[Fp(0),Fp(0),Fp(1),Fp(0),Fp(0),Fp(0)],
+              [Fp(0),Fp(0),Fp(0),Fp(1),Fp(0),Fp(0)],
+              [Fp(0),Fp(0),Fp(0),Fp(5),Fp(0),Fp(0)]])
+
+O = np.array([[Fp(0),Fp(0),Fp(0),Fp(0),Fp(1),Fp(0)],
+              [Fp(0),Fp(0),Fp(0),Fp(0),Fp(0),Fp(1)],
+              [Fp(-3),Fp(1),Fp(1),Fp(2),Fp(0),Fp(-1)]])
+
+# witness
+xw = 100
+yw = 100
+out = 3 * xw * xw * yw + 5 * xw * yw - xw - 2*yw + 3# the witness vector with the intermediate variables inside
+v1 = 3*xw*xw
+v2 = v1 * yw
+w = np.array([1, out, xw, yw, v1, v2])
+
+# interpolation set
+xs = [Fp(1),Fp(2),Fp(3)]
+
+us = []
+for col in np.matrix.transpose(np.array(L)):
+  p = Rx.lagrange_polynomial(zip(xs,col))
+  us.append(p)
+
+vs = []
+for col in np.matrix.transpose(np.array(R)):
+  p = Rx.lagrange_polynomial(zip(xs,col))
+  vs.append(p)
+
+ws = []
+for col in np.matrix.transpose(np.array(O)):
+  p = Rx.lagrange_polynomial(zip(xs,col))
+  ws.append(p)
+
+
+# --- QAP ---
+
+l = np.dot(us, w)
+r = np.dot(vs, w)
+o = np.dot(ws, w)
+
+T=(x-xs[0])*(x-xs[1])*(x-xs[2])
+h=(l*r-o)/T
+
+# --- trusted setup ---
+
+# random tau (unknown to the prover and verifier)
+tau = random.randint(-1000,1000)
+
+SRS1 = []
+SRS2 = []
+SRS3 = []
+
+# G1, tau*G1, tau^2*G1,...
+for i in range(len (L)):
+  SRS1.append(tau^i * G1)
+
+# G2, tau*G2, tau^2*G2,...
+for i in range(len (L)):
+  SRS2.append(tau^i * G2)
+
+for i in range(len (L)-1):
+  SRS3.append(T(tau) * tau^i * G1)
+
+# --- proving QAP using the trusted setup
+
+       # flipped
+lcoeff = l.coefficients()
+lcoeff.reverse()
+A = np.dot(lcoeff, SRS1)
+
+rcoeff = r.coefficients()
+rcoeff.reverse()
+B = np.dot(rcoeff, SRS2)
+
+# TODO : C
+
+# TODO : verify (using pairings)
 
 #+END_SRC
+
+#+RESULTS:

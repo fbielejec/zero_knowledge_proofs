@@ -128,7 +128,7 @@ C = np.array([[Fp(0),Fp(0),Fp(0),Fp(0),Fp(1),Fp(0)],
 x = 100
 y = 100
 
-# this is our orignal formula
+# this is our original formula
 out = 3 * x * x * y + 5 * x * y - x- 2*y + 3# the witness vector with the intermediate variables inside
 v1 = 3*x*x
 v2 = v1 * y
