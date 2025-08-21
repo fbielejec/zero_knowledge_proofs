@@ -169,6 +169,9 @@ C = otau + hTtau
 
 # TODO : verify (using pairings)
 
+pairing(A,B) == pairing(C,G2)
+
 #+END_SRC
 
 #+RESULTS:
+: False
