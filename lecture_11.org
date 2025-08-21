@@ -150,14 +150,14 @@ for i in range(len (L)-1):
 A = E(0)
 lcoeff = l.coefficients()
 # needs to match the SRS order! (low powers to high)
-#lcoeff.reverse()
+# lcoeff.reverse()
 for i in range(len(SRS1)):
   A = A + lcoeff[i] * SRS1[i]
 
 # evaluate r(tau) in the same manner
 B = E2(0)
 rcoeff = r.coefficients()
-#rcoeff.reverse()
+# rcoeff.reverse()
 for i in range(len(SRS2)):
   B = B + rcoeff[i] * SRS2[i]
 
@@ -165,14 +165,14 @@ for i in range(len(SRS2)):
 
 otau = E(0)
 ocoeff = o.coefficients()
-#ocoeff.reverse()
+# ocoeff.reverse()
 for i in range(len(SRS1)):
   otau = otau + ocoeff[i] * SRS1[i]
 
 # h(x)T(x) = (a + b*x + c*x^2 + ...) * T(x) = a * T(x)
 hTtau=E(0)
 hcoeff = h.coefficients()
-#hcoeff.reverse()
+# hcoeff.reverse()
 for i in range(len(SRS3)):
   hTtau = hTtau + hcoeff[i] * SRS3[i]
 
