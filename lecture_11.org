@@ -18,13 +18,13 @@ from py_ecc.fields import (
       bn128_FQ12 as FQ12
 )
 
-p=21888242871839275222246405745257275088696311157297823662689037894645226208583
-Fp=GF(p)
+p = 21888242871839275222246405745257275088696311157297823662689037894645226208583
+Fp = GF(p)
 E = EllipticCurve(Fp, [0,3])
 G1 = E(1,2)
 k = 2
-Rx.<x>=Fp[]
-Fp2 = GF(p^k, name='i', modulus=x^k + 1)
+Rx.<x> = Fp[]
+Fp2 = GF(p^k, name = 'i', modulus = x^k + 1)
 
 # https://eips.ethereum.org/EIPS/eip-197#:~:text=q%20%3D%2021888242871839275222246405745257275088548364400416034343698204186575808495617.-,Definition%20of%20the%20groups,-The%20groups%20G_1
 a=0
@@ -112,7 +112,7 @@ l(1) * r(1) == o(1)
 l(2) * r(2) == o(2)
 l(3) * r(3) == o(3)
 
-# TODO: generatee based on interpolation set
+# TODO: generate based on the interpolation set
 T = (x-xs[0])*(x-xs[1])*(x-xs[2])
 
 h = (l*r-o)//T
@@ -148,7 +148,7 @@ for i in range(len (L)-1):
 # A = l(tau)G1 = a * tau^0*G1 + b*tau*G1 + c*tau^2*G1 + ...
 A = E(0)
 lcoeff = l.coefficients()
-# flipped to match the SRS order
+# needs to match the SRS order! (low powers to high)
 #lcoeff.reverse()
 for i in range(len(SRS1)):
   A = A + lcoeff[i] * SRS1[i]
@@ -170,7 +170,7 @@ for i in range(len(SRS1)):
 
 # h(x)T(x) = (a + b*x + c*x^2 + ...) * T(x) = a * T(x)
 hTtau=E(0)
-hcoeff = h.coefficients() # somehow these ordered from the low to high?
+hcoeff = h.coefficients()
 #hcoeff.reverse()
 for i in range(len(SRS3)):
   hTtau = hTtau + hcoeff[i] * SRS3[i]
