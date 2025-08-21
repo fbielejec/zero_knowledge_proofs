@@ -18,7 +18,6 @@ from py_ecc.fields import (
       bn128_FQ12 as FQ12
 )
 
-
 p=21888242871839275222246405745257275088696311157297823662689037894645226208583
 Fp=GF(p)
 E = EllipticCurve(Fp, [0,3])
@@ -53,6 +52,20 @@ def pairing(P,Q):
                         (bn128.FQ(int(P[0])), bn128.FQ(int(P[1]))));
     return ePQ
 
+# pick values for x (xw) and y (yw)
+xw = 100
+yw = 100
+
+# this is our original formula
+out = 3 * xw * xw * yw + 5 * xw * yw - xw - 2*yw + 3
+
+v1 = 3*xw*xw
+v2 = v1 * yw
+
+# --- witness vector
+
+w = np.array([1, out, xw, yw, v1, v2])
+
 # Define the matrices for R1CS
 L = np.array([[Fp(0),Fp(0),Fp(3),Fp(0),Fp(0),Fp(0)],
               [Fp(0),Fp(0),Fp(0),Fp(0),Fp(1),Fp(0)],
@@ -65,14 +78,6 @@ R = np.array([[Fp(0),Fp(0),Fp(1),Fp(0),Fp(0),Fp(0)],
 O = np.array([[Fp(0),Fp(0),Fp(0),Fp(0),Fp(1),Fp(0)],
               [Fp(0),Fp(0),Fp(0),Fp(0),Fp(0),Fp(1)],
               [Fp(-3),Fp(1),Fp(1),Fp(2),Fp(0),Fp(-1)]])
-
-# witness
-xw = 100
-yw = 100
-out = 3 * xw * xw * yw + 5 * xw * yw - xw - 2*yw + 3# the witness vector with the intermediate variables inside
-v1 = 3*xw*xw
-v2 = v1 * yw
-w = np.array([1, out, xw, yw, v1, v2])
 
 # interpolation set
 xs = [Fp(1),Fp(2),Fp(3)]
@@ -92,19 +97,20 @@ for col in np.matrix.transpose(np.array(O)):
   p = Rx.lagrange_polynomial(zip(xs,col))
   ws.append(p)
 
-
 # --- QAP ---
 
 l = np.dot(us, w)
 r = np.dot(vs, w)
 o = np.dot(ws, w)
 
-T=(x-xs[0])*(x-xs[1])*(x-xs[2])
-h=(l*r-o)/T
+T = (x-xs[0])*(x-xs[1])*(x-xs[2])
+h = (l*r-o)/T
+remainder = (l*r - o) % T
 
 # --- trusted setup ---
 
 # random tau (unknown to the prover and verifier)
+random.seed(7)
 tau = random.randint(-1000,1000)
 
 SRS1 = []
@@ -122,18 +128,28 @@ for i in range(len (L)):
 for i in range(len (L)-1):
   SRS3.append(T(tau) * tau^i * G1)
 
-# --- proving QAP using the trusted setup
+# --- proving QAP using the trusted setup (prover does not know tau, but he knows the powers of tau)
 
-       # flipped
+A = E(0)
 lcoeff = l.coefficients()
+# flipped to match the SRS order
 lcoeff.reverse()
-A = np.dot(lcoeff, SRS1)
+for i in range(len(SRS1)):
+  A = A + lcoeff[i] * SRS1[i]
 
+B = E2(0)
 rcoeff = r.coefficients()
 rcoeff.reverse()
-B = np.dot(rcoeff, SRS2)
+for i in range(len(SRS2)):
+  B = B + rcoeff[i] * SRS2[i]
 
 # TODO : C
+
+C = E(0)
+#hcoeff = h.coefficients()
+
+
+
 
 # TODO : verify (using pairings)
 

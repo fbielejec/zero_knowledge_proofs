@@ -240,7 +240,7 @@ Figure out how to discover if $sG_{1} == sG_{2}$ if you are given the elliptic c
   G2_vec = [G2 for _ in range(len(w))]
 
   # check all pairwise pairing
-  [pairing(LwG1[6],RwG2[6]) == pairing(OwG1[6],G2_vec[6]) for i in range(len(w))]
+  [pairing(LwG1[i],RwG2[i]) == pairing(OwG1[i],G2_vec[i]) for i in range(len(w))]
 #+END_SRC
 
 #+RESULTS:
