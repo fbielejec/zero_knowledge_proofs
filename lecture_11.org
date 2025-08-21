@@ -7,6 +7,9 @@
   - proof check via pairings
 - srs
 - verifying polynomial equality in ZK (using EC)
+- chapters
+  - https://rareskills.io/post/elliptic-curve-qaphttps://rareskills.io/post/elliptic-curve-qap
+  - https://rareskills.io/post/trusted-setup
 
 #+BEGIN_SRC sage :session . :exports both
 import numpy as np
@@ -127,21 +130,14 @@ tau = random.randint(1, E.order())
 # check QAP (assuming we know tau, although we dont)
 l(tau) * r(tau) == o(tau) + T(tau)*h(tau)
 
-SRS1 = []
-SRS2 = []
-SRS3 = []
-
 # 1*G1, tau*G1, tau^2*G1, ...
-for i in range(len (L)):
-  SRS1.append(tau^i * G1)
+SRS1 = [G1 * tau**i for i in range(len (L))]
 
 # 1*G2, tau*G2, tau^2*G2, ...
-for i in range(len (L)):
-  SRS2.append(tau^i * G2)
+SRS2 = [G2 * tau**i for i in range(len (L))]
 
 # T(tau)*G1, T(tau)*t*G1, T(tau)*t^2*G1, ...
-for i in range(len (L)-1):
-  SRS3.append(T(tau) * tau^i * G1)
+SRS3 = [G1 * T(tau) * tau**i for i in range(len (L)-1)]
 
 # --- proving QAP using the trusted setup (prover does not know tau, but he knows the powers of tau)
 
@@ -191,3 +187,4 @@ C = otau + hTtau
 : True
 : True
 : True
+: False
