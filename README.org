@@ -30,3 +30,4 @@
 | [[file:homework_10.org][Homework 10]] | HW10 (R1CS to QAP)                                  |
 | [[file:lecture_11.org][Lecture 11]]  | Notes: lecture 10                                   |
 | [[file:homework_11.org][Homework 11]] | HW11: Proving the QAP using EC points               |
+| [[file:lecture_12.org][Lecture 12]]  | Pinocchio and trusted setup                         |
