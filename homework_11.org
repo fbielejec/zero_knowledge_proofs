@@ -150,13 +150,13 @@ def commit(poly, srs):
     return sum( int(ci) % E.order() * srs[i] for i, ci in enumerate(coeffs) )
 
 ltau = commit(l, SRS1)
-ltau == (int(l(tau_fr)) % E.order()) * G1
+assert(ltau == (int(l(tau_fr)) % E.order()) * G1)
 
 rtau = commit(r, SRS2)
-rtau == r(tau) * G2
+assert(rtau == r(tau) * G2)
 
 otau = commit(o, SRS1)
-otau == o(tau) * G1
+assert(otau == o(tau) * G1)
 
 hTtau = commit(h, SRS3)
 
@@ -166,7 +166,4 @@ pairing(ltau,rtau) == pairing(otau + hTtau,G2)
 
 #+RESULTS:
 : [True, True, True]
-: True
-: True
-: True
 : True
