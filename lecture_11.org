@@ -85,6 +85,8 @@ O = np.array([[Fp(0),Fp(0),Fp(0),Fp(0),Fp(1),Fp(0)],
 # check r1cs
 O.dot(w) == np.multiply(L.dot(w),R.dot(w))
 
+# --- QAP ---
+
 # interpolation set
 # TODO : generate based on ncol
 xs = [Fp(1),Fp(2),Fp(3)]
@@ -104,8 +106,6 @@ for col in np.matrix.transpose(np.array(O)):
   p = Rx.lagrange_polynomial(zip(xs,col))
   ws.append(p)
 
-# --- QAP ---
-
 l = np.dot(us, w)
 r = np.dot(vs, w)
 o = np.dot(ws, w)
@@ -119,22 +119,28 @@ l(xs[2]) * r(xs[2]) == o(xs[2])
 T = (x-xs[0])*(x-xs[1])*(x-xs[2])
 
 h = (l*r-o)//T
+# remainder should be 0
 remainder = (l*r - o) % T
+
+remainder == 0
 
 # --- trusted setup ---
 
 # random tau (unknown to the prover and verifier)
 random.seed(int(2137))
-tau = random.randint(1, E.order())
+tau = Fp(random.randint(1, E.order()))
 
-# check QAP (assuming we know tau, although we dont)
-l(tau) * r(tau) == o(tau) + T(tau)*h(tau)
+# check QAP non-succintly
+l * r - o == T*h
+
+# check QAP succintly using SZ lemma (assuming we know tau, although we dont)
+l(tau) * r(tau) - o(tau) == T(tau)*h(tau)
 
 # 1*G1, tau*G1, tau^2*G1, ...
 SRS1 = [G1 * tau**i for i in range(len (L))]
 
 # 1*G2, tau*G2, tau^2*G2, ...
-SRS2 = [G2 * tau**i for i in range(len (L))]
+SRS2 = [G2 * tau**i for i in range(len (R))]
 
 # T(tau)*G1, T(tau)*t*G1, T(tau)*t^2*G1, ...
 SRS3 = [G1 * T(tau) * tau**i for i in range(len (L)-1)]
@@ -143,36 +149,59 @@ SRS3 = [G1 * T(tau) * tau**i for i in range(len (L)-1)]
 
 # l(x) = a + b*x + c*x^2 + ... + d*x^(n-1)
 # A = l(tau)G1 = a * tau^0*G1 + b*tau*G1 + c*tau^2*G1 + ...
-A = E(0)
+#A = E(0)
 # coeff order needs to match the SRS order! (low powers to high)
-lcoeff = l.coefficients()
-# lcoeff.reverse()
-for i in range(len(SRS1)):
-  A = A + lcoeff[i] * SRS1[i]
+#lcoeff = l.coefficients()
+#lcoeff.reverse()
+#for i in range(len(SRS1)):
+#  A = A + lcoeff[i] * SRS1[i]
 
-# evaluate r(tau) in the same manner
-B = E2(0)
-rcoeff = r.coefficients()
-# rcoeff.reverse()
+### -- START : tmp
+
+rtaus=[0,0,0]
 for i in range(len(SRS2)):
-  B = B + rcoeff[i] * SRS2[i]
+  rtaus[i]=r.coefficients()[i] * SRS2[i]  
 
-# --- C = o(tau)G1 + h(tau)*T(tau)*G1
 
-otau = E(0)
-ocoeff = o.coefficients()
-# ocoeff.reverse()
-for i in range(len(SRS1)):
-  otau = otau + ocoeff[i] * SRS1[i]
+#rtau == G2*r(tau)
 
-# h(x)T(x) = (a + b*x + c*x^2 + ...) * T(x) = a * T(x)
-hTtau=E(0)
-hcoeff = h.coefficients()
-# hcoeff.reverse()
-for i in range(len(SRS3)):
-  hTtau = hTtau + hcoeff[i] * SRS3[i]
+### --- END
 
-C = otau + hTtau
+# check
+#A == G1*l(tau)
+#
+## evaluate r(tau) in the same manner
+#B = E2(0)
+#rcoeff = r.coefficients()
+## rcoeff.reverse()
+#for i in range(len(SRS2)):
+#  B = B + rcoeff[i] * SRS2[i]
+#
+## check
+#B == G2*r(tau)
+#
+## --- C = o(tau)G1 + h(tau)*T(tau)*G1
+#
+#otau = E(0)
+#ocoeff = o.coefficients()
+## ocoeff.reverse()
+#for i in range(len(SRS1)):
+#  otau = otau + ocoeff[i] * SRS1[i]
+#
+## check
+#otau == G1*o(tau)
+#
+## h(x)T(x) = (a + b*x + c*x^2 + ...) * T(x) = a * T(x)
+#hTtau=E(0)
+#hcoeff = h.coefficients()
+## hcoeff.reverse()
+#for i in range(len(SRS3)):
+#  hTtau = hTtau + hcoeff[i] * SRS3[i]
+#
+##check
+#hTtau == h(tau)*T(tau)*G1
+#
+#C = otau + hTtau
 
 # TODO : verify (using pairings)
 # TODO: fails, why?
@@ -183,6 +212,8 @@ C = otau + hTtau
 
 #+RESULTS:
 : array([ True,  True,  True])
+: True
+: True
 : True
 : True
 : True
