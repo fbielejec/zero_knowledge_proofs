@@ -15,8 +15,13 @@ p = 2188824287183927522224640574525727508869631115729782366268903789464522620858
 Fp = GF(p)
 E = EllipticCurve(Fp, [0,3])
 G1 = E(1,2)
+
+r = E.order()             # group order (Fr modulus)
+Fr = GF(r)                # scalar field
+Rx_fr = Fr['x']           # polynomial ring over Fr
+x = Rx_fr.gen()
+
 k = 2
-Rx.<x> = Fp[]
 Fp2 = GF(p^k, name = 'i', modulus = x^k + 1)
 
 # https://eips.ethereum.org/EIPS/eip-197#:~:text=q%20%3D%2021888242871839275222246405745257275088548364400416034343698204186575808495617.-,Definition%20of%20the%20groups,-The%20groups%20G_1
@@ -37,21 +42,21 @@ y_G2 = Fp2([
 
 G2 = E2(x_G2, y_G2)
 
-# computes e(Q \in G2, P \in G1)
+# computes e(P \in G1, Q \in G2)
 # returns an element in FQ12 (extension tower Fp^2 -> Fp^6 -> Fp12)
-def pairing(P,Q):
-    ePQ = bn128.pairing((bn128.FQ2([int(Q[0][0]), int(Q[0][1])]),
-                         bn128.FQ2([int(Q[1][0]), int(Q[1][1])])),
-                        (bn128.FQ(int(P[0])), bn128.FQ(int(P[1]))));
+def pairing(P_G1,Q_G2):
+    ePQ = bn128.pairing((bn128.FQ2([int(Q_G2[0][0]), int(Q_G2[0][1])]),
+                         bn128.FQ2([int(Q_G2[1][0]), int(Q_G2[1][1])])),
+                        (bn128.FQ(int(P_G1[0])), bn128.FQ(int(P_G1[1]))));
     return ePQ
 
 # --- STATEMENT:
 # I know 4 numbers a1*a2*a3*a4 = 48"
 a1=6; a2=2; a3=2; a4=2; a5=12; a6=4
 
-a1*a2==a5
-a3*a4==a6
-a5*a6==48
+assert(a1*a2==a5)
+assert(a3*a4==a6)
+assert(a5*a6==48)
 
 # the witness:
 a = np.array([1, a1, a2, a3, a4, a5, a6])
@@ -62,37 +67,41 @@ R = np.array([[0,0,1,0,0,0,0],[0,0,0,0,1,0,0],[0,0,0,0,0,0,1]])
 O = np.array([[0,0,0,0,0,1,0],[0,0,0,0,0,0,1],[48,0,0,0,0,0,0]])
 
 # check r1cs
-O.dot(a) == np.multiply(L.dot(a),R.dot(a))
+assert (all(O.dot(a) == np.multiply(L.dot(a), R.dot(a))))
 
 # --- QAP ---
 
-# interpolation set x in 0 ... #constraints
-xs = [Fp(i) for i in range(0,len(L))]
-xs
+m = len(L)                # number of constraints
+
+# interpolation points in Fr
+xs_fr = [Fr(i) for i in range(m)]
 
 us = []
 for col in np.matrix.transpose(np.array(L)):
-  p = Rx.lagrange_polynomial(zip(xs,col))
-  us.append(p)
+    p = Rx_fr.lagrange_polynomial(zip(xs_fr, [Fr(int(c)) for c in col]))
+    us.append(p)
 
 vs = []
 for col in np.matrix.transpose(np.array(R)):
-  p = Rx.lagrange_polynomial(zip(xs,col))
-  vs.append(p)
+  vs.append(Rx_fr.lagrange_polynomial(zip(xs_fr, [Fr(int(c)) for c in col])))
 
 ws = []
 for col in np.matrix.transpose(np.array(O)):
-  p = Rx.lagrange_polynomial(zip(xs,col))
-  ws.append(p)
+  ws.append(Rx_fr.lagrange_polynomial(zip(xs_fr, [Fr(int(c)) for c in col])))
 
-l = np.dot(us, a)
-r = np.dot(vs, a)
-o = np.dot(ws, a)
+# compute l,r,o in Fr[x]
+
+a_fr = [Fr(int(v)) for v in a]   # witness as Fr elements
+
+# compute l,r,o in Fr[x]
+l = sum(u * ai for u, ai in zip(us, a_fr))
+r = sum(v * ai for v, ai in zip(vs, a_fr))
+o = sum(w * ai for w, ai in zip(ws, a_fr))
 
 # check interpolation l(x) * r(x) = o(x) for x in the interpolation set
-[l(x) * r(x) == o(x) for x in xs]
+[l(x) * r(x) == o(x) for x in xs_fr]
 
-T = math.prod(x - xi for xi in xs)
+T = math.prod(x - xi for xi in xs_fr)
 
 # calculate h
 h = (l*r-o)//T
@@ -100,76 +109,64 @@ h = (l*r-o)//T
 remainder = (l*r - o) % T
 
 # remainder should be 0 (when the witness is correct)
-remainder == 0
+assert (remainder == 0)
 
 # --- TRUSTED SETUP ---
-
-# random tau (unknown to the prover and verifier)
+#
+## random tau (unknown to the prover and verifier)
 random.seed(int(2137))
 tau = random.randint(1, E.order())
+tau_int = int(tau)        # ensure it's in 0..r-1
+tau_fr  = Fr(tau_int)     # element of Fr for polynomial evaluation if needed
 
+#
 # check QAP non-succintly (in every point)
-l * r - o == T*h
+assert(l * r - o == T*h)
 
 # check QAP succintly (using SZ lemma and assuming verifier knows tau)
-l(tau) * r(tau) - o(tau) == T(tau)*h(tau)
+assert(l(tau) * r(tau) - o(tau) == T(tau)*h(tau))
+
+deg_l = len(l.coefficients())
+deg_r = len(r.coefficients())
+deg_o = len(o.coefficients())
+deg_h = len(h.coefficients())
+
+# build SRS with integer powers (group scalars are integers modulo r)
 
 # 1*G1, tau*G1, tau^2*G1, ...
-SRS1 = [G1 * (tau**i) for i in range(len (L))]
+SRS1 = [ (tau_int**i) * G1 for i in range(max(deg_l, deg_o)) ]
 # 1*G2, tau*G2, tau^2*G2, ...
-SRS2 = [G2 * tau**i for i in range(len (L))]
+SRS2 = [(tau_int**i) * G2 for i in range(deg_r)]
 # T(tau)*G1, T(tau)*t*G1, T(tau)*t^2*G1, ...
-SRS3 = [G1 * T(tau) * tau**i for i in range(len (L)-1)]
+T_val = Fr(T(tau_int))
+SRS3 = [(T_val * (tau_int**i)) * G1 for i in range(deg_h)]
 
 # --- proving QAP using the trusted setup (prover does not know tau, but he knows the powers of tau)
 
-# l(x) = a + b*x + c*x^2 + ... + d*x^(n-1)
-# l(tau) * G1 = a * tau^0*G1 + b*tau*G1 + c*tau^2*G1 + ...
-ltau = E(0)
-# pad with 0's in case the lagrange polynomial has degree less than m
-lcoeffs = l.coefficients()
-lcoeffs = np.pad(lcoeffs, (0, len(SRS1) - len(lcoeffs)))
-for i in range(len(SRS1)):
-  ltau = ltau + SRS1[i]* lcoeffs[i]
+# commit to a polynomial (in Fr[x]) using SRS
+def commit(poly, srs):
+    coeffs = poly.coefficients()   # elements in Fr
+    # convert each Fr element to its canonical integer representative 0..r-1
+    return sum( int(ci) % E.order() * srs[i] for i, ci in enumerate(coeffs) )
 
-# ltau == l(tau)*G1
+ltau = commit(l, SRS1)
+ltau == (int(l(tau_fr)) % E.order()) * G1
 
-rtau = E2(0)
-rcoeffs = r.coefficients()
-rcoeffs = np.pad(rcoeffs, (0, len(SRS2) - len(rcoeffs)))
-for i in range(len(SRS2)):
-  rtau = rtau + SRS2[i]* rcoeffs[i]
+rtau = commit(r, SRS2)
+rtau == r(tau) * G2
 
-#rtau == r(tau)*G2
+otau = commit(o, SRS1)
+otau == o(tau) * G1
 
-otau = E(0)
-ocoeffs = o.coefficients()
-ocoeffs = np.pad(ocoeffs, (0, len(SRS1) - len(ocoeffs)))
-for i in range(len(SRS1)):
-  otau = otau + SRS1[i]* ocoeffs[i]
-
-#otau == o(tau)*G1
-
-# h(x)T(x) = (a + b*x + c*x^2 + ...) * T(x) = a * T(x)
-hTtau=E(0)
-hcoeffs = h.coefficients()
-hcoeffs = np.pad(hcoeffs, (0, len(SRS3) - len(hcoeffs)))
-for i in range(len(SRS3)):
-  hTtau = hTtau + hcoeff[i] * SRS3[i]
+hTtau = commit(h, SRS3)
 
 # verify
-
 pairing(ltau,rtau) == pairing(otau + hTtau,G2)
-
 #+END_SRC
 
 #+RESULTS:
-: True
-: True
-: True
-: array([ True,  True,  True])
-: [0, 1, 2]
 : [True, True, True]
+: True
 : True
 : True
 : True
