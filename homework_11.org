@@ -157,6 +157,9 @@ hcoeffs = np.pad(hcoeffs, (0, len(SRS3) - len(hcoeffs)))
 for i in range(len(SRS3)):
   hTtau = hTtau + hcoeff[i] * SRS3[i]
 
+# verify
+
+pairing(ltau,rtau) == pairing(otau + hTtau,G2)
 
 #+END_SRC
 
