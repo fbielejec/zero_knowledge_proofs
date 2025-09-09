@@ -31,3 +31,5 @@
 | [[file:lecture_11.org][Lecture 11]]  | Notes: lecture 10                                   |
 | [[file:homework_11.org][Homework 11]] | HW11: Proving the QAP using EC points               |
 | [[file:lecture_12.org][Lecture 12]]  | Pinocchio and trusted setup                         |
+| [[file:homework_12.org][Homework 12]] | Homework 12                                         |
+| [[file:homework_13.org][Homework 13]] | Homework 13                                         |

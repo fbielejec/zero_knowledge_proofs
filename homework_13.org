@@ -1,0 +1,4 @@
+* hw 13
+- https://www.notion.so/Homework-12-1cc34d22fd9a430bb2b210cb9ce3db71
+Implement the full G16 protocol. 
+Don't try to do it all at once, try to make it work for one particular circuit, add alpha and beta, then add gamma and delta, and if everything is working you can move to add r and s and to implement it for a generic R1CS.
