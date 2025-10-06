@@ -1,4 +1,4 @@
-* DONE ECDS
+* DONE ECDSA
 :PROPERTIES:
 :ID:       6868106e-df36-4c65-8f16-f5b42ae3db2c
 :END:
