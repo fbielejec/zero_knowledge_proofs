@@ -661,8 +661,11 @@ print(get_row_as_1d(A, 2)) # [7,8,9]
 : [7 8 9]
 
 * DONE P vs NP Problem
+:PROPERTIES:
+:ID:       2f4ffbe3-1f86-4612-88c6-86cf5971798b
+:END:
 - *P (Polynomial) Problems:* problems that can be solved in polynomial time and whose solutions can be verified in polynomial time are called *problems in P*.
-  - e.g. Sorting a list : e.g. mergesort takes $\mathcal{O}(n \cdot log(n))< \mathcal{O}^{2}$ to sort a list and $\mathcal{O}(n)$ to verify that the list is sorted.
+  - e.g. Sorting a list : e.g. mergesort takes $\mathcal{O}(n \cdot log(n))< \mathcal{O}(n^{2})$ to sort a list and $\mathcal{O}(n)$ to verify that the list is sorted.
 - *The Witness*: proof that you solved a problem correctly
   - in the example above a sorted list would be a witness
 - *NP (non-deterministic polynomial) Problems:*
