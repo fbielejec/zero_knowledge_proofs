@@ -372,7 +372,6 @@ print(f"log_G(M) = {k}")  # Output: 17
 :ID:       ea70ba33-00a4-4083-aa91-41b6004dd99f
 :END:
 #+BEGIN_SRC sage :session . :exports both
-
 # TODO P+O and P+(-P)
 def add(P1,P2):
   x1=P1[0];x2=P2[0];y1=P1[1];y2=P2[1];

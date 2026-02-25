@@ -33,3 +33,83 @@
 | [[file:lecture_12.org][Lecture 12]]  | Pinocchio and trusted setup                         |
 | [[file:homework_12.org][Homework 12]] | Homework 12                                         |
 | [[file:homework_13.org][Homework 13]] | Homework 13                                         |
+
+* Building a SNARK from Scratch
+
+The construction proceeds in 5 stages, each building on the last.
+
+** Stage 1: Arithmetic Circuits ([[file:lecture_7.org][lecture 7]], [[file:homework_7.org][homework 7]])
+
+The starting point is encoding a computational statement as an *arithmetic circuit* -- a DAG of addition and multiplication gates over a finite field. The homework problems demonstrate this for graph coloring, subset sum, covering set, max, and power-of-two checks. The key insight: any computation can be "flattened" into constraints of the form $a \cdot b = c$, where addition is folded into linear combinations for free.
+
+** Stage 2: R1CS -- Rank-1 Constraint System ([[file:lecture_8.org][lecture 8]], [[file:homework_8.org][homework 8]])
+
+Each multiplication gate becomes one row of three matrices $L, R, O$ (of size $n \times m$, where $n$ = number of constraints, $m$ = witness length). The witness vector $w = [1, \text{public inputs}\ldots, \text{private inputs}\ldots, \text{intermediates}\ldots]$ satisfies:
+
+$L\mathbf{w} \odot R\mathbf{w} = O\mathbf{w}$
+
+where $\odot$ is the Hadamard (element-wise) product. The [[file:homework_8.org][homework 8]] demonstrates this for graph 3-coloring, and [[file:lecture_10.org][lecture 10]] works through $x \cdot y \cdot z = 10$ by hand. The single-multiplication-per-row restriction is fundamental -- it maps directly onto bilinear pairings later (homework 8, problem 4).
+
+** Stage 3: QAP -- Quadratic Arithmetic Program ([[file:lecture_9.org][lectures 9-10]], [[file:homework_9.org][homeworks 9-10]])
+
+The R1CS matrices are converted to polynomials via *Lagrange interpolation*. Each column of $L, R, O$ becomes a polynomial $u_i(x)$, $v_i(x)$, $w_i(x)$ interpolated over points $x = 0, 1, \ldots, n-1$. Combining with the witness:
+
+$l(x) = \sum_i a_i \cdot u_i(x), \quad r(x) = \sum_i a_i \cdot v_i(x), \quad o(x) = \sum_i a_i \cdot w_i(x)$
+
+The R1CS identity $L\mathbf{w} \odot R\mathbf{w} = O\mathbf{w}$ holding at every row translates to $l(x) \cdot r(x) = o(x)$ at each interpolation point. Therefore $l(x) \cdot r(x) - o(x)$ is divisible by the *target polynomial* $T(x) = (x-0)(x-1)\cdots(x-(n-1))$, giving:
+
+$l(x) \cdot r(x) - o(x) = h(x) \cdot T(x)$
+
+The prover computes $h(x) = \frac{l(x) \cdot r(x) - o(x)}{T(x)}$. *Succinctness* comes from the [[id:e52ff81b-e1a8-4153-b8e7-710ab93f82d9][Schwartz-Zippel Lemma]]: instead of checking this identity at every point, the verifier picks a random $\tau$ and checks $l(\tau) \cdot r(\tau) = o(\tau) + h(\tau) \cdot T(\tau)$. A false proof passes with negligible probability $\frac{\deg}{|\mathbb{F}|}$.
+
+** Stage 4: Trusted Setup + Elliptic Curve Commitments ([[file:lecture_11.org][lecture 11]], [[file:homework_11.org][homework 11]])
+
+The verifier shouldn't reveal $\tau$ to the prover (that would let them cheat). Solution: *powers of tau* in the exponent of elliptic curve points.
+
+A trusted party generates a *Structured Reference String (SRS)*:
+
+- $\text{SRS}_1 = [\tau^0 G_1, \tau^1 G_1, \tau^2 G_1, \ldots]$ for $l, o$ commitments
+- $\text{SRS}_2 = [\tau^0 G_2, \tau^1 G_2, \ldots]$ for $r$ commitment
+- $\text{SRS}_3 = [T(\tau)\tau^0 G_1, T(\tau)\tau^1 G_1, \ldots]$ for $h \cdot T$ commitment
+
+Then $\tau$ is destroyed ("toxic waste"). The prover *commits* to polynomials by computing linear combinations of SRS points (never learning $\tau$):
+
+$[l(\tau)]G_1 = \sum_i c_i \cdot \text{SRS}_1[i], \quad [r(\tau)]G_2 = \sum_i c_i \cdot \text{SRS}_2[i]$
+
+** Stage 5: Verification via Pairings ([[file:lecture_6.org][lecture 6]], [[file:homework_6.org][homework 6]], [[file:homework_11.org][homework 11]])
+
+The verifier checks the QAP identity *in the exponent* using bilinear pairings:
+
+$e([l]G_1, [r]G_2) = e([o]G_1 + [hT]G_1, G_2)$
+
+This works because $e(aG_1, bG_2) = g^{ab}$ where $g = e(G_1, G_2)$, so the pairing equation reduces to checking $g^{l \cdot r} = g^{o + hT}$ without anyone knowing $\tau$, $l$, $r$, $o$, or $h$ in the clear.
+
+* Adding Zero Knowledge
+
+Everything above gives a *SNARK* (Succinct Non-interactive Argument of Knowledge) but it is *not yet zero-knowledge*. The verifier learns the EC point commitments $[l]G_1$, $[r]G_2$, $[o]G_1$ which, while they don't directly reveal the witness, could leak information (e.g., the verifier could test whether a guessed witness produces those same points).
+
+The [[file:lecture_12.org][Pinocchio protocol / Groth16]] approach adds ZK in layers:
+
+** Alpha/Beta shifting (Knowledge of Exponent)
+
+The trusted setup includes random $\alpha$, $\beta$. The prover must provide "shifted" versions of their commitments (e.g., $[\alpha \cdot l]G_1$). The verifier checks consistency via pairings. This prevents the prover from constructing valid-looking proofs without actually knowing the polynomials -- it enforces that the proof was derived from the SRS.
+
+** Gamma/Delta partitioning
+
+The witness is split into *public* inputs and *private* inputs. Random $\gamma$ and $\delta$ from the trusted setup are used to separate verification of public vs private parts. The public-input check uses $\gamma$, the private-witness check uses $\delta$. The [[file:homework_6.org][homework 6]] already demonstrates this structure:
+
+$a \cdot b = \alpha \cdot \beta + (x_1 + x_2 + x_3) \cdot \gamma + c \cdot \delta$
+
+** Random blinding ($r$ and $s$)
+
+This is where *actual zero-knowledge* enters. The prover samples fresh random scalars $r$, $s$ for each proof and adds blinding terms to the commitments:
+
+$A' = [l(\tau)]G_1 + r \cdot [\delta]G_1$
+
+$B' = [r(\tau)]G_2 + s \cdot [\delta]G_2$
+
+$C' = [o(\tau) + h(\tau) \cdot T(\tau)]G_1 + s \cdot A' + r \cdot B' - rs \cdot [\delta]G_1$
+
+The cross-terms cancel in the pairing check, so verification still works. But now each proof is randomized -- even for the same witness, every proof looks different. This makes the proof a *perfect zero-knowledge simulator*: given only the public inputs, one could generate indistinguishable "fake" proofs (with knowledge of $\delta$), proving that the real proof reveals nothing beyond the statement's truth.
+
+In short: the SNARK gives succinctness and soundness; $\alpha / \beta$ enforce correct polynomial structure; $\gamma / \delta$ separate public from private; and the random blinding $r, s$ make it truly zero-knowledge.
